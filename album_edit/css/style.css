@@ -1,0 +1,56 @@
+.box1 {
+    text-align: center;
+    width: 90%;
+    padding: 1em 1em;
+    margin: 1em ;
+    background: white;
+    border: dashed 2px #000000;/*点線*/
+}
+.box1 p {
+    margin: 0; 
+    padding: 0;
+}
+#a_box{
+    float: left;
+    padding: 0em 3em;
+    /* 高さや幅など、好きな様に設定
+    bms_messages_containerの方で、縦横いっぱいに広がってくれるので、
+    ここで充てた高さと横幅がそのままスタイルになる仕組み */
+
+    height:120px;/*ここはご自由に*/
+    width: 100%;/*ここはご自由に*/
+    }
+#b_box{
+    float: left;
+    padding: 0em 3em;
+    /* 高さや幅など、好きな様に設定
+    bms_messages_containerの方で、縦横いっぱいに広がってくれるので、
+    ここで充てた高さと横幅がそのままスタイルになる仕組み */
+
+    height:80px;/*ここはご自由に*/
+    width: 100%;/*ここはご自由に*/
+    }
+    .box2 {
+    text-align: center;
+    width: 30%;
+    padding: 0.5em 1em;
+    margin: 2em 0;
+    font-weight: bold;
+    color: #ffffff;/*文字色*/
+    background: #eb6ea0;
+    border: solid 3px #eb6ea0;/*線*/
+    border-radius: 10px;/*角の丸み*/
+    }
+    .box2 p {
+        margin: 0; 
+        padding: 0;
+    }
+#c_box{
+    padding: 0em 3em;
+    /* 高さや幅など、好きな様に設定
+    bms_messages_containerの方で、縦横いっぱいに広がってくれるので、
+    ここで充てた高さと横幅がそのままスタイルになる仕組み */
+
+    height:120px;/*ここはご自由に*/
+    width: 100%;/*ここはご自由に*/
+    }
