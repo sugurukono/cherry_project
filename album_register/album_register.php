@@ -4,6 +4,9 @@
     //var_dump($_POST);
     //echo '</pre>';
 
+    session_start();
+    // require('functions.php');
+    // require('dbconnect.php');
 
     $pref = array('6時間','24時間','3日','１週間','無期限');
 

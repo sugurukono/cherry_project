@@ -1,3 +1,22 @@
+<?php
+
+    // session_start();
+    // require('functions.php');
+    // require('dbconnect.php');
+
+    // $data = array($_SESSION['id']);
+    // $sql = 'SELECT * FROM `users` WHERE `id` = ?';
+
+    // $stmt = $dbh->prepare($sql);//アロー演算子の左側をオブジェクトという
+    // $stmt->execute($data);
+    // $signin_user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // $validations = array();
+    // $feed = '';
+
+
+?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
 <head>
@@ -70,7 +89,7 @@ $('a.large').fancybox();
         </button>
       </div>
     </div>
-    <div class="box3"><h3>ユーザー名：さくらんぼちゃん</h3><h3>ID：123456789</h3><h3>友達：10000人</h3></div>
+    <div class="box3"><h3>ユーザー名：<?php echo $signin_user['name']; ?></h3><h3>ID：123456789</h3><h3>友達：10000人</h3></div>
     <div class="box2"><h1><img src="images/icon_ninja1.jpeg"></h1></div>
     <div class="box2"><h1><br>PROFILE</h1></div><br>
 
