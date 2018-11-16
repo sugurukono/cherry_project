@@ -8,6 +8,7 @@
     <link type="text/css" rel="stylesheet" href="bmesse.css" />
 
     <link rel="stylesheet" type="text/css"  href="css/header.css">
+    <link rel="stylesheet" type="text/css"  href="header_only.css">
 
 </head>
 
@@ -17,32 +18,35 @@
     <div class="col-xs-12" style="background-color: #003366; height: 90px">
       <h1 class="title" style="color:white;">🍒Cherry</h1>
 
-      <ul class="list"> 
-            <li class="button">
-            My Page
-            </li>
-            <li class="button">
-             Talk
-            </li>
+    <li class="words">
+        <a href="#">My Page</a>
+    </li>
+     
+    <li class="words"><a href="#">Talk</a>
+    </li>
 
-            <li class="button">
-            Add Friends
-            </li>
 
-            <li class="button">
-            Setting
-            </li>
+    <li class="words">
+        <a href="#">Add Friends</a>
+    </li>
+     
 
-            <li class="button">
-            Fake Page
-            </li>
+    <li class="words">
+        <a href="#">Setting</a>
+    </li>
+     
+     <li class="words">
+        <a href="#">Fake Page</a>
+    </li>
 
-            <li class="logout">
-            LOG OUT
-            </li>
+    <li class="words">
+        <a href="#">Log Out</a>
+    </li>
+
          </ul>
     </div>
   </div>
+
 <!-- ヘッダー終わり -->
 
     <!-- 自分やユーザーの情報 -->
