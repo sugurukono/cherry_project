@@ -1,6 +1,6 @@
 <?php
     session_start();
-    require('functions.php');
+    // require('functions.php');
 
     $name = $_SESSION['Cherry_reg']['name'];
     $email =$_SESSION['Cherry_reg']['email'];
@@ -12,7 +12,7 @@
         header('Location:signup.php');
     }
 
-    // v($_POST,'$_POST');
+    var_dump($_POST);
 
 
 
@@ -55,6 +55,7 @@
 
           <div class="center">
             <input type ="button" class="square_btn3" value="戻る" onclick="history.back()">
+            <input type="hidden" name="hoge" value="fuga">
             <input type="submit" class="square_btn2" value="アカウント作成">
 
           </div>
