@@ -2,7 +2,7 @@
     session_start();
     require('functions.php');
 
-    // v($_POST,'$_POST');
+    v($_POST,'$_POST');
 
     $validations = array();
     $name = '';
@@ -37,7 +37,7 @@
           }
           elseif($password_2 != $password ) {
             $validations['password_2'] = 'different';
-          }//実装できないので聞く
+          }
 
 
 
@@ -45,7 +45,6 @@
             $_SESSION['Cherry_reg']['name'] = $name;
             $_SESSION['Cherry_reg']['email'] = $email;
             $_SESSION['Cherry_reg']['password'] = $password;
-            $_SESSION['Cherry_reg']['password_2'] =$password_2;
 
             header('Location: check.php');
             exit();

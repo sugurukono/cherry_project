@@ -1,6 +1,8 @@
 <?php
 
+    require('functions.php');
 
+    v($_POST,'$_POST');
 
 
 
@@ -25,7 +27,7 @@
     </div>
   </div>
 <!-- ヘッダー終わり -->
-s
+
 <!-- 登録部分 -->
   <div class="row">
     <div class="col-xs-9" style="background-color:white; height:700px">
