@@ -1,3 +1,34 @@
+<?php
+    session_start();
+    require('functions.php');
+    require('dbconnect.php');
+
+    $user_id = "";
+
+    $sql = 'SELECT * FROM `users` WHERE `id`=?';
+    $data = array($user_id);//WHEREで入れたやつだけでOK
+    $stmt = $dbh->prepare($sql);
+    $stmt->execute($data);
+    $signin_user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    $sql ='SELECT `folder_name`, `user_id` FROM `folders` WHERE `folder_name`';
+    $data = array();
+    $stmt = $dbh->prepare($sql);
+    $stmt->execute($data);
+    $folders= [];
+
+    while (true) {
+      $folder= $stmt->fetch(PDO::FETCH_ASSOC);
+
+      if ($folder == false) {
+        break;
+      }
+    }
+
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -136,22 +167,33 @@
             よろしければ、フォルダーを選んで登録しましょう！<br>
            </b>
            <br>
+           <form method="POST" action="creat_folder.php">
            <b style="font-size: 20px">フォルダー新規作成</b>
-           <input type="text" name="" class="text">
+           <input type="text" name="folder_name" class="text">
            <input type="submit" value="新規作成" class="square_btn">
+           </form>
+<!-- 友達検索・フォルダー作成 -->
            <br>
             <b style="font-size: 20px">フォルダー選択：</b>
             <div class="scrol_box">
-            <b>ダーリン</b><button class="square_btn2">削除</button><br><br>
+
+<!-- フォルダーの行を作成 -->
+            <?php foreach($folders as $folder_each) :?>
+            <b href = "creat_fodler.php?folder_name=<?php echo $feed_each['id']; ?>"><?php echo $folder_name ?></b><button class="square_btn2">削除</button><br><br>
+            <?php endforeach; ?>
+
+
             <b>男友だち</b><button class="square_btn2">削除</button><br><br>
             <b>女友だち</b><button class="square_btn2">削除</button><br><br>
             <b>職場</b><button class="square_btn2">削除</button><br><br>
           </div>
+          <form>
           <input type="submit" value="登録" class="square_btn3" style="float: right; ">
+          </form>
         </div>
         </div>
       </div>
-
+<!-- 友達一覧 -->
       <div>
         <h1><span class="title_2">♦︎お友達一覧♦︎</span></h1>
         <div class="row">
@@ -185,9 +227,6 @@
             <b>メロンちゃん</b><button class="square_btn2">削除</button><br><br>
             <button class="delet_button2">全件削除</button>
           </div>
-
-         
-
         </div>
         </div>
       </div>
@@ -195,8 +234,6 @@
     </div>
 
 
-
-  
 
 
 <div class="row">
