@@ -1,6 +1,6 @@
 <?php
     session_start();
-    require('functions.php');
+    // require('functions.php');
 
     v($_POST,'$_POST');
 
@@ -12,36 +12,40 @@
 
     if (!empty($_POST)) {
 
-      $name= $_POST['name'];
-      $email= $_POST['email'];
-      $password = $_POST['password'];
-      $password_2 = $_POST['password_2'];
+        $name= $_POST['name'];
+        $email= $_POST['email'];
+        $password = $_POST['password'];
+        $password_2 = $_POST['password_2'];
 
-          if ($name == '') {
+            if ($name == '') {
             $validations['name'] = 'blank';
-          }
+            }
 
-          if ($email == '') {
+            if ($email == '') {
             $validations['email'] = 'blank';
-          }
-          $c = strlen($password);
-          if ($password == '') {
+            }
+            $c = strlen($password);
+            if ($password == '') {
             $validations['password'] = 'blank';
-          }elseif ($c < 4 || 16 <$c) {
+            }elseif ($c < 4 || 16 <$c) {
             $validations['password'] = 'length';
-          }
+            }
 
-          if ($password_2 == ''){
+            if ($password_2 == ''){
             $validations['password_2'] ='blank';
 
-          }
-          elseif($password_2 != $password ) {
+            }
+            elseif($password_2 != $password ) {
             $validations['password_2'] = 'different';
+<<<<<<< HEAD
           }
+=======
+            }
+>>>>>>> toppage
 
 
 
-          if (empty($validations)) {
+            if (empty($validations)) {
             $_SESSION['Cherry_reg']['name'] = $name;
             $_SESSION['Cherry_reg']['email'] = $email;
             $_SESSION['Cherry_reg']['password'] = $password;
@@ -49,7 +53,7 @@
             header('Location: check.php');
             exit();
 
-          }
+            }
 
 
     }

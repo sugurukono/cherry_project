@@ -1,8 +1,9 @@
 .title{
   float: left;
-  margin:23px 30px;
+  margin:23px;
   font-size: 41px;
   font-family: 'Lobster', cursive;
+  margin-right: 151px;
 }
 
 .list{
@@ -52,6 +53,27 @@
   color:white;
   padding:8px;
 }
+
+li{float:left;
+    list-style: none;}
+
+.words a{
+  float: left;
+  font-family: 'Lobster', cursive;
+  font-size: 25px;
+  padding: 33px 47px;
+  color:#fe5f95;
+  text-decoration: none;
+  /*-webkit-transition: all 0.5s ease;
+    /*-*/moz-transition: all 0.5s ease;
+    /*-o-transition: all 0.5s ease;*/
+    /*transition: all  0.5s ease;*/*/
+}
+.words a:hover{
+  color:white;
+  text-decoration: none;
+}
+
 
 /*↓は画面わけに必要なコードなので消さないで！
 /*!

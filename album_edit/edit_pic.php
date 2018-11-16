@@ -1,5 +1,14 @@
 <?php
 
+    $pref = array('6時間','24時間','3日','１週間','無期限');
+
+    $pref_num = -1; //0以外のデータを初期化
+    if (!empty($_POST)) {
+      $pref_num = $_POST['pref'];
+    }
+
+    $c = count($pref);
+
 ?>
 
 <!DOCTYPE html>
@@ -17,29 +26,31 @@
     <div class="col-xs-12" style="background-color: #003366; height: 90px">
       <h1 class="title" style="color:white;">🍒Cherry</h1>
 
-      <ul class="list"> 
-            <li class="button">
-            My Page
-            </li>
-            <li class="button">
-             Talk
-            </li>
+    <li class="words">
+        <a href="#">My Page</a>
+    </li>
+     
+    <li class="words"><a href="#">Talk</a>
+    </li>
 
-            <li class="button">
-            Add Friends
-            </li>
 
-            <li class="button">
-            Setting
-            </li>
+    <li class="words">
+        <a href="#">Add Friends</a>
+    </li>
+     
 
-            <li class="button">
-            Fake Page
-            </li>
+    <li class="words">
+        <a href="#">Setting</a>
+    </li>
+     
+     <li class="words">
+        <a href="#">Fake Page</a>
+    </li>
 
-            <li class="logout">
-            LOG OUT
-            </li>
+    <li class="words">
+        <a href="#">Log Out</a>
+    </li>
+
          </ul>
     </div>
   </div>
@@ -52,11 +63,20 @@
         <textarea name="content" placeholder="" cols="135" rows="3">このオムレツめちゃめちゃうまい！！！</textarea><br>
       </div>
       <div id="b_box" class="col-xs-9"><h4>＜公開期間＞</h4>
-          <input type="button" class="btn btn-default" value="24時間" style="background-color:#777777; width: 330px ">
-          <input type="button" class="btn btn-default" value="1週間" style="width: 330px ">
-          <select name="pref" style="width: 300px ">
-            <option value="0">期間を指定する</option>
+        <form method="POST" action="select_tag_for.php">
+          <select name="pref">
+            <option value="-1">選択してください</option>
+            <?php for($i=0; $i < $c; $i++): ?>
+              <?php if ($i == $pref_num): ?>
+                <!--前回選択されたvalue（都道府県）なのでoptionタグにselected属性をつける　-->
+                <option value="<?php echo $i; ?>" selected><?php echo $pref[$i]; ?></option>
+              <?php else: ?>
+                <!--前回選択されたvalueと一致しないもしくはそもそもPOST送信されていないのでoptionタグをそのまま表示-->
+                <option value="<?php echo $i; ?>"><?php echo $pref[$i]; ?></option>
+              <?php endif; ?>
+            <?php endfor; ?>
           </select>
+        </form>
       </div>
       <div id="c_box" class="col-xs-9">
         <center>

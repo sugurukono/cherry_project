@@ -1,3 +1,22 @@
+<?php
+
+    // session_start();
+    // require('functions.php');
+    // require('dbconnect.php');
+
+    // $data = array($_SESSION['id']);
+    // $sql = 'SELECT * FROM `users` WHERE `id` = ?';
+
+    // $stmt = $dbh->prepare($sql);//アロー演算子の左側をオブジェクトという
+    // $stmt->execute($data);
+    // $signin_user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // $validations = array();
+    // $feed = '';
+
+
+?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ja">
 <head>
@@ -26,29 +45,31 @@ $('a.large').fancybox();
     <div class="col-xs-12" style="background-color: #003366; height: 90px">
       <h1 class="title" style="color:white;">🍒Cherry</h1>
 
-      <ul class="list"> 
-            <li class="button">
-            My Page
-            </li>
-            <li class="button">
-             Talk
-            </li>
+    <li class="words">
+        <a href="#">My Page</a>
+    </li>
+     
+    <li class="words"><a href="#">Talk</a>
+    </li>
 
-            <li class="button">
-            Add Friends
-            </li>
 
-            <li class="button">
-            Setting
-            </li>
+    <li class="words">
+        <a href="#">Add Friends</a>
+    </li>
+     
 
-            <li class="button">
-            Fake Page
-            </li>
+    <li class="words">
+        <a href="#">Setting</a>
+    </li>
+     
+     <li class="words">
+        <a href="#">Fake Page</a>
+    </li>
 
-            <li class="logout">
-            LOG OUT
-            </li>
+    <li class="words">
+        <a href="#">Log Out</a>
+    </li>
+
          </ul>
     </div>
   </div>
@@ -68,7 +89,7 @@ $('a.large').fancybox();
         </button>
       </div>
     </div>
-    <div class="box3"><h3>ユーザー名：さくらんぼちゃん</h3><h3>ID：123456789</h3><h3>友達：10000人</h3></div>
+    <div class="box3"><h3>ユーザー名：<?php echo $signin_user['name']; ?></h3><h3>ID：123456789</h3><h3>友達：10000人</h3></div>
     <div class="box2"><h1><img src="images/icon_ninja1.jpeg"></h1></div>
     <div class="box2"><h1><br>PROFILE</h1></div><br>
 
