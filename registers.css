@@ -1,0 +1,166 @@
+.box5 {
+    padding: 10px;
+    margin: 10px;
+    border: double 5px #4ec4d3;
+
+}
+.box5 p {
+    margin: 50px; 
+    padding: 30px;
+
+}
+
+.text_new{
+  margin: 35px 122px;
+  font-size: 45px;
+  
+}
+
+.text_new2 {
+    font-family: 'Kaushan Script', cursive;
+    margin:20px;
+    color:#003366;
+}
+
+.text {
+    padding: 20px;
+    padding-right: 279px;
+    margin: 19px 348px;
+    background: white;/*背景色*/
+    border-top: solid 6px #003366;
+    box-shadow: 0 3px 4px rgba(0, 0, 0, 0.32);/*影*/
+    font-weight: bold;
+    color: #003366;/*文字色*/
+    
+}
+.text p {
+    margin: 0; 
+    padding: 0;
+}
+
+.center{
+    float: right;
+}
+.square_btn{
+    text-align:center;
+    margin-top: 20px;
+    margin-right: 255px;
+    display: inline-block;
+    position: relative;
+    padding: 11px 45px;
+    text-decoration: none;
+    background: #003366;/*ボタン色*/
+    color: #FFF;
+    border-bottom: solid 5px #36528c;/*ボタン色より暗めに*/
+    border-right: solid 5px #5375bd;/*ボタン色より暗めに*/
+
+}
+
+.square_btn2{
+    text-align:center;
+    margin-top: 20px;
+    margin-right: 110px;
+    display: inline-block;
+    position: relative;
+    padding: 11px 45px;
+    text-decoration: none;
+    background: #fe5f95;/*ボタン色*/
+    color: #FFF;
+    border-bottom: solid 5px pink;/*ボタン色より暗めに*/
+    border-right: solid 5px pink;/*ボタン色より暗めに*/
+
+}
+.square_btn3{
+    text-align:center;
+    margin-top: 20px;
+    margin-right: 110px;
+    display: inline-block;
+    position: relative;
+    padding: 11px 45px;
+    text-decoration: none;
+    background: #5b8bd0;/*ボタン色*/
+    color: #FFF;
+    border-bottom: solid 5px pink;/*ボタン色より暗めに*/
+    border-right: solid 5px pink;/*ボタン色より暗めに*/
+}
+
+.square_btn:before{    
+    content: " ";
+    position: absolute;
+    bottom: -5px;
+    left: -1px;
+    width: 0;
+    height: 0;
+    border-width: 0 6px 6px 0px;
+    border-style: solid;
+    border-color: transparent;
+    border-bottom-color: #FFF;
+}
+
+.square_btn:after{   
+    content: " ";
+    position: absolute;
+    top: -1px;
+    right: -5px;
+    width: 0;
+    height: 0;
+    border-width: 0px 6px 6px 0px;
+    border-style: solid;
+    border-color: #FFF;
+    border-bottom-color: transparent;
+}
+
+.square_btn:active{ /*ボタンを押したとき*/
+    border:none;
+    -ms-transform: translate(6px,6px);
+    -webkit-transform: translate(6px,6px);
+    transform: translate(6px,6px);
+}
+
+.square_btn:active:after,.square_btn:active:before {
+    content: none;/*ボタンを押すと線が消える*/
+}
+
+.check{
+    text-align: center;
+    font-size: 25px;
+    float: left;
+    margin: 25px 265px;
+    padding: 12px;
+
+
+}
+
+.under{
+        border-bottom: dotted 2px #87CEFA;
+}
+
+
+.box6 {
+    padding: 0.5em 1em;
+    margin: 2em 0;
+    background: #f0f7ff;
+    border: dashed 2px #5b8bd0;/*点線*/
+    font-size: 20px;
+    margin: 100px 200px;
+}
+.box6 p {
+    margin: 0; 
+    padding: 0;
+}
+
+.error_msg{
+      color: red;
+      font-size: 12px;
+      margin: 1px 350px;
+    }
+
+
+
+
+
+
+
+
+
+
