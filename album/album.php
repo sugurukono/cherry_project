@@ -1,18 +1,23 @@
 <?php
 
-    // session_start();
-    // require('functions.php');
-    // require('dbconnect.php');
+    session_start();
+    require('../functions.php');
+    require('../dbconnect.php');
 
-    // $data = array($_SESSION['id']);
-    // $sql = 'SELECT * FROM `users` WHERE `id` = ?';
+    $data = array();
+    $sql = 'SELECT * FROM `users` WHERE `id` = 1';
 
-    // $stmt = $dbh->prepare($sql);//アロー演算子の左側をオブジェクトという
-    // $stmt->execute($data);
-    // $signin_user = $stmt->fetch(PDO::FETCH_ASSOC);
+    $stmt = $dbh->prepare($sql);//アロー演算子の左側をオブジェクトという
+    $stmt->execute($data);
+    $signin_user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     // $validations = array();
-    // $feed = '';
+
+    $sql = 'SELECT * FROM `users` WHERE `user_name`=1';
+    $data = array();
+
+    $stmt = $dbh->prepare($sql);
+    $stmt->execute($data);
 
 
 ?>
@@ -89,8 +94,9 @@ $('a.large').fancybox();
         </button>
       </div>
     </div>
-    <div class="box3"><h3>ユーザー名：<?php echo $signin_user['name']; ?></h3><h3>ID：123456789</h3><h3>友達：10000人</h3></div>
-    <div class="box2"><h1><img src="images/icon_ninja1.jpeg"></h1></div>
+    <span hidden id="signin-user"><?php echo $signin_user['id']; ?></span>
+    <div class="box3"><h3>ユーザー名：<?php echo $signin_user['user_name']; ?></h3><h3>ID：<?php echo $signin_user['id']; ?></h3><h3>友達：10000人</h3></div>
+    <div class="box2"><h1><img src="user_profile_img/<?php echo $signin_user['img_name']; ?>"></h1></div>
     <div class="box2"><h1><br>PROFILE</h1></div><br>
 
     <div id="wrap" style="background-color:white;">
