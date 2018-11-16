@@ -1,6 +1,7 @@
 <?php
     session_start();
     require('functions.php');
+    require('dbconnect.php');
 
     $name = $_SESSION['Cherry_reg']['name'];
     $email =$_SESSION['Cherry_reg']['email'];
@@ -13,6 +14,26 @@
     }
 
     // v($_POST,'$_POST');
+        v($_SESSION,'$_SESSION');
+
+    $name = $_SESSION['Cherry_reg']['name'];
+    $email =$_SESSION['Cherry_reg']['email'];
+    $password =$_SESSION['Cherry_reg']['password'];
+
+    if (!empty($_POST)) {
+    $hash_password = password_hash($password, PASSWORD_DEFAULT);
+
+    $sql = 'INSERT INTO `users` SET `user_name`=?, `email`=?,`password`=?,`created`=NOW()';
+    $stmt = $dbh->prepare($sql);//PHPにMYSQLの言語を準備させるコード
+    $data = array($name, $email, $hash_password);
+    $stmt->execute($data);//PHPに実行させるコード
+
+    unset($_SESSION['Cherry_reg']);//今まで入力したデータを削除する
+    header('Location: thanks.php');
+    exit();//header関数とはニコイチ！
+
+  }
+
 
 
 
@@ -51,10 +72,11 @@
         <p class="check"><span class="under">パスワード：●●●●●●●●●●●●</span></p>
         <p class="check">上記の内容でお間違えないでしょうか？</p>
 
-          <form method="POST" action="thanks.php">
+          <form method="POST" action="">
 
           <div class="center">
             <input type ="button" class="square_btn3" value="戻る" onclick="history.back()">
+            <input type="hidden" name="hoge" value="huga">
             <input type="submit" class="square_btn2" value="アカウント作成">
 
           </div>
