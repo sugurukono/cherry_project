@@ -74,7 +74,7 @@ $('a.large').fancybox();
     <li class="words">
         <a href="#">Log Out</a>
     </li>
-
+    おはよう
          </ul>
     </div>
   </div>
