@@ -9,10 +9,10 @@
 
 
     if(!isset($_SESSION['Cherry_reg'])){
-      header('Location:signup.php');
+        header('Location:signup.php');
     }
 
-    v($_POST,'$_POST');
+    // v($_POST,'$_POST');
 
 
 
