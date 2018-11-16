@@ -3,10 +3,10 @@
     require('functions.php');
     require('dbconnect.php');
 
-    $user_id = "";
+    
 
     $sql = 'SELECT * FROM `users` WHERE `id`=?';
-    $data = array($user_id);//WHEREで入れたやつだけでOK
+    $data = array($_SESSION["id"]);//WHEREで入れたやつだけでOK
     $stmt = $dbh->prepare($sql);
     $stmt->execute($data);
     $signin_user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -166,13 +166,14 @@
            <b class=asking>検索された方はこちらの方ですか？ <br>
             よろしければ、フォルダーを選んで登録しましょう！<br>
            </b>
+<!-- 友達検索・フォルダー作成 -->
            <br>
            <form method="POST" action="creat_folder.php">
            <b style="font-size: 20px">フォルダー新規作成</b>
            <input type="text" name="folder_name" class="text">
            <input type="submit" value="新規作成" class="square_btn">
            </form>
-<!-- 友達検索・フォルダー作成 -->
+
            <br>
             <b style="font-size: 20px">フォルダー選択：</b>
             <div class="scrol_box">
