@@ -1,18 +1,12 @@
 <?php
     session_start();
-<<<<<<< HEAD
     require('functions.php');
     require('dbconnect.php');
-=======
-    // require('functions.php');
->>>>>>> toppage
-
 
 
     if(!isset($_SESSION['Cherry_reg'])){
         header('Location:signup.php');
     }
-<<<<<<< HEAD
     
     v($_POST,'$_POST');
     v($_SESSION,'$_SESSION');
@@ -23,10 +17,7 @@
 
     if (!empty($_POST)) {
     $hash_password = password_hash($password, PASSWORD_DEFAULT);
-=======
 
-    var_dump($_POST);
->>>>>>> toppage
 
     $sql = 'INSERT INTO `users` SET `user_name`=?, `email`=?,`password`=?,`created`=NOW()';
     $stmt = $dbh->prepare($sql);//PHPにMYSQLの言語を準備させるコード
@@ -40,11 +31,7 @@
   
 
   }
-
-
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -81,11 +68,11 @@
           <div class="center">
              <form method="POST" action="" >
             <input type ="button" class="square_btn3" value="戻る" onclick="history.back()">
-<<<<<<< HEAD
+
             <input type="hidden" name="hoge" value="huga">
-=======
+
             <input type="hidden" name="hoge" value="fuga">
->>>>>>> toppage
+
             <input type="submit" class="square_btn2" value="アカウント作成">
           </form>
           </div>
