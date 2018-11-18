@@ -10,13 +10,13 @@
     $signin_user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 
-    // v($_SESSION,'$_SESSION');
-    // v($signin_user,'$signin_user');
+     v($_SESSION,'$_SESSION');
+     v($signin_user,'$signin_user');
     $user_id="";
     $signin_user['id'] = $user_id;
     $folder='';
 
-    $sql = 'SELECT `folder_name`FROM `folders` WHERE `user_id`=?';
+    $sql = 'SELECT * FROM `folders` WHERE `user_id`=?';
     $data = array($_SESSION['id']);//WHEREで入れたやつだけでOK
     $stmt = $dbh->prepare($sql);
     $stmt->execute($data);
@@ -34,8 +34,9 @@
       $folders[] = $folder;
 
     }
-
+    // v($folder,'$folder');
     // v($folders,'$folders');
+    // v($folder_each['id'],'$folder_each');
 
 ?>
 
@@ -186,7 +187,10 @@
 
 <!-- フォルダーの行を作成 -->
             <?php foreach($folders as $folder_each) :?>
-            <b><?php echo $folder_each['folder_name'] ;?></b><button class="square_btn2">削除</button><br><br>
+            <b><?php echo $folder_each['folder_name'] ;?></b>
+            <button class="square_btn2"><a onclick="return confirm('フォルダーを削除しますか？');" href="delete_folders.php?folder_id=<?php echo $folder_each['id']; ?>">削除</a></button>
+
+            <br><br>
           <?php endforeach; ?>
           </div>
           <form>
