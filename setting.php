@@ -3,6 +3,8 @@
     require('functions.php');
     require('dbconnect.php');
 
+
+// usersテーブルからデータ取得
     $sql = 'SELECT * FROM `users` WHERE `id`=?';
     $data = array($_SESSION["id"]);//WHEREで入れたやつだけでOK
     $stmt = $dbh->prepare($sql);
@@ -10,21 +12,21 @@
     $signin_user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 
-     v($_SESSION,'$_SESSION');
-     v($signin_user,'$signin_user');
+    v($_SESSION,'$_SESSION');
+    v($signin_user,'$signin_user');
     $user_id="";
     $signin_user['id'] = $user_id;
     $folder='';
-
+//foldersテーブルからデータ取得①
     $sql = 'SELECT * FROM `folders` WHERE `user_id`=?';
     $data = array($_SESSION['id']);//WHEREで入れたやつだけでOK
     $stmt = $dbh->prepare($sql);
     $stmt->execute($data);
-    $folders = [];
+
 
     // $folder = $stmt->fetch(PDO::FETCH_ASSOC);
 
-
+//$foldersに格納②
     while(true){
       $folder = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -35,10 +37,29 @@
 
     }
     // v($folder,'$folder');
-    // v($folders,'$folders');
+    v($folders,$folders);
     // v($folder_each['id'],'$folder_each');
 
+    $sql='SELECT * FROM `friends` INNER JOIN `friends_folders`
+    ON `friends_folders`.`friend_id`= `friends`.`id` WHERE `friends_folders`.`folder_owner_id`=?';
+    $data= array($_SESSION['id']);
+    $stmt = $dbh->prepare($sql);
+    $stmt->execute($data);
+    $friends=[];
+
+    while(true){
+      $friend =$stmt->fetch(PDO::FETCH_ASSOC);
+
+      if($friend == false){
+        break;
+      }
+      $friends[]=$friend;
+    }
+    v($friends,'$friends');
+
+
 ?>
+
 
 
 <!DOCTYPE html>
@@ -189,7 +210,6 @@
             <?php foreach($folders as $folder_each) :?>
             <b><?php echo $folder_each['folder_name'] ;?></b>
             <button class="square_btn2"><a onclick="return confirm('フォルダーを削除しますか？');" href="delete_folders.php?folder_id=<?php echo $folder_each['id']; ?>">削除</a></button>
-
             <br><br>
           <?php endforeach; ?>
           </div>
@@ -209,14 +229,11 @@
             <br>
             <b style="font-size: 20px">♦︎フォルダー♦︎</b><br>
             <br>
-            <button class="friends_folder" data-toggle="modal" data-target="#demoNormalModal"> ダーリン</button>
+            <?php foreach($folders as $folder_each) :?>
+            <button class="friends_folder" data-toggle="modal" data-target="#demoNormalModal"><?php echo $folder_each['folder_name'] ;?></button>
+          <?php endforeach; ?>
 
-            <button class="friends_folder" data-toggle="modal" data-target="#demoNormalModal"> 男友だち</button>
-
-            <button class="friends_folder" data-toggle="modal" data-target="#demoNormalModal"> 女友だち
-            </button>
-
-            <button class="friends_folder" data-toggle="modal" data-target="#demoNormalModal"> 職場</button>
+           
             <button class="delet_button" style="float: right;">全件削除</button>
         </div>
         <div class="col-xs-6" style="height: 450px; background-color: #37b8e061; margin: 30px 0px;">
@@ -227,10 +244,12 @@
             <b style="font-size: 20px">フォルダー選択：</b>
             <br>
             <div class="scrol_box2">
-            <b>みかんちゃん</b><button class="square_btn2">削除</button><br><br>
-            <b>りんごちゃん</b><button class="square_btn2">削除</button><br><br>
-            <b>ピーチちゃん</b><button class="square_btn2">削除</button><br><br>
-            <b>メロンちゃん</b><button class="square_btn2">削除</button><br><br>
+            <?php foreach($friends as $friend_each); ?>
+            <?php  if ($folder_each['id']== $friend_each['folder_id']):?>
+            <b><?php echo $friend_each['friend_id'] ?></b><button class="square_btn2">削除</button><br><br>
+          <?php endif ?>
+            <!-- <b>ピーチちゃん</b><button class="square_btn2">削除</button><br><br>
+            <b>メロンちゃん</b><button class="square_btn2">削除</button><br><br> -->
             <button class="delet_button2">全件削除</button>
           </div>
         </div>
