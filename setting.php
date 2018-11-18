@@ -3,28 +3,39 @@
     require('functions.php');
     require('dbconnect.php');
 
-    
-
     $sql = 'SELECT * FROM `users` WHERE `id`=?';
     $data = array($_SESSION["id"]);//WHEREで入れたやつだけでOK
     $stmt = $dbh->prepare($sql);
     $stmt->execute($data);
     $signin_user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $sql ='SELECT `folder_name`, `user_id` FROM `folders` WHERE `folder_name`';
-    $data = array();
+
+    // v($_SESSION,'$_SESSION');
+    // v($signin_user,'$signin_user');
+    $user_id="";
+    $signin_user['id'] = $user_id;
+    $folder='';
+
+    $sql = 'SELECT `folder_name`FROM `folders` WHERE `user_id`=?';
+    $data = array($_SESSION['id']);//WHEREで入れたやつだけでOK
     $stmt = $dbh->prepare($sql);
     $stmt->execute($data);
-    $folders= [];
+    $folders = [];
 
-    while (true) {
-      $folder= $stmt->fetch(PDO::FETCH_ASSOC);
+    // $folder = $stmt->fetch(PDO::FETCH_ASSOC);
 
-      if ($folder == false) {
+
+    while(true){
+      $folder = $stmt->fetch(PDO::FETCH_ASSOC);
+
+      if($folder == false){
         break;
       }
+      $folders[] = $folder;
+
     }
 
+    // v($folders,'$folders');
 
 ?>
 
@@ -93,12 +104,11 @@
   </div>
   </div>
 
-
   <div class="img background">
     <div class="container">
       <div>
         <h1><span class="title_1">♦︎プロフィール編集♦︎</span></h1>
-        
+
         <div class="row">
           <div class="col-xs-6" style="height: 450px; background-color: #37b8e061; margin:30px 0px;">
           <div class="profile1">
@@ -108,7 +118,6 @@
           <input type="submit" value="更新" class="square_btn">
 
            </div>
-           
              </div>
            <div class="col-xs-6" style="height: 450px; background-color: #37b8e061; margin: 30px 0px;">
            <div class="profile2">
@@ -126,9 +135,8 @@
             </div>
 
             </div>
-         
         </div>
-      
+
 
     </div>
     </div>
@@ -156,8 +164,6 @@
 
               </div>
 
-           
-
         </div>
         <div class="col-xs-6" style="height: 450px; background-color: #37b8e061; margin: 30px 0px;">
            <br>
@@ -180,13 +186,8 @@
 
 <!-- フォルダーの行を作成 -->
             <?php foreach($folders as $folder_each) :?>
-            <b href = "creat_fodler.php?folder_name=<?php echo $feed_each['id']; ?>"><?php echo $folder_name ?></b><button class="square_btn2">削除</button><br><br>
-            <?php endforeach; ?>
-
-
-            <b>男友だち</b><button class="square_btn2">削除</button><br><br>
-            <b>女友だち</b><button class="square_btn2">削除</button><br><br>
-            <b>職場</b><button class="square_btn2">削除</button><br><br>
+            <b><?php echo $folder_each['folder_name'] ;?></b><button class="square_btn2">削除</button><br><br>
+          <?php endforeach; ?>
           </div>
           <form>
           <input type="submit" value="登録" class="square_btn3" style="float: right; ">

@@ -1,3 +1,25 @@
+<?php 
+    session_start();
+    require('functions.php');
+    require('dbconnect.php');
+
+    
+
+    $sql = 'SELECT * FROM `users` WHERE `id`=?';
+    $data = array($_SESSION["id"]);//WHEREで入れたやつだけでOK
+    $stmt = $dbh->prepare($sql);
+    $stmt->execute($data);
+    $signin_user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    v($signin_user,'$signin_user');
+
+
+?>
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -32,7 +54,7 @@
      
 
     <li class="words">
-        <a href="#">Setting</a>
+        <a href="setting.php">Setting</a>
     </li>
      
      <li class="words">
