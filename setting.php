@@ -55,7 +55,20 @@
       }
       $friends[]=$friend;
     }
-    v($friends,'$friends');
+    // v($friends,'$friends');
+
+    if (!empty($_GET)) {
+        $search_friend= $_GET['search_friend'];
+
+
+        $sql= "SELECT * FROM `users` WHERE `search_id`=?";
+        $data= array($search_friend);
+        $stmt = $dbh->prepare($sql);
+        $stmt->execute($data);
+        $related_friend =$stmt->fetch(PDO::FETCH_ASSOC);
+
+    }
+        v($related_friend,'$related_friend');
 
 
 ?>
@@ -176,11 +189,13 @@
         <div class="row">
           <div class="col-xs-6" style="height: 450px; background-color: #37b8e061; margin:30px 0px;">
             <div class="id">
+<!-- ID検索 -->
             <b style="font-size: 20px;">ID検索：</b>
-            <input type="text" name="search" value="" class="text">
+            <form action="" method="GET">
+            <input type="text" name="search_friend" value="" class="text">
             <input type="submit" value="検索" class="square_btn ">
-
-            <b style="font-size: 20px">検索結果:さくらんぼくん</b>
+            </form>
+            <b style="font-size: 20px">検索結果:<?php echo $related_friend['user_name'] ?></b>
             </div>
             <div class="pic"><img src="img/profile_first.jpg">
 
@@ -230,7 +245,7 @@
             <b style="font-size: 20px">♦︎フォルダー♦︎</b><br>
             <br>
             <?php foreach($folders as $folder_each) :?>
-            <button class="friends_folder" data-toggle="modal" data-target="#demoNormalModal"><?php echo $folder_each['folder_name'] ;?></button>
+             <a href="setting.php?folder_id=4"><button class="friends_folder" data-toggle="modal" data-target="#demoNormalModal"><?php echo $folder_each['folder_name'] ;?></button></a>
           <?php endforeach; ?>
 
            
