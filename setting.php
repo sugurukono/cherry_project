@@ -69,6 +69,8 @@
 
     }
         v($related_friend,'$related_friend');
+        $_SESSION['cherry']['related_friend']=$related_friend;
+
 
 
 ?>
@@ -222,13 +224,14 @@
             <div class="scrol_box">
 
 <!-- フォルダーの行を作成 -->
+            <form action="folder_related_friend.php" method="GET">
             <?php foreach($folders as $folder_each) :?>
-            <b><?php echo $folder_each['folder_name'] ;?></b>
+            <input type="checkbox" name="check_folder" value="<?php echo $folder_each['id']?>"><?php echo $folder_each['folder_name'] ;?>
             <button class="square_btn2"><a onclick="return confirm('フォルダーを削除しますか？');" href="delete_folders.php?folder_id=<?php echo $folder_each['id']; ?>">削除</a></button>
             <br><br>
-          <?php endforeach; ?>
+            <?php endforeach; ?>
           </div>
-          <form>
+          
           <input type="submit" value="登録" class="square_btn3" style="float: right; ">
           </form>
         </div>
@@ -246,7 +249,7 @@
             <br>
             <?php foreach($folders as $folder_each) :?>
              <a href="setting.php?folder_id=4"><button class="friends_folder" data-toggle="modal" data-target="#demoNormalModal"><?php echo $folder_each['folder_name'] ;?></button></a>
-          <?php endforeach; ?>
+            <?php endforeach; ?>
 
            
             <button class="delet_button" style="float: right;">全件削除</button>
@@ -259,10 +262,12 @@
             <b style="font-size: 20px">フォルダー選択：</b>
             <br>
             <div class="scrol_box2">
-            <?php foreach($friends as $friend_each); ?>
+            <?php foreach($friends as $friend_each): ?>
             <?php  if ($folder_each['id']== $friend_each['folder_id']):?>
             <b><?php echo $friend_each['friend_id'] ?></b><button class="square_btn2">削除</button><br><br>
-          <?php endif ?>
+          <?php endif;?>
+           <?php endforeach; ?>
+
             <!-- <b>ピーチちゃん</b><button class="square_btn2">削除</button><br><br>
             <b>メロンちゃん</b><button class="square_btn2">削除</button><br><br> -->
             <button class="delet_button2">全件削除</button>
