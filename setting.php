@@ -247,26 +247,24 @@
             <br>
             <b style="font-size: 20px">♦︎フォルダー♦︎</b><br>
             <br>
+            <form method="POST" action="">
             <?php foreach($folders as $folder_each) :?>
-             <a href="setting.php?folder_id=4"><button class="friends_folder" data-toggle="modal" data-target="#demoNormalModal"><?php echo $folder_each['folder_name'] ;?></button></a>
+            <a href="setting.php?folder_id=4"><button class="friends_folder" data-toggle="modal" data-target="#demoNormalModal"><?php echo $folder_each['folder_name'] ;?></button></a>
             <?php endforeach; ?>
-
-           
+            </form>
             <button class="delet_button" style="float: right;">全件削除</button>
         </div>
         <div class="col-xs-6" style="height: 450px; background-color: #37b8e061; margin: 30px 0px;">
-          <div>
-            <br>
-            <br>
-            <br>
-            <b style="font-size: 20px">フォルダー選択：</b>
-            <br>
-            <div class="scrol_box2">
-            <?php foreach($friends as $friend_each): ?>
-            <?php  if ($folder_each['id']== $friend_each['folder_id']):?>
-            <b><?php echo $friend_each['friend_id'] ?></b><button class="square_btn2">削除</button><br><br>
+        <div>
+          <br>
+          <b style="font-size: 20px">友達一覧：</b>
+          <br>
+          <div class="scrol_box2">
+          <?php foreach($friends as $friend_each): ?>
+          <?php  if ($folder_each['id']== $friend_each['folder_id']):?>
+          <b><?php echo $friend_each['friend_id'] ?></b><button class="square_btn2">削除</button><br><br>
           <?php endif;?>
-           <?php endforeach; ?>
+          <?php endforeach; ?>
 
             <!-- <b>ピーチちゃん</b><button class="square_btn2">削除</button><br><br>
             <b>メロンちゃん</b><button class="square_btn2">削除</button><br><br> -->
