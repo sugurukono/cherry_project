@@ -12,8 +12,8 @@
     $signin_user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 
-    v($_SESSION,'$_SESSION');
-    v($signin_user,'$signin_user');
+    // v($_SESSION,'$_SESSION');
+    // v($signin_user,'$signin_user');
     $user_id="";
     $signin_user['id'] = $user_id;
     $folder='';
@@ -22,10 +22,6 @@
     $data = array($_SESSION['id']);//WHEREで入れたやつだけでOK
     $stmt = $dbh->prepare($sql);
     $stmt->execute($data);
-
-
-    // $folder = $stmt->fetch(PDO::FETCH_ASSOC);
-
 //$foldersに格納②
     while(true){
       $folder = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -36,12 +32,18 @@
       $folders[] = $folder;
 
     }
-    // v($folder,'$folder');
-    v($folders,$folders);
-    // v($folder_each['id'],'$folder_each');
+    // v($folders,$folders);
+    if (!empty($_GET['folder'])) {
+      $folder=$_GET['folder'];
+       // v($folder,"$folder");
+    }
 
-    $sql='SELECT * FROM `friends` INNER JOIN `friends_folders`
-    ON `friends_folders`.`friend_id`= `friends`.`id` WHERE `friends_folders`.`folder_owner_id`=?';
+
+
+
+// フォルダーを押すと友達一覧が表示される処理(挑戦中)
+    $sql='SELECT `user_name`,`folder_id`,`friend_id` FROM `users` INNER JOIN `friends_folders`
+    ON `friends_folders`.`friend_id`= `users`.`id` WHERE `friends_folders`.`folder_owner_id`=?';
     $data= array($_SESSION['id']);
     $stmt = $dbh->prepare($sql);
     $stmt->execute($data);
@@ -55,21 +57,24 @@
       }
       $friends[]=$friend;
     }
-    // v($friends,'$friends');
 
+    // v($friends,'$friends');
+    // v($_GET['folder'],'$_GET[folder]');
+    // v($_GET['folder_id'],'$_GET[foler_id');
+
+
+// ID検索ファンクション
     if (!empty($_GET)) {
         $search_friend= $_GET['search_friend'];
-
-
         $sql= "SELECT * FROM `users` WHERE `search_id`=?";
         $data= array($search_friend);
         $stmt = $dbh->prepare($sql);
         $stmt->execute($data);
         $related_friend =$stmt->fetch(PDO::FETCH_ASSOC);
 
-    }
-        v($related_friend,'$related_friend');
         $_SESSION['cherry']['related_friend']=$related_friend;
+    }
+        
 
 
 
@@ -197,7 +202,9 @@
             <input type="text" name="search_friend" value="" class="text">
             <input type="submit" value="検索" class="square_btn ">
             </form>
-            <b style="font-size: 20px">検索結果:<?php echo $related_friend['user_name'] ?></b>
+            <b style="font-size: 20px">検索結果:<?php if(!empty($_GET)): ?><?php echo $related_friend['user_name'] ?>
+              <?php endif; ?>
+            </b>
             </div>
             <div class="pic"><img src="img/profile_first.jpg">
 
@@ -206,8 +213,6 @@
         </div>
         <div class="col-xs-6" style="height: 450px; background-color: #37b8e061; margin: 30px 0px;">
            <br>
-           <br>
-
            <b class=asking>検索された方はこちらの方ですか？ <br>
             よろしければ、フォルダーを選んで登録しましょう！<br>
            </b>
@@ -218,8 +223,6 @@
            <input type="text" name="folder_name" class="text">
            <input type="submit" value="新規作成" class="square_btn">
            </form>
-
-           <br>
             <b style="font-size: 20px">フォルダー選択：</b>
             <div class="scrol_box">
 
@@ -243,15 +246,19 @@
         <div class="row">
           <div class="col-xs-6" style="height: 450px; background-color: #37b8e061; margin:30px 0px;">
             <br>
-            <br>
-            <br>
             <b style="font-size: 20px">♦︎フォルダー♦︎</b><br>
             <br>
-            <form method="POST" action="">
+
+
+<!-- GET送信で二つのデータ送信の仕方がわからない -->
+            
             <?php foreach($folders as $folder_each) :?>
-            <a href="setting.php?folder_id=4"><button class="friends_folder" data-toggle="modal" data-target="#demoNormalModal"><?php echo $folder_each['folder_name'] ;?></button></a>
-            <?php endforeach; ?>
+            <form method="GET" action="" style="float: left">
+            <input type="submit" name="folder" class="friends_folder" data-toggle="modal" data-target="#demoNormalModal" value="<?php echo $folder_each['folder_name']?>">
+            <input type="hidden" name="folder_id" value="<?php echo $folder_each['id']?>">
             </form>
+            <?php endforeach; ?>
+            
             <button class="delet_button" style="float: right;">全件削除</button>
         </div>
         <div class="col-xs-6" style="height: 450px; background-color: #37b8e061; margin: 30px 0px;">
@@ -260,15 +267,20 @@
           <b style="font-size: 20px">友達一覧：</b>
           <br>
           <div class="scrol_box2">
+
+
+          <?php if (isset($_GET['folder_id'])): ?>
           <?php foreach($friends as $friend_each): ?>
-          <?php  if ($folder_each['id']== $friend_each['folder_id']):?>
-          <b><?php echo $friend_each['friend_id'] ?></b><button class="square_btn2">削除</button><br><br>
-          <?php endif;?>
+          <?php if($friend_each['folder_id']== $_GET['folder_id']): ?>
+          <b><?php echo $friend_each['user_name'] ?></b><button class="square_btn2">削除</button><br><br>
+          <?php endif; ?>
           <?php endforeach; ?>
+          <button class="delet_button2">全件削除</button>
+          <?php endif ;?>
 
             <!-- <b>ピーチちゃん</b><button class="square_btn2">削除</button><br><br>
             <b>メロンちゃん</b><button class="square_btn2">削除</button><br><br> -->
-            <button class="delet_button2">全件削除</button>
+            
           </div>
         </div>
         </div>

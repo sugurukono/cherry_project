@@ -2,14 +2,14 @@
     session_start();
     require('dbconnect.php');
     require('functions.php');
-    v($_GET['check_folder'],"check_folder");
-    v($_SESSION["cherry"]["related_friend"],"$_SESSION[cherry][related_friend]");
+    v($_GET['check_folder'],'check_folder');
+    v($_SESSION['cherry']['related_friend'],"$_SESSION[cherry][related_friend]");
 
 
     $friend_id=$_SESSION["cherry"]["related_friend"]["id"];
     // 空が左、右がデータが入っている。
 
-    v($friend_id,"$friend_id");
+    v($friend_id,'$friend_id');
 
 
     $check_folder = $_GET['check_folder'];
