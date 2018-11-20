@@ -89,7 +89,7 @@ $('a.large').fancybox();
       </div>
       <div><br>
         <form method="post" action="../setting.php">
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#demoNormalModal">写真を編集</button>
+          <button class="btn btn-primary">写真を編集</button>
         </form>
       </div>
     </div>
