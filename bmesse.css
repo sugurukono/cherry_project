@@ -48,13 +48,17 @@
     background: #6eb7ff;
     border-bottom: solid 6px #3f87ce;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
-    border-radius: 9px;
+    border-radius: 5px;
     }
     .box13 p {
         margin: 0; 
         padding: 0;
     }
-
+    .font{
+        font-family: 'Lobster', cursive;
+        padding: 10px 13px;
+        margin: 3px -6px;
+    }
     .box15 {
     padding: 0.2em 0.5em;
     margin: 2em 0;
@@ -63,6 +67,7 @@
     box-shadow: 0px 0px 0px 10px #ffeaea;
     border: dashed 2px #ffc3c3;
     border-radius: 8px;
+    font-family: 'Lobster', cursive;
     }
     .box15 p {
         margin: 0; 
@@ -76,6 +81,7 @@
     box-shadow: 0px 0px 0px 10px #ff69b4;
     border: dashed 2px #ffc3c3;
     border-radius: 8px;
+    font-family: 'Lobster', cursive;
     }
     .box16 p {
         margin: 0; 
