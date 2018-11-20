@@ -41,7 +41,7 @@
 
 
 
-// フォルダーを押すと友達一覧が表示される処理(挑戦中)
+// フォルダーを押すと友達一覧が表示される処理
     $sql='SELECT `user_name`,`folder_id`,`friend_id` FROM `users` INNER JOIN `friends_folders`
     ON `friends_folders`.`friend_id`= `users`.`id` WHERE `friends_folders`.`folder_owner_id`=?';
     $data= array($_SESSION['id']);
@@ -50,12 +50,12 @@
     $friends=[];
 
     while(true){
-      $friend =$stmt->fetch(PDO::FETCH_ASSOC);
+        $friend =$stmt->fetch(PDO::FETCH_ASSOC);
 
-      if($friend == false){
-        break;
-      }
-      $friends[]=$friend;
+        if($friend == false){
+            break;
+        }
+            $friends[]=$friend;
     }
 
     // v($friends,'$friends');
@@ -100,7 +100,7 @@
     <li class="words">
         <a href="#">My Page</a>
     </li>
-    <li class="words"><a href="#">Talk</a>
+    <li class="words"><a href="talk_main1.php">Talk</a>
     </li>
     <li class="words">
         <a href="#">Add Friends</a>
@@ -206,22 +206,20 @@
               <?php endif; ?>
             </b>
             </div>
-            <div class="pic"><img src="img/profile_first.jpg">
-
-              </div>
+            <div class="pic"><img src="img/profile_first.jpg"></div>
 
         </div>
         <div class="col-xs-6" style="height: 450px; background-color: #37b8e061; margin: 30px 0px;">
-           <br>
-           <b class=asking>検索された方はこちらの方ですか？ <br>
-            よろしければ、フォルダーを選んで登録しましょう！<br>
-           </b>
+          <br>
+          <b class=asking>検索された方はこちらの方ですか？ <br>
+          よろしければ、フォルダーを選んで登録しましょう！<br>
+          </b>
 <!-- 友達検索・フォルダー作成 -->
-           <br>
-           <form method="POST" action="creat_folder.php">
-           <b style="font-size: 20px">フォルダー新規作成</b>
-           <input type="text" name="folder_name" class="text">
-           <input type="submit" value="新規作成" class="square_btn">
+          <br>
+          <form method="POST" action="creat_folder.php">
+          <b style="font-size: 20px">フォルダー新規作成</b>
+          <input type="text" name="folder_name" class="text">
+          <input type="submit" value="新規作成" class="square_btn">
            </form>
             <b style="font-size: 20px">フォルダー選択：</b>
             <div class="scrol_box">
@@ -249,16 +247,12 @@
             <b style="font-size: 20px">♦︎フォルダー♦︎</b><br>
             <br>
 
-
-<!-- GET送信で二つのデータ送信の仕方がわからない -->
-            
             <?php foreach($folders as $folder_each) :?>
             <form method="GET" action="" style="float: left">
             <input type="submit" name="folder" class="friends_folder" data-toggle="modal" data-target="#demoNormalModal" value="<?php echo $folder_each['folder_name']?>">
             <input type="hidden" name="folder_id" value="<?php echo $folder_each['id']?>">
             </form>
             <?php endforeach; ?>
-            
             <button class="delet_button" style="float: right;">全件削除</button>
         </div>
         <div class="col-xs-6" style="height: 450px; background-color: #37b8e061; margin: 30px 0px;">
@@ -277,9 +271,6 @@
           <?php endforeach; ?>
           <button class="delet_button2">全件削除</button>
           <?php endif ;?>
-
-            <!-- <b>ピーチちゃん</b><button class="square_btn2">削除</button><br><br>
-            <b>メロンちゃん</b><button class="square_btn2">削除</button><br><br> -->
             
           </div>
         </div>
@@ -287,9 +278,6 @@
       </div>
     </div>
     </div>
-
-
-
 
 <div class="row">
     <div class="col-xs-12" style="background-color:black; height:50px;" >
