@@ -56,7 +56,6 @@
         <div class="agileits-grid">
             <div class="content-top-agile">
                 <br><h2>あなたの身長と体重を<br>入力してください</h2>
-                <h5>ホゲホゲ</h5>
             </div>
             <div class="content-bottom">
                 <form action="" method="post">
