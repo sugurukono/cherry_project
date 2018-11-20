@@ -74,7 +74,6 @@ $('a.large').fancybox();
     <li class="words">
         <a href="#">Log Out</a>
     </li>
-    おはよう
          </ul>
     </div>
   </div>
@@ -89,9 +88,9 @@ $('a.large').fancybox();
         </form>
       </div>
       <div><br>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#demoNormalModal">
-            写真を編集
-        </button>
+        <form method="post" action="../setting.php">
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#demoNormalModal">写真を編集</button>
+        </form>
       </div>
     </div>
     <span hidden id="signin-user"><?php echo $signin_user['id']; ?></span>
