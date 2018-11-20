@@ -165,13 +165,13 @@
            <div class="profile2">
             <br>
           <b>お名前</b>
-          <input type="text" name="name" placeholder="さくらんぼ" value="" class="text"><br>
+          <input type="text" name="name" placeholder="さくらんぼ" value="<?php echo $signin_user['user_name']; ?>" class="text"><br>
           <b>ID設定</b>
-          <input type="text" name="id" placeholder="sakura"value="" class="text"><br>
-          <b>Emali</b>
-          <input type="email" name="email" placeholder="sakura@gmail.com" value="" class="text"><br>
+          <input type="text" name="id" placeholder="sakura"value="<?php echo $signin_user['search_id']; ?>" class="text"><br>
+          <b>Email</b>
+          <input type="email" name="email" placeholder="sakura@gmail.com" value="<?php echo $signin_user['email']; ?>" class="text"><br>
           <b>ひとこと</b>
-          <textarea placeholder="🍒チェリー" class="text"></textarea>
+          <textarea placeholder="🍒チェリー" class="text"><?php echo $signin_user['password']; ?></textarea>
 
           <input type="submit" value="更新" class="square_btn4" style="float: right;">
             </div>
