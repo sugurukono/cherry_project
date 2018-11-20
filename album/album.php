@@ -13,12 +13,6 @@
 
     // $validations = array();
 
-    $sql = 'SELECT * FROM `users` WHERE `user_name`=1';
-    $data = array();
-
-    $stmt = $dbh->prepare($sql);
-    $stmt->execute($data);
-
 
 ?>
 
@@ -95,7 +89,7 @@ $('a.large').fancybox();
     </div>
     <span hidden id="signin-user"><?php echo $signin_user['id']; ?></span>
     <div class="box3"><h3>ユーザー名：<?php echo $signin_user['user_name']; ?></h3><h3>ID：<?php echo $signin_user['id']; ?></h3><h3>友達：10000人</h3></div>
-    <div class="box2"><h1><img src="user_profile_img/<?php echo $signin_user['img_name']; ?>"></h1></div>
+    <div class="box2"><h1><img src="user_profile_img/<?php echo $signin_user['user_img']; ?>"></h1></div>
     <div class="box2"><h1><br>PROFILE</h1></div><br>
 
     <div id="wrap" style="background-color:white;">
