@@ -11,6 +11,46 @@
 
     v($signin_user,'$signin_user');
 
+    $user_id="";
+    $signin_user['id'] = $user_id;
+    $folder='';
+//foldersテーブルからデータ取得①
+    $sql = 'SELECT * FROM `folders` WHERE `user_id`=?';
+    $data = array($_SESSION['id']);//WHEREで入れたやつだけでOK
+    $stmt = $dbh->prepare($sql);
+    $stmt->execute($data);
+//$foldersに格納②
+    while(true){
+      $folder = $stmt->fetch(PDO::FETCH_ASSOC);
+
+      if($folder == false){
+        break;
+      }
+      $folders[] = $folder;
+
+    }
+    // v($folders,$folders);
+    if (!empty($_GET['folder'])) {
+      $folder=$_GET['folder'];
+       // v($folder,"$folder");
+    }
+
+// フォルダーを押すと友達一覧が表示される処理
+    $sql='SELECT `user_name`,`folder_id`,`friend_id` FROM `users` INNER JOIN `friends_folders`
+    ON `friends_folders`.`friend_id`= `users`.`id` WHERE `friends_folders`.`folder_owner_id`=?';
+    $data= array($_SESSION['id']);
+    $stmt = $dbh->prepare($sql);
+    $stmt->execute($data);
+    $friends=[];
+
+    while(true){
+        $friend =$stmt->fetch(PDO::FETCH_ASSOC);
+
+        if($friend == false){
+            break;
+        }
+            $friends[]=$friend;
+    }
 
 ?>
 
@@ -76,12 +116,11 @@
         <img src="images/icon_ninja.jpeg"><br><br>
         <img src="images/icon_hotspring.jpeg"><br><br>
     </div>
+    <form method="POST" action="creat_folder.php">
     <div id="container" class="col-xs-3" style="background-color:pink; height:690px">
         <div class="font" style="font-size: 25px;"><p>Folders</p></div>
         <div class="box13"><p>ママ友</p></div>
-        <div class="box12"><p>フォルダ１</p></div>
-        <div class="box12"><p>フォルダ２</p></div>
-        <div class="box12"><p>フォルダ３</p></div>
+    </form>
     </div>
     <div id="container" class="col-xs-3" style="background-color:white; height:690px">
         <div class="font" style="font-size: 25px;"><p>Friends</p></div>
