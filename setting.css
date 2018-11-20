@@ -1,0 +1,327 @@
+html, body{
+    margin: 0;         /* 余白の削除 */
+    padding: 0;        /* 余白の削除 */
+    width:100%;
+    height:100%;
+}
+
+
+.background{
+    background: url(img/setting1.jpg)no-repeat center;
+    padding-top:170px;
+  }
+
+.background2{
+    background: url(img/setting2.jpg)no-repeat center;
+  }
+
+.background3{
+    background: url(img/setting4.jpg)no-repeat center;
+  }
+
+.background4{
+    background: url(img/setting3.jpg)no-repeat center;
+  }
+
+
+.img{
+  background-size: cover;
+  
+  }
+
+#header{
+  left:0;
+  line-height:1;
+  position:fixed;
+  top:0;
+  z-index:24;
+
+}
+
+.box1 {
+    padding: 0.5em 1em;
+    margin: 2em 0;
+    font-weight: bold;
+    border: solid 3px #000000;
+}
+.box1 p {
+    margin: 0; 
+    padding: 0;
+}
+
+.words2 a{
+  float: left;
+  font-family: 'Lobster', cursive;
+  font-size: 25px;
+  padding: 12px 70px;
+  color:#003366;
+  text-decoration: none;
+  /*-webkit-transition: all 0.5s ease;
+    /*-*/moz-transition: all 0.5s ease;
+    /*-o-transition: all 0.5s ease;*/
+    /*transition: all  0.5s ease;*/*/
+}
+.words2 a:hover{
+  color:#fe5f95;
+  text-decoration: none;
+}
+
+li{float:left;}
+
+.menu{
+  font-size: 32px;
+  color:black;
+  font-family: 'Lobster', cursive;
+  padding: 7px 64px;
+}
+
+.title_1{
+  font-size: 50px
+  color:black;
+}
+
+.box2 {
+    background-color: #37b8e061;
+    color: black;
+    margin: 2em 0;
+    padding: 150px;
+}
+
+.box3{
+    border: 4px double #ddd;
+    margin: 2em 0;
+    padding: 2em;
+}
+
+.profile1 b{
+  font-size: 25px;
+  margin-top:20px;
+}
+
+.profile1{
+  margin-left: 130px
+}
+
+.profile2{
+  float:left;
+  width:200px;
+  hight:300px;
+}
+
+.profile2 b{
+  font-size: 20px;
+  margin-top: 10px;
+}
+
+.square_btn{
+    display: inline-block;
+    padding: 10px;
+    margin: 10px;
+    text-decoration: none;
+    background: #668ad8;/*ボタン色*/
+    color: #FFF;
+    border-bottom: solid 4px #627295;
+    border-radius: 3px;
+}
+.square_btn:active {/*ボタンを押したとき*/
+    -ms-transform: translateY(4px);
+    -webkit-transform: translateY(4px);
+    transform: translateY(4px);/*下に動く*/
+    border-bottom: none;/*線を消す*/
+}
+
+.text {
+    padding: 9px;
+    padding-right: 200px;
+    margin: 10px 0px;
+    background: white;/*背景色*/
+    border-top: solid 6px #003366;
+    box-shadow: 0 3px 4px rgba(0, 0, 0, 0.32);/*影*/
+    font-weight: bold;
+    color: #003366;/*文字色*/
+}
+
+.title_2{
+    color:white;
+}
+.pic img {
+  display: inline-block;
+  background-position: center;
+  border-radius: 50%;  /* 角丸半径を50%にする(=円形にする) */
+  width: 250px;
+    height: 250px;
+    margin: -17px 185px;
+  float: right;   
+}
+
+.friends_folder{
+    display: inline-block;
+    text-decoration: none;
+    background: #051779f7;
+    color: #FFF;
+    width: 120px;
+    height: 120px;
+    line-height: 120px;
+    border-radius: 50%;
+    text-align: center;
+    font-weight: bold;
+    vertical-align: middle;
+    overflow: hidden;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.29);
+    border-bottom: solid 3px #e894e0;
+    transition: .4s;
+}
+
+.friends_folder:active{
+    -ms-transform: translateY(2px);
+    -webkit-transform: translateY(2px);
+    transform: translateY(2px);
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0.15);
+    border-bottom: none;
+}
+
+.delet_button{
+  margin: 23px 100px;
+  padding:10px 10px;
+  position: relative;
+  display: inline-block;
+  padding: .8em 4em;
+  background: -webkit-linear-gradient(#fe5f95 , #ff3f7f);
+  background: linear-gradient(#fe5f95 , #ff3f7f);
+  border: 1px solid #fe3276;
+  border-radius: 4px;
+  color: #fff;
+  text-decoration: none;
+  text-align: center;
+}
+.delet_button::after {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  bottom: 3px;
+  left: 3px;
+  content: '';
+}
+
+
+.id{
+  margin: 30px 50px;
+}
+
+.kensaku{
+  float: right;
+  padding: 10px 50px;
+  margin: 1px -5px;
+}
+
+.asking{
+  font-size: 20px
+
+}
+
+.scrol_box {
+    overflow:auto;
+    width: 380px;
+    height:120px;
+    padding:5px 20px;
+    border: double 2px  #ffffff;
+    color:black;
+    background-color:#3ceff169;
+    line-height:1.5em;
+    font-size: 20px;
+    margin-top: 20px;
+  }
+
+  .square_btn2 {
+    display: inline-block;
+    text-decoration: none;
+    color: #67c5ff;
+    border: solid 2px #67c5ff;
+    border-radius: 3px;
+    transition: .4s;
+    float: right;
+
+}
+
+.square_btn2:hover {
+    background: #67c5ff;
+    color: white;
+}
+
+.scrol_box b{
+    margin:20px 0px;
+}
+
+.square_btn3{
+  margin: 23px 100px;
+  padding:10px 10px;
+  position: relative;
+  display: inline-block;
+  padding: .8em 4em;
+  background: -webkit-linear-gradient(#fe5f95 , #ff3f7f);
+  background: linear-gradient(#fe5f95 , #ff3f7f);
+  border: 1px solid #fe3276;
+  border-radius: 4px;
+  color: #fff;
+  text-decoration: none;
+  text-align: center;
+}
+
+.delet_button2{
+  margin: 30px 110px;
+  padding:10px 10px;
+  position: relative;
+  display: inline-block;
+  padding: 10px 30px;
+  background: -webkit-linear-gradient(#fe5f95 , #ff3f7f);
+  background: linear-gradient(#fe5f95 , #ff3f7f);
+  border: 1px solid #fe3276;
+  border-radius: 4px;
+  color: #fff;
+  text-decoration: none;
+  text-align: center;
+}
+.delet_button2::after {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  bottom: 3px;
+  left: 3px;
+  content: '';
+}
+
+
+.scrol_box2 {
+    overflow:auto;
+    width: 420px;
+    height: 260px;
+    padding:5px 20px;
+    border: double 2px  #ffffff;
+    color:black;
+    background-color:#3ceff169;
+    line-height:1.5em;
+    font-size: 20px;
+    margin-top: 20px;
+  }
+
+.btn{
+  margin-left:300px;
+}
+
+.square_btn4{
+display: inline-block;
+    padding: 1px 20px;
+    margin: -5px -186px;
+    text-decoration: none;
+    background: #668ad8;/*ボタン色*/
+    color: #FFF;
+    border-bottom: solid 4px #627295;
+    border-radius: 3px;
+}
+.square_btn4:active {/*ボタンを押したとき*/
+    -ms-transform: translateY(4px);
+    -webkit-transform: translateY(4px);
+    transform: translateY(4px);/*下に動く*/
+    border-bottom: none;/*線を消す*/
+}
+
