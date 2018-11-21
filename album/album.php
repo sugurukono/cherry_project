@@ -5,13 +5,30 @@
     require('../dbconnect.php');
 
     $data = array();
-    $sql = 'SELECT * FROM `users` WHERE `id` = 1';
+    $sql = 'SELECT * FROM `users` WHERE `id` = 4';
 
     $stmt = $dbh->prepare($sql);//アロー演算子の左側をオブジェクトという
     $stmt->execute($data);
     $signin_user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // $validations = array();
+    $validations = array();
+    $feed = '';
+
+    $feed = $stmt->fetch(PDO::FETCH_ASSOC);
+        //$feed連想配列にlike数を格納するキーを用意し、数字を代入する
+        //代入するlike数を取得するSQL文の実行
+        $friends_sql = 'SELECT COUNT(*) as `friends_count` FROM `friends` WHERE `id` = ?';
+        $friends_data = array($feed['id']);
+        $friends_stmt = $dbh->prepare($friends_sql);
+        $friends_stmt->execute($friends_data);
+
+        $friends_count_data = $friends_stmt->fetch(PDO::FETCH_ASSOC);
+
+        $feed['friends_count'] = $friends_count_data['friends_count'];
+
+        v($feed,'$feed');
+        //[]は、配列の末尾にデータを追加するという意味
+
 
 
 ?>
@@ -87,10 +104,11 @@ $('a.large').fancybox();
         </form>
       </div>
     </div>
-    <span hidden id="signin-user"><?php echo $signin_user['id']; ?></span>
-    <div class="box3"><h3>ユーザー名：<?php echo $signin_user['user_name']; ?></h3><h3>ID：<?php echo $signin_user['id']; ?></h3><h3>友達：10000人</h3></div>
-    <div class="box2"><h1><img src="user_profile_img/<?php echo $signin_user['user_img']; ?>"></h1></div>
-    <div class="box2"><h1><br>PROFILE</h1></div><br>
+      <span hidden id="signin-user"><?php echo $signin_user['id']; ?></span>
+      <div class="box3"><h3>ユーザー名：<?php echo $signin_user['user_name']; ?></h3><h3>ID：<?php echo $signin_user['id']; ?></h3><h3><span class="friends_count">友達：<?= $feed['friends_count']; ?></span>人</h3></div>
+      <div class="box2"><h1><img src="<?php echo $signin_user['user_img']; ?>"></h1></div>
+      <div class="box2"><h1><br>PROFILE</h1></div><br>
+    
 
     <div id="wrap" style="background-color:white;">
       <a class="large" rel="group" title="タイトル 1"
