@@ -103,7 +103,7 @@
     <!-- ヘッダー 開始-->
   <div class="row">
     <div class="col-xs-12" style="background-color: #003366; height: 90px">
-      <h1 class="title" style="color:white;">🍒Cherry</h1>
+    <a href="top.php"><h1 class="title" style="color:white;">🍒Cherry</h1></a>
 
     <li class="words">
         <a href="#">My Page</a>
@@ -212,7 +212,16 @@
                 </div>
                 <div class="bms_clear"></div><!-- 回り込みを解除（スタイルはcssで充てる） -->
 
-                <!--メッセージ２（右側）-->
+                <div class="bms_message bms_right">
+                    <div class="bms_message_box">
+                        <div class="bms_message_content">
+                            <div class="bms_message_text">テスト</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bms_clear"></div><!-- 回り込みを解除（スタイルはcssで充てる） -->
+
+                <!--メッセージ（右側）-->
                 <?php foreach ($talks as $talk_each):?>
                 <div class="bms_message bms_right">
                     <div class="bms_message_box">
@@ -221,12 +230,9 @@
                         </div>
                     </div>
                 </div>
+                <div class="bms_clear"></div><!-- 回り込みを解除（スタイルはcssで充てる） -->
                 <?php endforeach; ?>
-                <br>
-                <div class="bms_clear"></div>
-                <!-- 回り込みを解除（スタイルはcssで充てる） -->
             </div>
-
             <!-- テキストボックス、送信ボタン④ -->
             <div id="bms_send">
                 <form method="GET" action="">
