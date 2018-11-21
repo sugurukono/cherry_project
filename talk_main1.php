@@ -29,7 +29,7 @@
       $folders[] = $folder;
 
     }
-    // v($folders,$folders);
+    v($folders,'$folders');
     if (!empty($_GET['folder'])) {
       $folder=$_GET['folder'];
        // v($folder,"$folder");
@@ -52,6 +52,33 @@
             $friends[]=$friend;
     }
 
+    v($friends,'$friends');
+    v($_GET['sending'],'$_GET[sending]');
+
+// 送信ボタンを押されたら、自分のトークが表示される
+    if (!empty($_GET['sending'])) {
+        $sql= 'INSERT INTO `talk` SET `sender_id`=?, `receiver_id`=4, `message_type`=1, `message`=?,`send_date`=NOW();';
+        $data = array($signin_user['id'], $_GET['sending']);
+        $stmt = $dbh->prepare($sql);
+        $stmt->execute($data);
+        
+    }
+//トークの内容を取得
+        $sql='SELECT `message` FROM `talk` WHERE `sender_id`=?';
+        $data = array($signin_user['id']);
+        $stmt = $dbh->prepare($sql);
+        $stmt->execute($data);
+        $talks=[];
+
+    while (true) {
+        $talk =$stmt->fetch(PDO::FETCH_ASSOC);
+        if ($talk == false) {
+            break;
+        }
+        $talks[]=$talk;
+    }
+
+    v($talks,'$talks');
 ?>
 
 
@@ -116,18 +143,39 @@
         <img src="images/icon_ninja.jpeg"><br><br>
         <img src="images/icon_hotspring.jpeg"><br><br>
     </div>
-    <form method="POST" action="creat_folder.php">
+
+
+
+
+    <!-- フォルダー -->
+    
     <div id="container" class="col-xs-3" style="background-color:pink; height:690px">
-        <div class="font" style="font-size: 25px;"><p>Folders</p></div>
-        <div class="box13"><p>ママ友</p></div>
-    </form>
+         <div class="font" style="font-size: 25px;"><p>Folders</p></div>
+        <?php foreach($folders as $folder_each) :?>
+        <form method="GET" action="">
+        <input type="submit" name="folder" class="box13" value="<?php echo $folder_each['folder_name'] ?>">
+        <input type="hidden" name="folder_id" value="<?php echo $folder_each['id']?>">
+        </form>
+    <?php endforeach; ?>
     </div>
+
+
+
     <div id="container" class="col-xs-3" style="background-color:white; height:690px">
-        <div class="font" style="font-size: 25px;"><p>Friends</p></div>
-        <div><p class="font">🍒YU</p></div>
-        <div><p class="font">🍒KATSUE</p></div>
-        <div><p class="font">🍒ETSUKO</p></div>
+    <!-- 友達一覧 -->
+        <!-- <div class="font" style="font-size: 25px;"><p>Friends</p></div> -->
+        <?php if (isset($_GET['folder_id'])): ?>
+        <?php foreach($friends as $friend_each): ?>
+        <?php if($friend_each['folder_id']== $_GET['folder_id']): ?>
+        <div><p class="font">🍒<?php echo $friend_each['user_name'] ?></p></div>
+        <?php endif; ?>
+        <?php endforeach; ?>
+        <?php endif; ?>
     </div>
+
+
+
+
     <div id="your_container">
         <!-- チャットの外側部分① -->
         <div id="bms_messages_container">
@@ -136,9 +184,9 @@
                 <!--ステータス-->
                 <div id="bms_chat_user_status">
                     <!--ステータスアイコン-->
-                    <div id="bms_status_icon">●</div>
+                    <div id="bms_status_icon">🍒</div>
                     <!--ユーザー名-->
-                    <div id="bms_chat_user_name">ユーザー</div>
+                    <div id="bms_chat_user_name"><?php echo $signin_user['user_name'] ?></div>
                 </div>
             </div>
 
@@ -165,20 +213,27 @@
                 <div class="bms_clear"></div><!-- 回り込みを解除（スタイルはcssで充てる） -->
 
                 <!--メッセージ２（右側）-->
+                <?php foreach ($talks as $talk_each):?>
                 <div class="bms_message bms_right">
                     <div class="bms_message_box">
                         <div class="bms_message_content">
-                            <div class="bms_message_text">うん、まあまあいけとるな</div>
+                            <div class="bms_message_text"><?php echo $talk_each['message']?></div>
                         </div>
                     </div>
                 </div>
-                <div class="bms_clear"></div><!-- 回り込みを解除（スタイルはcssで充てる） -->
+                <?php endforeach; ?>
+                <br>
+                <div class="bms_clear"></div>
+                <!-- 回り込みを解除（スタイルはcssで充てる） -->
             </div>
 
             <!-- テキストボックス、送信ボタン④ -->
             <div id="bms_send">
-                <textarea id="bms_send_message"></textarea>
-                <div id="bms_send_btn">送信</div>
+                <form method="GET" action="">
+                <input type="text" name="sending" id="bms_send_message">
+                <input type="submit"  id="bms_send_btn"value="送信">
+            </div>
+                </form>
             </div>
         </div>
     </div>
