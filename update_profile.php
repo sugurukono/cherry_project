@@ -1,5 +1,6 @@
 <?php
     session_start();
+    require('dbconnect.php');
 
     $sql = 'SELECT * FROM `users` WHERE `id`=?';
     $data = array($_SESSION["id"]);
@@ -9,7 +10,7 @@
 
     if (!empty($_POST)) {
         $update_sql = "UPDATE `users` SET `user_img`=?,`user_name`=?,`search_id`=?,`email`=?,`comments`=? WHERE id=?";
-        $data = array($_POST["user_img"],$_POST["name"],$_POST["id"],$_POST["email"],$_POST["comments"]);
+        $data = array($_POST["user_img"],$_POST["name"],$_POST["id"],$_POST["email"],$_POST["comments"],$_SESSION["id"]);
         $stmt = $dbh->prepare($update_sql);
         $stmt->execute($data);
         header("Location: setting.php");

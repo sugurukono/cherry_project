@@ -78,11 +78,11 @@
 // 編集バリデーション・アップロード機能
 
     // $validations =array();
-    // $user_img = $signin_user['user_img'];
-    // $user_name = $signin_user['user_name'];
-    // $search_id = $signin_user['search_id'];
-    // $email = $signin_user['email'];
-    // $comments = $signin_user['comments'];
+    $user_img = $signin_user['user_img'];
+    $user_name = $signin_user['user_name'];
+    $search_id = $signin_user['search_id'];
+    $email = $signin_user['email'];
+    $comments = $signin_user['comments'];
 
     // if (!empty($_POST)) {
 
@@ -184,7 +184,7 @@
         <h1><span class="title_1">♦︎プロフィール編集♦︎</span></h1>
 
         <div class="row">
-          <form method="POST" action="">
+          <form method="POST" action="update_profile.php">
           <div class="col-xs-6" style="height: 450px; background-color: #37b8e061; margin:30px 0px;">
             <div class="profile1">
               
