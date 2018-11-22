@@ -219,7 +219,7 @@
       <div>
         <h1><span class="title_2">♦︎お友達検索♦︎</span></h1>
         <div class="row">
-          <div class="col-xs-6" style="height: 450px; background-color: #37b8e061; margin:30px 0px;">
+          <div class="col-xs-6" style="height: 600px; background-color: #37b8e061; margin:30px 0px;">
             <div class="id">
 <!-- ID検索 -->
             <b style="font-size: 20px;">ID検索：</b>
@@ -232,10 +232,10 @@
             </b>
             </div>
             <div class="pic"><img src="img/profile_first.jpg"></div>
-            <input type="submit" value="リクエスト" class="square_btn4" style="float: left;">
+           <input type="submit" value="友達リクエストを送る" class="square_btn3" style="float: right; ">
 
         </div>
-        <div class="col-xs-6" style="height: 450px; background-color: #37b8e061; margin: 30px 0px;">
+        <div class="col-xs-6" style="height: 600px; background-color: #37b8e061; margin: 30px 0px;">
           <br>
           <b class=asking>検索された方はこちらの方ですか？ <br>
           よろしければ、フォルダーを選んで登録しましょう！<br>
