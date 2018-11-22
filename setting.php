@@ -63,7 +63,6 @@
 
 
 // ID検索ファンクション
-    $related_friend['user_img'] == '';
     if (!empty($_GET)) {
         $search_friend= $_GET['search_friend'];
         $sql= "SELECT * FROM `users` WHERE `search_id`=?";
