@@ -12,7 +12,7 @@
     v($signin_user,'$signin_user');
 
     $user_id="";
-    $signin_user['id'] = $user_id;
+    $user_id=$signin_user['id'];
     $folder='';
 //foldersテーブルからデータ取得①
     $sql = 'SELECT * FROM `folders` WHERE `user_id`=?';
@@ -29,7 +29,7 @@
       $folders[] = $folder;
 
     }
-    v($folders,'$folders');
+    // v($folders,'$folders');
     if (!empty($_GET['folder'])) {
       $folder=$_GET['folder'];
        // v($folder,"$folder");
@@ -51,18 +51,57 @@
         }
             $friends[]=$friend;
     }
+    $friend_id= "";
+    $folder_id= "";
+    $friend_id= $_GET['friend_id'];
+    $folder_id= $_GET['folder_id'];
 
-    v($friends,'$friends');
-    v($_GET['sending'],'$_GET[sending]');
+     v($friends,'$friends');
+    // v($_GET['sending'],'$_GET[sending]');
+    v($friend_id,'$friend_id');
+    // v($signin_user['id'],'$signin_user');
+     // v($friends['friend_id'],'$friends[friend_id]');
+
+    //チャットルームを探すSELECT分実行
+    //存在している時はチャットルームIDを取得
+    //存在していない時はチャットルームにデータを挿入
+    if (!empty($friend_id)) {
+       
+    
+    $sql='SELECT * FROM `chatroom` WHERE `owner_id`=? AND`member_id`=?';
+    $data = array($user_id,$friend_id);
+    $stmt = $dbh->prepare($sql);
+    $stmt->execute($data);
+    $chatroom_data=$stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!empty($chatroom_id)) {
+        $chatroom_id=$chatroom_data['id'];
+    }
+
+    if (empty($chatroom_id)) {
+        $sql='INSERT INTO `chatroom` SET `owner_id`=?, `member_id`=?';
+        $data = array($user_id,$friend_id);
+        $stmt = $dbh->prepare($sql);
+        $stmt->execute($data);
+        $chatroom=$dbh->lastInsertId();
+    }
+    }
+
+v($chatroom_id,'$chatroom_id');
+
+
+
 
 // 送信ボタンを押されたら、自分のトークが表示される
     if (!empty($_GET['sending'])) {
-        $sql= 'INSERT INTO `talk` SET `sender_id`=?, `receiver_id`=4, `message_type`=1, `message`=?,`send_date`=NOW();';
-        $data = array($signin_user['id'], $_GET['sending']);
+        $sql= 'INSERT INTO `talk` SET `chat_room_id`=? `sender_id`=?, `receiver_id`=?, `message_type`=1, `message`=?,`send_date`=NOW();';
+        $data = array($chatroom_id,$signin_user['id'],$friend_id,$_GET['sending'],);
         $stmt = $dbh->prepare($sql);
         $stmt->execute($data);
-        
+
     }
+
+
 //トークの内容を取得
         $sql='SELECT `message` FROM `talk` WHERE `sender_id`=?';
         $data = array($signin_user['id']);
@@ -78,7 +117,15 @@
         $talks[]=$talk;
     }
 
-    v($talks,'$talks');
+    // v($talks,'$talks');
+
+    // v($_GET['friend_id'],'friend_id');
+    // v($_GET['folder_id'],'folder_id');
+    
+
+
+
+
 ?>
 
 
@@ -163,14 +210,18 @@
 
     <div id="container" class="col-xs-3" style="background-color:white; height:690px">
     <!-- 友達一覧 -->
-        <!-- <div class="font" style="font-size: 25px;"><p>Friends</p></div> -->
-        <?php if (isset($_GET['folder_id'])): ?>
+        <form method="GET" action="">
+        <?php if (isset($folder_id)): ?>
         <?php foreach($friends as $friend_each): ?>
-        <?php if($friend_each['folder_id']== $_GET['folder_id']): ?>
-        <div><p class="font">🍒<?php echo $friend_each['user_name'] ?></p></div>
+        <?php if($friend_each['folder_id']== $folder_id): ?>
+        <div>
+        <button class="font">🍒<?php echo $friend_each['user_name'] ?></button>
+        <input type="hidden" name="friend_id" value="<?php echo $friend_each['friend_id']?>">
+        </div>
         <?php endif; ?>
         <?php endforeach; ?>
         <?php endif; ?>
+        </form>
     </div>
 
 
@@ -191,6 +242,7 @@
             </div>
 
             <!-- タイムライン部分③ -->
+
             <div id="bms_messages">
 
                 <!--メッセージ１（左側）-->
@@ -233,6 +285,8 @@
                 <div class="bms_clear"></div><!-- 回り込みを解除（スタイルはcssで充てる） -->
                 <?php endforeach; ?>
             </div>
+
+
             <!-- テキストボックス、送信ボタン④ -->
             <div id="bms_send">
                 <form method="GET" action="">
