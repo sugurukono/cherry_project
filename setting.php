@@ -75,39 +75,20 @@
         $_SESSION['cherry']['related_friend']=$related_friend;
     }
         
-// 編集バリデーション・アップロード機能
+// プロフィール情報の読み込み
 
-    // $validations =array();
     $user_img = $signin_user['user_img'];
     $user_name = $signin_user['user_name'];
     $search_id = $signin_user['search_id'];
     $email = $signin_user['email'];
     $comments = $signin_user['comments'];
 
-    // if (!empty($_POST)) {
-
-    //     if ($user_name == '') {
-    //         $validations['user_name'] = 'blank';
-    //     }
-    //     if ($search_id == '') {
-    //         $validations['search_id'] = 'blank';
-    //     }
-    //     if ($email == '') {
-    //         $validations['email'] = 'blank';
-    //     }
-    //     if (empty($validations)) {
-    //         $user_img = $_POST["user_img"];
-    //         $user_name = $_POST["name"];
-    //         $search_id = $$_POST["id"];
-    //         $email = $_POST["email"];
-
-    //         $update_sql = "UPDATE `users` SET `user_img`=?,`user_name`=?,`search_id`=?,`email`=?,`comments`=? WHERE id=?";
-    //         $data = array($_POST["user_img"],$_POST["name"],$_POST["id"],$_POST["email"],$_POST["comments"]);
-    //         $stmt = $dbh->prepare($update_sql);
-    //         $stmt->execute($data);
-    //     }
-    // }
-
+//バリデーション
+    if(!isset($_SESSION['error'])){
+        $error['user_name'] = $_SESSION['error']['name'];
+        $error['search_id'] = $_SESSION['error']['search_id'];
+        $error['email'] = $_SESSION['error']['email'];
+  }
 
 
 ?>
@@ -184,38 +165,38 @@
         <h1><span class="title_1">♦︎プロフィール編集♦︎</span></h1>
 
         <div class="row">
-          <form method="POST" action="update_profile.php">
-          <div class="col-xs-6" style="height: 450px; background-color: #37b8e061; margin:30px 0px;">
+          <form method="POST" action="update_profile.php" enctype="multipart/form-data">
+          <div class="col-xs-6" style="height: 600px; background-color: #37b8e061; margin:30px 0px;">
             <div class="profile1">
               
-                <p>プロフィール画像</p> <!-- img/profile_first.jpg -->
+                <b>プロフィール画像</b> 
                   <?php if($user_img == '') :?>
                   <img src="img/profile_first.jpg" style="width: 300px; height: 300px;">
                   <?php else : ?>
-                <img src="<?php echo $user_img; ?>" style="width: 300px; height: 300px;">
+                <img src="user_img/<?php echo $user_img; ?>" style="width: 300px; height: 300px;">
                 <?php endif; ?>
                 <span class="square_btn"><input type="file" name="img_name" accept="image/*"></span>
             </div>
           </div>
-          <div class="col-xs-6" style="height: 450px; background-color: #37b8e061; margin: 30px 0px;">
+          <div class="col-xs-6" style="height: 600px; background-color: #37b8e061; margin: 30px 0px;">
             <div class="profile2"><br>
                 <b>お名前</b>
-                <input type="text" name="name" placeholder="さくらんぼ" value="<?php echo $user_name; ?>" class="text"><br>
-                <?php if (isset($validations['user_name']) && $validations['user_name'] == 'blank'):?>
+                <input type="text" name="name" placeholder="さくらんぼ" value="<?php echo htmlspecialchars($user_name); ?>" class="text"><br>
+                <?php if (isset($error['user_name']) && $error['user_name'] == 'blank'):?>
                   <p> <span class="error_msg">お名前を入力してください。</span></p>
                 <?php endif; ?>
                 <b>ID設定</b>
-                <input type="text" name="id" placeholder="sakura"value="<?php echo $search_id; ?>" class="text"><br>
-                <?php if (isset($validations['search_id']) && $validations['search_id'] == 'blank'):?>
+                <input type="text" name="id" placeholder="sakura"value="<?php echo htmlspecialchars($search_id); ?>" class="text"><br>
+                <?php if (isset($error['search_id']) && $error['search_id'] == 'blank'):?>
                   <p> <span class="error_msg">IDを入力してください。</span></p>
                 <?php endif; ?>
                 <b>Email</b>
-                <input type="email" name="email" placeholder="sakura@gmail.com" value="<?php echo $email; ?>" class="text"><br>
-                <?php if (isset($validations['email']) && $validations['email'] == 'blank'):?>
+                <input type="email" name="email" placeholder="sakura@gmail.com" value="<?php echo htmlspecialchars($email); ?>" class="text"><br>
+                <?php if (isset($error['email']) && $error['email'] == 'blank'):?>
                   <p> <span class="error_msg">メールアドレスを入力してください。</span></p>
                 <?php endif; ?>
                 <b>ひとこと</b>
-                <textarea placeholder="🍒チェリー" class="text" name="comments"><?php echo $comments; ?></textarea>
+                <textarea placeholder="🍒チェリー" class="text" name="comments"><?php echo htmlspecialchars($comments); ?></textarea>
                 <input type="submit" value="更新" class="square_btn4" style="float: right;">
               
             </div>
