@@ -5,19 +5,30 @@
     require('../dbconnect.php');
 
     $data = array();
-    $sql = 'SELECT * FROM `users` WHERE `id` = 1';
+    $sql = 'SELECT * FROM `users` WHERE `id` = 4';
 
     $stmt = $dbh->prepare($sql);//アロー演算子の左側をオブジェクトという
     $stmt->execute($data);
     $signin_user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // $validations = array();
+    $validations = array();
+    $feed = '';
 
-    $sql = 'SELECT * FROM `users` WHERE `user_name`=1';
-    $data = array();
+    $feed = $stmt->fetch(PDO::FETCH_ASSOC);
+        //$feed連想配列にlike数を格納するキーを用意し、数字を代入する
+        //代入するlike数を取得するSQL文の実行
+        $friends_sql = 'SELECT COUNT(*) as `friends_count` FROM `friends` WHERE `id` = ?';
+        $friends_data = array($feed['id']);
+        $friends_stmt = $dbh->prepare($friends_sql);
+        $friends_stmt->execute($friends_data);
 
-    $stmt = $dbh->prepare($sql);
-    $stmt->execute($data);
+        $friends_count_data = $friends_stmt->fetch(PDO::FETCH_ASSOC);
+
+        $feed['friends_count'] = $friends_count_data['friends_count'];
+
+        v($feed,'$feed');
+        //[]は、配列の末尾にデータを追加するという意味
+
 
 
 ?>
@@ -74,7 +85,6 @@ $('a.large').fancybox();
     <li class="words">
         <a href="#">Log Out</a>
     </li>
-    おはよう
          </ul>
     </div>
   </div>
@@ -89,15 +99,16 @@ $('a.large').fancybox();
         </form>
       </div>
       <div><br>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#demoNormalModal">
-            写真を編集
-        </button>
+        <form method="post" action="../setting.php">
+          <button class="btn btn-primary">写真を編集</button>
+        </form>
       </div>
     </div>
-    <span hidden id="signin-user"><?php echo $signin_user['id']; ?></span>
-    <div class="box3"><h3>ユーザー名：<?php echo $signin_user['user_name']; ?></h3><h3>ID：<?php echo $signin_user['id']; ?></h3><h3>友達：10000人</h3></div>
-    <div class="box2"><h1><img src="user_profile_img/<?php echo $signin_user['img_name']; ?>"></h1></div>
-    <div class="box2"><h1><br>PROFILE</h1></div><br>
+      <span hidden id="signin-user"><?php echo $signin_user['id']; ?></span>
+      <div class="box3"><h3>ユーザー名：<?php echo $signin_user['user_name']; ?></h3><h3>ID：<?php echo $signin_user['id']; ?></h3><h3><span class="friends_count">友達：<?= $feed['friends_count']; ?></span>人</h3></div>
+      <div class="box2"><h1><img src="images/20181019035621IMG_7352.jpg"></h1></div>
+      <div class="box2"><h1><br>PROFILE</h1></div><br>
+    
 
     <div id="wrap" style="background-color:white;">
       <a class="large" rel="group" title="タイトル 1"
