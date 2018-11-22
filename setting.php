@@ -51,7 +51,6 @@
 
     while(true){
         $friend =$stmt->fetch(PDO::FETCH_ASSOC);
-
         if($friend == false){
             break;
         }
@@ -64,6 +63,7 @@
 
 
 // ID検索ファンクション
+    $related_friend['user_img'] == '';
     if (!empty($_GET)) {
         $search_friend= $_GET['search_friend'];
         $sql= "SELECT * FROM `users` WHERE `search_id`=?";
@@ -231,13 +231,21 @@
               <?php endif; ?>
             </b>
             </div>
-            <div class="pic"><img src="img/profile_first.jpg"></div>
-           <input type="submit" value="友達リクエストを送る" class="square_btn3" style="float: right; ">
+            <div class="pic">
+              <?php if(empty($_GET)): ?>
+              <img src="img/profile_first.jpg" style="width: 300px; height: 300px;">
+              <?php elseif($related_friend['user_img'] == '') : ?>
+              <img src="img/profile_first.jpg" style="width: 300px; height: 300px;">
+              <?php else : ?>
+              <img src="user_img/<?php echo $related_friend['user_img']; ?>" style="width: 300px; height: 300px;">
+              <?php endif; ?>
+            </div>
+           <input type="submit" value="友だち申請を送る" class="square_btn3" style="float: right; ">
 
         </div>
         <div class="col-xs-6" style="height: 600px; background-color: #37b8e061; margin: 30px 0px;">
           <br>
-          <b class=asking>検索された方はこちらの方ですか？ <br>
+          <b class=asking>申請された方はこちらの方ですか？ <br>
           よろしければ、フォルダーを選んで登録しましょう！<br>
           </b>
 <!-- 友達検索・フォルダー作成 -->
