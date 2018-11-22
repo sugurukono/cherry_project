@@ -8,8 +8,6 @@
     require('../functions.php');
     require('../dbconnect.php');
 
-    v($_POST, '$_POST');
-
     $validations = array();
 
     $file_name = $_FILES['img_name']['name'];

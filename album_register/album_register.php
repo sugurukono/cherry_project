@@ -12,15 +12,13 @@
 
     $pref = array('6時間','24時間','3日','１週間','無期限');
 
-    $validations = array();
     $comment = '';
     $limit_time = '';
+    $validations = array();
 
     if (!empty($_POST)) {
         
-        $comment = $_POST['comment'];
-        $limit_time = $_POST['limit_time'];
-
+        
         if ($comment == '') {
             $validations['comment'] = 'blank';
         }
