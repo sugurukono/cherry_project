@@ -102,6 +102,12 @@
   <link rel="stylesheet" type="text/css"  href="header_only.css">
   <link rel="stylesheet" type="text/css"  href="setting.css">
 
+  <!-- viewport meta -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
 </head>
 <body>
 <!-- ヘッダー 開始-->
@@ -312,15 +318,54 @@
     </div>
     </div>
 
-<div class="row">
-    <div class="col-xs-12" style="background-color:black; height:50px;" >
+  <div class="row">
+    <div class="col-xs-12" style="background-color:black; height:50px;" ></div>
+  </div>
+
+  <div class="col-xs-12" style="background-color: white; height:400px">
+    <div class=" col-xs-11" style="height: 300px; background-color: #37b8e061; margin:30px 60px;">
+       <h1><span class="title_1">♦︎トーク全件削除♦︎</span></h1><br>
+       <div>
+        <b class=asking>ここでは、あなたがトークした全ての履歴を削除することができます！</b>
+      </div>
+        <form method="GET" action="" >
+
+        <!-- ボタン -->
+          <button type="button" class="square_btn3" style="float: right;" data-toggle="modal" data-target="#demoNormalModal">
+            全トーク履歴の削除
+          </button>
+
+        <!-- モーダルダイアログ -->
+          <div class="modal fade" id="demoNormalModal" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="demoModalTitle">全トーク履歴の削除</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                  <div class="modal-body">
+                    今までした全てのトークの履歴が消えてしまいます。<br>
+                    本当によろしいですか？
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"style="width:102px;height:33px;">キャンセル</button>
+                    <input type="submit" class="square_btn3" value="削除">
+                  </div>
+                </div>
+            </div>
+          </div>
+        </form>
     </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-12" style="background-color:black; height:50px;" ></div>
   </div>
 
     <div class="col-xs-12" style="background-color: white; height:200px">
        Help 使い方ガイド（TOPでも使用したもの？）
-
-
     </div>
 
 <div class="row">
@@ -353,7 +398,11 @@
   </div>
 <!-- フッター終わり -->
 
-
+<!-- jQuery、Popper.js、Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    </body>
 
 </body>
 </html>
