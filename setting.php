@@ -84,7 +84,7 @@
     $comments = $signin_user['comments'];
 
 //バリデーション
-    if(!isset($_SESSION['error'])){
+    if(!empty($_SESSION['error'])){
         $error['user_name'] = $_SESSION['error']['name'];
         $error['search_id'] = $_SESSION['error']['search_id'];
         $error['email'] = $_SESSION['error']['email'];
