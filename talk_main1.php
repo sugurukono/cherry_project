@@ -21,17 +21,17 @@
     $stmt->execute($data);
 //$foldersに格納②
     while(true){
-      $folder = $stmt->fetch(PDO::FETCH_ASSOC);
+        $folder = $stmt->fetch(PDO::FETCH_ASSOC);
 
-      if($folder == false){
-        break;
-      }
-      $folders[] = $folder;
+        if($folder == false){
+            break;
+        }
+        $folders[] = $folder;
 
     }
     // v($folders,'$folders');
     if (!empty($_GET['folder'])) {
-      $folder=$_GET['folder'];
+        $folder=$_GET['folder'];
        // v($folder,"$folder");
     }
 
@@ -56,25 +56,26 @@
     $friend_id= $_GET['friend_id'];
     $folder_id= $_GET['folder_id'];
 
-     v($friends,'$friends');
+    //✨SESSIONにデータを入れて、talkのsqlに入れる！！
+
+    
+    // v($friends,'$friends');
     // v($_GET['sending'],'$_GET[sending]');
-    v($friend_id,'$friend_id');
+    // v($friend_id,'$friend_id');
     // v($signin_user['id'],'$signin_user');
-     // v($friends['friend_id'],'$friends[friend_id]');
+    // v($friends['friend_id'],'$friends[friend_id]');
 
     //チャットルームを探すSELECT分実行
     //存在している時はチャットルームIDを取得
     //存在していない時はチャットルームにデータを挿入
     if (!empty($friend_id)) {
-       
-    
     $sql='SELECT * FROM `chatroom` WHERE `owner_id`=? AND`member_id`=?';
     $data = array($user_id,$friend_id);
     $stmt = $dbh->prepare($sql);
     $stmt->execute($data);
     $chatroom_data=$stmt->fetch(PDO::FETCH_ASSOC);
 
-    if (!empty($chatroom_id)) {
+    if (!empty($chatroom_data["id"])) {
         $chatroom_id=$chatroom_data['id'];
     }
 
@@ -83,7 +84,7 @@
         $data = array($user_id,$friend_id);
         $stmt = $dbh->prepare($sql);
         $stmt->execute($data);
-        $chatroom=$dbh->lastInsertId();
+        $chatroom_id=$dbh->lastInsertId();
     }
     }
 
@@ -197,7 +198,7 @@ v($chatroom_id,'$chatroom_id');
     <!-- フォルダー -->
     
     <div id="container" class="col-xs-3" style="background-color:pink; height:690px">
-         <div class="font" style="font-size: 25px;"><p>Folders</p></div>
+        <div class="font" style="font-size: 25px;"><p>Folders</p></div>
         <?php foreach($folders as $folder_each) :?>
         <form method="GET" action="">
         <input type="submit" name="folder" class="box13" value="<?php echo $folder_each['folder_name'] ?>">
