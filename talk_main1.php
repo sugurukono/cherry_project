@@ -14,6 +14,8 @@
     $user_id="";
     $user_id=$signin_user['id'];
     $folder='';
+
+
 //foldersテーブルからデータ取得①
     $sql = 'SELECT * FROM `folders` WHERE `user_id`=?';
     $data = array($_SESSION['id']);//WHEREで入れたやつだけでOK
@@ -32,7 +34,7 @@
     // v($folders,'$folders');
     if (!empty($_GET['folder'])) {
         $folder=$_GET['folder'];
-       // v($folder,"$folder");
+       v($folder,"$folder");
     }
 
 // フォルダーを押すと友達一覧が表示される処理
@@ -51,14 +53,25 @@
         }
             $friends[]=$friend;
     }
-    $friend_id= "";
-    $folder_id= "";
-    $friend_id= $_GET['friend_id'];
-    $folder_id= $_GET['folder_id'];
 
-    //✨SESSIONにデータを入れて、talkのsqlに入れる！！
+//フォルダー選択→友達選択
+    if (!empty($_GET['folder_id'])) {
+        $folder_id= "";
+        $folder_id= $_GET['folder_id'];
+        v($folder_id,'$folder_id');
+        $_SESSION['cherry']['folder_id']=$folder_id;
+    }
+    if (!empty($_GET['friend_id'])) {
+        $friend_id= "";
+        $friend_id= $_GET['friend_id'];
+        v($friend_id,'$friend_id');
+        $_SESSION['cherry']['friend_id']=$friend_id;
+    }
 
-    
+
+
+
+
     // v($friends,'$friends');
     // v($_GET['sending'],'$_GET[sending]');
     // v($friend_id,'$friend_id');
@@ -77,6 +90,8 @@
 
     if (!empty($chatroom_data["id"])) {
         $chatroom_id=$chatroom_data['id'];
+        $_SESSION['cherry']['chatroom_id']=$chatroom_id;
+        v($_SESSION['cherry']['chatroom_id'],'$chatroom_id');
     }
 
     if (empty($chatroom_id)) {
@@ -85,18 +100,20 @@
         $stmt = $dbh->prepare($sql);
         $stmt->execute($data);
         $chatroom_id=$dbh->lastInsertId();
+        v($chatroom_id,'$chatroom_id');
     }
     }
 
-v($chatroom_id,'$chatroom_id');
+ 
+
 
 
 
 
 // 送信ボタンを押されたら、自分のトークが表示される
     if (!empty($_GET['sending'])) {
-        $sql= 'INSERT INTO `talk` SET `chat_room_id`=? `sender_id`=?, `receiver_id`=?, `message_type`=1, `message`=?,`send_date`=NOW();';
-        $data = array($chatroom_id,$signin_user['id'],$friend_id,$_GET['sending'],);
+        $sql= 'INSERT INTO `talk` SET `chatroom_id`=?, `sender_id`=?, `receiver_id`=?, `message_type`=1, `message`=?,`send_date`=NOW()';
+        $data = array($_SESSION['cherry']['chatroom_id'],$signin_user['id'],$_SESSION['cherry']['friend_id'],$_GET['sending'],);
         $stmt = $dbh->prepare($sql);
         $stmt->execute($data);
 
@@ -117,11 +134,6 @@ v($chatroom_id,'$chatroom_id');
         }
         $talks[]=$talk;
     }
-
-    // v($talks,'$talks');
-
-    // v($_GET['friend_id'],'friend_id');
-    // v($_GET['folder_id'],'folder_id');
     
 
 
@@ -199,23 +211,27 @@ v($chatroom_id,'$chatroom_id');
     
     <div id="container" class="col-xs-3" style="background-color:pink; height:690px">
         <div class="font" style="font-size: 25px;"><p>Folders</p></div>
+        <?php if (isset($folders)): ?>
         <?php foreach($folders as $folder_each) :?>
         <form method="GET" action="">
         <input type="submit" name="folder" class="box13" value="<?php echo $folder_each['folder_name'] ?>">
         <input type="hidden" name="folder_id" value="<?php echo $folder_each['id']?>">
         </form>
     <?php endforeach; ?>
+     <?php endif ?>
     </div>
 
 
 
     <div id="container" class="col-xs-3" style="background-color:white; height:690px">
+    <div class="font" style="font-size: 25px;"><p>Friends</p></div>
     <!-- 友達一覧 -->
         <form method="GET" action="">
         <?php if (isset($folder_id)): ?>
         <?php foreach($friends as $friend_each): ?>
         <?php if($friend_each['folder_id']== $folder_id): ?>
         <div>
+
         <button class="font">🍒<?php echo $friend_each['user_name'] ?></button>
         <input type="hidden" name="friend_id" value="<?php echo $friend_each['friend_id']?>">
         </div>
