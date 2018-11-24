@@ -100,7 +100,7 @@
   <div class="row">
     <div class="col-xs-9" style="background-color:white; height:700px">
       <div class="box1">
-        <h1><img src="images/icon_camera1.jpeg"></h1>
+        <h1><img src="../user_profile_img/<?= h($file_name); ?>"></h1>
         <h3>写真をアップロードする</h3>
         <input type="file" name="img_name" accept="image/*">
         <?php if(isset($validations['img_name']) && $validations['img_name'] == 'blank'): ?>
@@ -134,6 +134,7 @@
         <center>
           <div><br>
             <form method="POST" action="../album_register/album_register.php">
+              <button class="btn btn-primary">戻る</button>
               <button class="btn btn-primary">写真を保存する</button>
             </form>
           </div>

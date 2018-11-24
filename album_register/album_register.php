@@ -132,7 +132,7 @@
       <div id="a_box" class="col-xs-9"><h4>＜コメント＞</h4>
         <textarea name="content" placeholder="自由記入欄" cols="135" rows="3"></textarea><br>
         <?php if(isset($validations['comment']) && $validations['comment'] == 'blank'): ?>
-          <span class="error_msg">投稿データを入力してください</span>
+          <span class="error_msg">コメントを入力してください</span>
         <?php endif; ?>
       </div>
       <div id="b_box" class="col-xs-9"><h4>＜公開期間＞</h4>
@@ -152,7 +152,7 @@
       <div id="c_box" class="col-xs-9">
         <center>
           <div><br>
-            <input type="submit" value="写真を保存する">
+            <input type="submit" value="内容確認">
           </div>
         </center>
       </div>
