@@ -9,11 +9,13 @@
     $stmt->execute($data);
     $signin_user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    v($signin_user,'$signin_user');
+    // v($signin_user,'$signin_user');
+
 
     $user_id="";
     $user_id=$signin_user['id'];
     $folder='';
+    v($user_id,'$user_id');
 
 
 //foldersテーブルからデータ取得①
@@ -34,7 +36,7 @@
     // v($folders,'$folders');
     if (!empty($_GET['folder'])) {
         $folder=$_GET['folder'];
-       v($folder,"$folder");
+       // v($folder,"$folder");
     }
 
 // フォルダーを押すと友達一覧が表示される処理
@@ -52,6 +54,8 @@
             break;
         }
             $friends[]=$friend;
+            // v($friends,'$friends');
+            // $friend_each
     }
 
 //フォルダー選択→友達選択
@@ -66,10 +70,11 @@
         $friend_id= $_GET['friend_id'];
         v($friend_id,'$friend_id');
         $_SESSION['cherry']['friend_id']=$friend_id;
+        $friend_id2=$_SESSION['cherry']['friend_id'];
     }
 
 
-
+    // v($friend_id2,'$friend_id2');
 
 
     // v($friends,'$friends');
@@ -79,35 +84,40 @@
     // v($friends['friend_id'],'$friends[friend_id]');
 
     //チャットルームを探すSELECT分実行
-    //存在している時はチャットルームIDを取得
-    //存在していない時はチャットルームにデータを挿入
     if (!empty($friend_id)) {
-    $sql='SELECT * FROM `chatroom` WHERE `owner_id`=? AND`member_id`=?';
-    $data = array($user_id,$friend_id);
-    $stmt = $dbh->prepare($sql);
-    $stmt->execute($data);
-    $chatroom_data=$stmt->fetch(PDO::FETCH_ASSOC);
-
-    if (!empty($chatroom_data["id"])) {
-        $chatroom_id=$chatroom_data['id'];
-        $_SESSION['cherry']['chatroom_id']=$chatroom_id;
-        v($_SESSION['cherry']['chatroom_id'],'$chatroom_id');
-    }
-
-    if (empty($chatroom_id)) {
-        $sql='INSERT INTO `chatroom` SET `owner_id`=?, `member_id`=?';
+        $sql='SELECT * FROM `chatroom` WHERE `owner_id`=? AND`member_id`=?';
         $data = array($user_id,$friend_id);
         $stmt = $dbh->prepare($sql);
         $stmt->execute($data);
-        $chatroom_id=$dbh->lastInsertId();
-        v($chatroom_id,'$chatroom_id');
+        $chatroom_data=$stmt->fetch(PDO::FETCH_ASSOC);
+        v($chatroom_data,'$chatroom_data');
+        // IDの反対の組み合わせでないか確認
+        if (empty($chatroom_data)) {
+            $sql='SELECT * FROM `chatroom` WHERE `owner_id`=? AND`member_id`=?';
+            $data = array($friend_id,$user_id);
+            $stmt = $dbh->prepare($sql);
+            $stmt->execute($data);
+            $chatroom_data2=$stmt->fetch(PDO::FETCH_ASSOC);
+            $chatroom_id=$chatroom_data2['id'];
+            v($chatroom_id,'$chatroom_data2');
+            $_SESSION['cherry']['chatroom_id']=$chatroom_id;
+
+            //存在していない時はチャットルームにデータを挿入
+            if (empty($chatroom_data2["id"])){
+                $sql='INSERT INTO `chatroom` SET `owner_id`=?, `member_id`=?, `created`=NOW()';
+                $data = array($user_id,$friend_id);
+                $stmt = $dbh->prepare($sql);
+                $stmt->execute($data);
+                $chatroom_id=$dbh->lastInsertId();
+                $_SESSION['cherry']['chatroom_id']=$chatroom_id;
+
+            }
+        }else{//存在している時はチャットルームIDを取得
+            $chatroom_id=$chatroom_data['id'];
+            $_SESSION['cherry']['chatroom_id']=$chatroom_id;
+            v($_SESSION['cherry']['chatroom_id'],'$chatroom_id');
+        }
     }
-    }
-
- 
-
-
-
 
 
 // 送信ボタンを押されたら、自分のトークが表示される
@@ -116,28 +126,25 @@
         $data = array($_SESSION['cherry']['chatroom_id'],$signin_user['id'],$_SESSION['cherry']['friend_id'],$_GET['sending'],);
         $stmt = $dbh->prepare($sql);
         $stmt->execute($data);
-
     }
 
 
 //トークの内容を取得
-        $sql='SELECT `message` FROM `talk` WHERE `sender_id`=?';
-        $data = array($signin_user['id']);
+        $sql='SELECT * FROM `talk` WHERE `chatroom_id`=?';
+        $data = array($_SESSION['cherry']['chatroom_id']);
         $stmt = $dbh->prepare($sql);
         $stmt->execute($data);
         $talks=[];
-
-    while (true) {
+        while (true) {
         $talk =$stmt->fetch(PDO::FETCH_ASSOC);
         if ($talk == false) {
             break;
         }
         $talks[]=$talk;
+        v($talks,'$talks');
     }
-    
 
-
-
+    v($_SESSION,('$_SESSION'));
 
 ?>
 
@@ -208,7 +215,6 @@
 
 
     <!-- フォルダー -->
-    
     <div id="container" class="col-xs-3" style="background-color:pink; height:690px">
         <div class="font" style="font-size: 25px;"><p>Folders</p></div>
         <?php if (isset($folders)): ?>
@@ -217,28 +223,32 @@
         <input type="submit" name="folder" class="box13" value="<?php echo $folder_each['folder_name'] ?>">
         <input type="hidden" name="folder_id" value="<?php echo $folder_each['id']?>">
         </form>
-    <?php endforeach; ?>
-     <?php endif ?>
+        <?php endforeach; ?>
+        <?php endif ?>
     </div>
 
 
 
     <div id="container" class="col-xs-3" style="background-color:white; height:690px">
     <div class="font" style="font-size: 25px;"><p>Friends</p></div>
-    <!-- 友達一覧 -->
-        <form method="GET" action="">
+
+
+    <!-- 友達一覧ボタン-->
+        
         <?php if (isset($folder_id)): ?>
         <?php foreach($friends as $friend_each): ?>
-        <?php if($friend_each['folder_id']== $folder_id): ?>
+        <?php if($friend_each['folder_id'] == $folder_id): ?>
         <div>
-
+        <form method="GET" action="">
         <button class="font">🍒<?php echo $friend_each['user_name'] ?></button>
         <input type="hidden" name="friend_id" value="<?php echo $friend_each['friend_id']?>">
+        <input type="hidden" name="folder_id" value="<?php echo $friend_each['folder_id']?>">
+        </form>
         </div>
         <?php endif; ?>
         <?php endforeach; ?>
         <?php endif; ?>
-        </form>
+        
     </div>
 
 
@@ -254,7 +264,13 @@
                     <!--ステータスアイコン-->
                     <div id="bms_status_icon">🍒</div>
                     <!--ユーザー名-->
-                    <div id="bms_chat_user_name"><?php echo $signin_user['user_name'] ?></div>
+                    <div id="bms_chat_user_name" "><?php echo $signin_user['user_name'] ?></div>
+
+                    <!-- <?php if (isset($_GET['friend_id'])): ?>
+                    <div id="bms_status_icon" ">🍒</div>
+                    ユーザー名-->
+                    <!-- <div id="bms_chat_user_name" ><?php echo $friend_each['user_name'] ?></div> -->
+                    <!-- <?php endif ?> --> -->
                 </div>
             </div>
 
@@ -262,36 +278,22 @@
 
             <div id="bms_messages">
 
+                
+                <?php foreach ($talks as $talk_each):?>
                 <!--メッセージ１（左側）-->
+                <?php if ($talk_each['sender_id']==$_SESSION['cherry']['friend_id']): ?>
                 <div class="bms_message bms_left">
                     <div class="bms_message_box">
                         <div class="bms_message_content">
-                            <div class="bms_message_text">ほうほうこりゃー便利じゃないか</div>
+                            <div class="bms_message_text"><?php echo $talk_each['message'] ?></div>
                         </div>
                     </div>
                 </div>
                 <div class="bms_clear"></div><!-- 回り込みを解除（スタイルはcssで充てる） -->
-
-                <div class="bms_message bms_left">
-                    <div class="bms_message_box">
-                        <div class="bms_message_content">
-                            <div class="bms_message_text">なかなかいい感じでしょ</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="bms_clear"></div><!-- 回り込みを解除（スタイルはcssで充てる） -->
-
-                <div class="bms_message bms_right">
-                    <div class="bms_message_box">
-                        <div class="bms_message_content">
-                            <div class="bms_message_text">テスト</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="bms_clear"></div><!-- 回り込みを解除（スタイルはcssで充てる） -->
+                 <?php endif ?>
 
                 <!--メッセージ（右側）-->
-                <?php foreach ($talks as $talk_each):?>
+                <?php if($talk_each['sender_id']== $user_id): ?>
                 <div class="bms_message bms_right">
                     <div class="bms_message_box">
                         <div class="bms_message_content">
@@ -300,7 +302,10 @@
                     </div>
                 </div>
                 <div class="bms_clear"></div><!-- 回り込みを解除（スタイルはcssで充てる） -->
+                <?php endif; ?>
                 <?php endforeach; ?>
+            
+
             </div>
 
 
