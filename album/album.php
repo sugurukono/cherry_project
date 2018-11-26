@@ -106,15 +106,15 @@ $('a.large').fancybox();
     </div>
       <span hidden id="signin-user"><?php echo $signin_user['id']; ?></span>
       <div class="box3"><h3>ユーザー名：<?php echo $signin_user['user_name']; ?></h3><h3>ID：<?php echo $signin_user['id']; ?></h3><h3><span class="friends_count">友達：<?= $feed['friends_count']; ?></span>人</h3></div>
-      <div class="box2"><h1><img src="images/20181019035621IMG_7352.jpg"></h1></div>
+      <div class="box2"><h1><img src="images/<?php echo $signin_user['img_name']; ?> width="80" class="img-circle""></h1></div>
       <div class="box2"><h1><br>PROFILE</h1></div><br>
     
 
     <div id="wrap" style="background-color:white;">
       <a class="large" rel="group" title="タイトル 1"
-      href="images/1_b.jpg"><img class="smallimage" src="images/2_m4.jpg" /></a>
+      href="images/2_b.jpg"><img class="smallimage" src="images/2_m4.jpg" /></a>
       <a class="large" rel="group" title="タイトル 2"
-      href="images/2_b.jpg"><img class="smallimage" src="images/9_m4.jpg" /></a>
+      href="images/9_b.jpg"><img class="smallimage" src="images/9_m4.jpg" /></a>
       <a class="large" rel="group" title="タイトル 3"
       href="images/3_b.jpg"><img class="smallimage" src="images/3_m44.jpg" /></a>
       <a class="large" rel="group" title="タイトル 4"
