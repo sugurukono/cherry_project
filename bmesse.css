@@ -5,7 +5,7 @@
     ここで充てた高さと横幅がそのままスタイルになる仕組み */
 
     height:600px;/*ここはご自由に*/
-    width: 5%;/*ここはご自由に*/
+    width: 10%;/*ここはご自由に*/
     }
 #container{
     float: left;
@@ -14,7 +14,7 @@
     ここで充てた高さと横幅がそのままスタイルになる仕組み */
 
     height:600px;/*ここはご自由に*/
-    width: 15%;/*ここはご自由に*/
+    width: 11%;/*ここはご自由に*/
     }
     .box8 {
     padding: 0.5em 1em;
@@ -101,7 +101,7 @@
 #bms_messages_container{
     float: right;
     height: 100%;/*your_containerに対して100%になる */
-    width: 100%;/*your_containerに対して100%になる */
+    width: 104%;/*your_containerに対して100%になる */
     background-color: #eee;
 }
 
@@ -281,14 +281,20 @@ margin-left: 50px;/*右側の発言だとわかる様に、吹き出し左側に
 }
 
 .img{
-    width:110%;
+    width:30%;
     margin-top: 15px;
 }
 
-
-.modal_wrap input{
-    display: none;
+.karaage{
+    color:pink;
+    font-size: 20px; 
+    margin-top:15px;
+    
 }
+/*.modal_wrap input{
+    width:20px;
+    color:red;
+}*/
 
 .modal_overlay{
     display: flex;
@@ -355,10 +361,16 @@ margin-left: 50px;/*右側の発言だとわかる様に、吹き出し左側に
     height: 30px;
     margin: auto;
     padding: 8px 16px;
-    color: #444;
+    color: red;
     font-weight: bold;
     font-family: 'Montserrat', sans-serif;
     box-shadow: 0 1px 3px rgba(0,0,0,0.6);
     border-radius: 16px;
     cursor: pointer;
 }
+
+input#trigger.checkbox1{
+    color:red;
+}
+/*最初のモーダル最後*/
+

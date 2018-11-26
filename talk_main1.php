@@ -165,7 +165,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>トーク／メイン</title>
-    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
+
 
     <link type="text/css" rel="stylesheet" href="bmesse.css" />
 
@@ -212,32 +212,78 @@
 
 <!-- ヘッダー終わり -->
 
-    <!-- 自分やユーザーの情報 -->
+<!--トークの設定 -->
     <div id="sub_container" class="col-xs-3" style="background-color:black; height:690px">
-        <!-- <button type="button" class="img" data-toggle="modal" data-target="#demoNormalModal">
-        <img class="img" src="images/icon_setting.jpg">
-        </button> -->
-        <!-- <img src="images/icon_apple.jpeg"><br><br>
-        <img src="images/icon_ninja.jpeg"><br><br>
-        <img src="images/icon_hotspring.jpeg"><br><br> -->
-    <label for="trigger"><img class="img" src="images/icon_setting.jpg"></label>
-
-<!-- モーダル試し -->
+    <img class="img" src="images/icon_setting.jpg">
+    <img class="img" src="images/icon_setting.jpg">
+    <img class="img" src="images/icon_setting.jpg">
+    <br>
+    <span class="karaage">Setting</span></label>
+    <br>
+    <br>
+<!-- モーダル チェックボックス-->
     <div class="modal_wrap">
     <input id="trigger" type="checkbox">
+    <label for="trigger" style="color:pink; font-size:15px;">文字変換設定</label>
+
     <div class="modal_overlay">
         <label for="trigger" class="modal_trigger"></label>
         <div class="modal_content">
-            <form>
             <label for="trigger" class="close_button">✖️</label>
             <h2>文字変換設定</h2>
-            フレーズ１<input type="text" name="aaa" value="1"> TO
-            ブレーズ２<input type="text" name="bbb" value="2">
-            
+            <p>※注※全てのチャットルームに適応されます。</p>
+            <form submit="GET" action="">
+            「<input type="text" name="aaa" value="好きだよ"> 」を
+            「<input type="text" name="bbb" value="おはよう">」へ
+            <select name="time">
+                <option value="1hour">今すぐ</option>
+                <option value="1hour">一時間後</option>
+                <option value="1hour">１２時間後</option>
+                <option value="1hour">２４時間後</option>
+            </select>
+            に変更
+            <br>
+            <br>
+             <p>変更履歴はSettingメニューにてご覧ください。</p>
+            <input type="submit" name="ccc" value="設定">
             </form>
         </div>
     </div>
     </div>
+    <br>
+    <br>
+
+
+    <div class="modal_wrap">
+    <input id="trigger2" type="checkbox">
+    <label for="trigger2" style="color:pink; font-size:12px;">トークルーム削除</label>
+
+    <div class="modal_overlay">
+        <label for="trigger2" class="modal_trigger"></label>
+        <div class="modal_content">
+            <label for="trigger2" class="close_button">✖️</label>
+            <h2>トークルーム削除</h2>
+            <form submit="GET" action="">
+            「<input type="text" name="aaa" value="学校"> 」フォルダーの
+            「<input type="text" name="bbb" value="さくらんぼちゃん">」とのトークを
+            <select name="time">
+                <option value="1hour">今すぐ</option>
+                <option value="1hour">一時間後</option>
+                <option value="1hour">１２時間後</option>
+                <option value="1hour">２４時間後</option>
+            </select>
+            に削除
+            <br>
+            <br>
+             <p>一度削除したトークは戻せません。よろしいですか？</p>
+            <input type="submit" name="ccc" value="削除">
+            </form>
+        </div>
+    </div>
+    </div>
+
+
+
     </div>
 
 
@@ -289,13 +335,13 @@
                 <!--ステータス-->
                 <div id="bms_chat_user_status">
                     <!--ステータスアイコン-->
-                    <div id="bms_status_icon">🍒</div>
+                    <!-- <div id="bms_status_icon">🍒</div> -->
                     <!--ユーザー名-->
-                    <div id="bms_chat_user_name" "><?php echo $signin_user['user_name'] ?></div>
-
+                    <!-- <div id="bms_chat_user_name" "><?php echo $signin_user['user_name'] ?></div>
+ -->
                     <?php if (isset($_GET['friend_id'])): ?>
-                    <div id="bms_status_icon" ">▶︎▶︎▶︎🍒</div>
-                    <div id="bms_chat_user_name" ><?php echo $select_friend['user_name'] ?></div>
+                    <div id="bms_status_icon" ">🍒</div>
+                    <div id="bms_chat_user_name" ><?php echo $select_friend['user_name'] ?>さん</div>
                     <?php endif ?>
                 </div>
             </div>
@@ -353,9 +399,5 @@
     </div>
   </div>
 <!-- フッター終わり -->
-<!-- jQuery、Popper.js、Bootstrap JS -->
-       <!--  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> -->
 </body>
 </html>
