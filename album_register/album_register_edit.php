@@ -2,53 +2,42 @@
 
     //echo '<pre>';
     //var_dump($_POST);
-    //echo '</pre>';
+    //echo '</pre>;
 
     session_start();
     require('../functions.php');
     require('../dbconnect.php');
 
-    $validations = array();
+    $time_limit = array('6時間','24時間','3日','１週間','無期限');
 
-    $file_name = $_FILES['img_name']['name'];
-    v($file_name, '$file_name');
-    if ($file_name == '') {
-        $validations['img_name'] = 'blank';
+    //$_SESSIONの中に46_LearnSNSが定義されていなければsignupに強制的に飛ばす
+    if (!isset($_SESSION['Cherry'])) {
+        header('Location: alubum_register.php');
     }
 
-    $data = array($_SESSION['id']);
-    $pref = array('6時間','24時間','3日','１週間','無期限');
-    $sql = 'SELECT * FROM `pics` WHERE `id` = 1';
+    //v($_POST, '$_POST');
 
-    $stmt = $dbh->prepare($sql);//アロー演算子の左側をオブジェクトという
-    $stmt->execute($data);
-    $signin_user = $stmt->fetch(PDO::FETCH_ASSOC);
+    //echo $POST['name']; 使えません
+    $content = $_SESSION['Cherry']['content'];
+    $time = $_SESSION['Cherry']['time'];
+    $file_name = $_SESSION['Cherry']['pic_name'];
 
-    $validations = array();
-    $feed = '';
+    //v($time, '$time');
 
+
+    //POST送信されたら
     if (!empty($_POST)) {
-        $hash_password = password_hash($password, PASSWORD_DEFAULT);
         //DB登録処理
         //usersテーブルにユーザー情報の登録処理
-        $sql = 'INSERT INTO `users` SET `name` = ?, `email` = ?, `password` = ?, `img_name` = ?, `created` = NOW()';
+        $sql = 'INSERT INTO `pics` SET `pic_name` = ?, `content` = ?, `time` = ?, `created` = NOW()';
         $stmt = $dbh->prepare($sql);
-        $data = array($name, $email, $hash_password, $file_name);
+        $data = array($file_name, $content, $time );
         $stmt->execute($data);
 
-        unset($_SESSION['46_LearnSNS']);//テータを残しておかない。消す
-        header('Location: thanks.php');
+        unset($_SESSION['Cherry']);//テータを残しておかない。消す
+        header('Location: album_register_complete.php');
         exit();//処理を終了させる
-        
     }
-
-
-    $pref_num = -1; //0以外のデータを初期化
-    if (!empty($_POST)) {
-      $pref_num = $_POST['pref'];
-    }
-
-    $c = count($pref);
 
 ?>
 
@@ -100,40 +89,29 @@
   <div class="row">
     <div class="col-xs-9" style="background-color:white; height:700px">
       <div class="box1">
-        <h1><img src="../user_profile_img/<?= h($file_name); ?>"></h1>
-        <h3>写真をアップロードする</h3>
-        <input type="file" name="img_name" accept="image/*">
-        <?php if(isset($validations['img_name']) && $validations['img_name'] == 'blank'): ?>
-          <span class="error_msg">画像を選択してください</span>
-        <?php endif; ?>
+      <!-- 画像 -->
+        <h1><img src="images/<?= h($file_name);?>" width="250"></h1>
       </div>
 
+      <!-- コメント -->
       <div id="a_box" class="col-xs-9"><h4>＜コメント＞</h4>
-        <textarea name="content" placeholder="自由記入欄" cols="135" rows="3"></textarea><br>
+        <textarea name="content" placeholder="自由記入欄" cols="135" rows="3"><?= h($content); ?></textarea><br>
         <?php if(isset($validations['feed']) && $validations['feed'] == 'blank'): ?>
           <span class="error_msg">投稿データを入力してください</span>
         <?php endif; ?>
       </div>
-      <div id="b_box" class="col-xs-9"><h4>＜公開期間＞</h4>
-        <form method="POST" action="select_tag_for.php">
-          <select name="pref">
-            <option value="-1">選択してください</option>
-            <?php for($i=0; $i < $c; $i++): ?>
-              <?php if ($i == $pref_num): ?>
-                <!--前回選択されたvalue（都道府県）なのでoptionタグにselected属性をつける　-->
-                <option value="<?php echo $i; ?>" selected><?php echo $pref[$i]; ?></option>
-              <?php else: ?>
-                <!--前回選択されたvalueと一致しないもしくはそもそもPOST送信されていないのでoptionタグをそのまま表示-->
-                <option value="<?php echo $i; ?>"><?php echo $pref[$i]; ?></option>
-              <?php endif; ?>
-            <?php endfor; ?>
-          </select>
-        </form>
+
+      <!-- 公開期間 -->
+      <div id="b_box" class="col-xs-9"><h4>＜公開期間＞</h4><br>
+        <h4><?= $time_limit[$time]; ?></h4>
       </div>
+
+
       <div id="c_box" class="col-xs-9">
         <center>
           <div><br>
-            <form method="POST" action="../album_register/album_register.php">
+            <form method="POST" action="">
+              <input type="hidden" name="dummy" value="1">
               <button class="btn btn-primary">戻る</button>
               <button class="btn btn-primary">写真を保存する</button>
             </form>

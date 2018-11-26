@@ -26,7 +26,7 @@
 
         $feed['friends_count'] = $friends_count_data['friends_count'];
 
-        v($feed,'$feed');
+        //v($feed,'$feed');
         //[]は、配列の末尾にデータを追加するという意味
 
 
@@ -100,7 +100,7 @@ $('a.large').fancybox();
       </div>
       <div><br>
         <form method="post" action="../setting.php">
-          <button class="btn btn-primary">写真を編集</button>
+          <button class="btn btn-primary">設定</button>
         </form>
       </div>
     </div>
