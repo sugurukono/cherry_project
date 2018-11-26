@@ -71,6 +71,13 @@
         v($friend_id,'$friend_id');
         $_SESSION['cherry']['friend_id']=$friend_id;
         $friend_id2=$_SESSION['cherry']['friend_id'];
+
+        $sql='SELECT `user_name`FROM `users` WHERE `id`=?';
+        $data= array($friend_id2);
+        $stmt = $dbh->prepare($sql);
+        $stmt->execute($data);
+        $select_friend=$stmt->fetch(PDO::FETCH_ASSOC);
+        v($select_friend,'$select_friend');
     }
 
 
@@ -141,10 +148,10 @@
             break;
         }
         $talks[]=$talk;
-        v($talks,'$talks');
+        // v($talks,'$talks');
     }
 
-    v($_SESSION,('$_SESSION'));
+    // v($_SESSION,('$_SESSION'));
 
 ?>
 
@@ -158,11 +165,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>トーク／メイン</title>
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
 
     <link type="text/css" rel="stylesheet" href="bmesse.css" />
 
     <link rel="stylesheet" type="text/css"  href="css/header.css">
     <link rel="stylesheet" type="text/css"  href="header_only.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 
 </head>
 
@@ -205,13 +214,31 @@
 
     <!-- 自分やユーザーの情報 -->
     <div id="sub_container" class="col-xs-3" style="background-color:black; height:690px">
-        <img src="images/icon_camera.jpeg"><br><br>
-        <img src="images/icon_apple.jpeg"><br><br>
+        <!-- <button type="button" class="img" data-toggle="modal" data-target="#demoNormalModal">
+        <img class="img" src="images/icon_setting.jpg">
+        </button> -->
+        <!-- <img src="images/icon_apple.jpeg"><br><br>
         <img src="images/icon_ninja.jpeg"><br><br>
-        <img src="images/icon_hotspring.jpeg"><br><br>
+        <img src="images/icon_hotspring.jpeg"><br><br> -->
+    <label for="trigger"><img class="img" src="images/icon_setting.jpg"></label>
+
+<!-- モーダル試し -->
+    <div class="modal_wrap">
+    <input id="trigger" type="checkbox">
+    <div class="modal_overlay">
+        <label for="trigger" class="modal_trigger"></label>
+        <div class="modal_content">
+            <form>
+            <label for="trigger" class="close_button">✖️</label>
+            <h2>文字変換設定</h2>
+            フレーズ１<input type="text" name="aaa" value="1"> TO
+            ブレーズ２<input type="text" name="bbb" value="2">
+            
+            </form>
+        </div>
     </div>
-
-
+    </div>
+    </div>
 
 
     <!-- フォルダー -->
@@ -266,11 +293,10 @@
                     <!--ユーザー名-->
                     <div id="bms_chat_user_name" "><?php echo $signin_user['user_name'] ?></div>
 
-                    <!-- <?php if (isset($_GET['friend_id'])): ?>
-                    <div id="bms_status_icon" ">🍒</div>
-                    ユーザー名-->
-                    <!-- <div id="bms_chat_user_name" ><?php echo $friend_each['user_name'] ?></div> -->
-                    <!-- <?php endif ?> --> -->
+                    <?php if (isset($_GET['friend_id'])): ?>
+                    <div id="bms_status_icon" ">▶︎▶︎▶︎🍒</div>
+                    <div id="bms_chat_user_name" ><?php echo $select_friend['user_name'] ?></div>
+                    <?php endif ?>
                 </div>
             </div>
 
@@ -327,6 +353,9 @@
     </div>
   </div>
 <!-- フッター終わり -->
-
+<!-- jQuery、Popper.js、Bootstrap JS -->
+       <!--  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> -->
 </body>
 </html>
