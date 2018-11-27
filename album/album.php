@@ -38,6 +38,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS" />
+
 <title>アルバム／プロフィール</title>
 <link href="css/style.css" rel="stylesheet" type="text/css" />
 <link href="css/gallery05.css" rel="stylesheet" type="text/css" media="screen" />
@@ -128,6 +129,7 @@ $('a.large').fancybox();
       <a class="large" rel="group" title="タイトル 8"
       href="images/8_b.jpg"><img class="smallimage" src="images/8_m4.jpg" /></a>
     </div>
+
   </div>
 
   <div class="col-xs-3" style="background-color:#DDDDDD; height:800px">
