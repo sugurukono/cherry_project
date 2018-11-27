@@ -4,7 +4,7 @@
     require('dbconnect.php');
 
     // v($_POST, '$_POST');
-    var_dump($_POST);
+    // var_dump($_POST);
 
     $validations = array();
 
@@ -20,7 +20,7 @@
           $stmt->execute($data);
           $record = $stmt->fetch(PDO::FETCH_ASSOC);
 
-          var_dump($record);
+          // var_dump($record);
 
           if ($record == false) {
               $validations['signin'] = 'failed';
@@ -62,7 +62,7 @@
 <body>
 <!-- ヘッダー 開始-->
   <div class="row" >
-    <div class="col-xs-12" style="background-color: pink; height: 90px">
+    <div class="col-xs-12" style="background-color: pink; height: 90px" id="header">
       <h1 class="title" style="color:white;">🍒Cherry</h1>
       <ul class="list"> 
             <li class="words"><a href="#1">About Us</a>

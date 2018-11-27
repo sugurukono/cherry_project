@@ -157,6 +157,7 @@
 
 
 
+
 ?>
 
 
@@ -186,10 +187,10 @@
     <a href="top.php"><h1 class="title" style="color:white;">🍒Cherry</h1></a>
 
     <li class="words">
-        <a href="#">My Page</a>
+        <a href="">My Page</a>
     </li>
      
-    <li class="words"><a href="#">Talk</a>
+    <li class="words"><a href="">Talk</a>
     </li>
 
 
@@ -207,7 +208,7 @@
     </li>
 
     <li class="words">
-        <a href="#">Log Out</a>
+        <a href="signout.php">Log Out</a>
     </li>
 
          </ul>
@@ -238,9 +239,9 @@
             <h2>文字変換設定</h2>
             <p>※注※全てのチャットルームに適応されます。</p>
             <form method="GET" action="magic.php">
-            「<input type="text" name="comment" value=""> 」を
-            「<input type="text" name="magic_com" value="">」へ
-            <select name="time">
+            「<input type="text" name="comment" class="textbox"value=""> 」を
+            「<input type="text" name="magic_com" class="textbox" value="">」へ
+            <select name="time" class="select">
                 <option value="now">今すぐ</option>
                 <option value="1hour">一時間後</option>
                 <option value="12hour">１２時間後</option>
@@ -250,7 +251,7 @@
             <br>
             <br>
              <p>変更履歴はSettingメニューにてご覧ください。</p>
-            <input type="submit" value="設定">
+            <input type="submit" value="設定" class="square_btn5">
             </form>
         </div>
     </div>
@@ -269,9 +270,9 @@
             <label for="trigger2" class="close_button">✖️</label>
             <h2>トークルーム削除</h2>
             <form submit="GET" action="">
-            「<input type="text" name="aaa" value="学校"> 」フォルダーの
-            「<input type="text" name="bbb" value="さくらんぼちゃん">」とのトークを
-            <select name="time">
+            「<input type="text" class="textbox" name="aaa" value="学校"> 」フォルダーの
+            「<input type="text" class="textbox" name="bbb" value="さくらんぼちゃん">」とのトークを
+            <select name="time" class="select">
                 <option value="1hour">今すぐ</option>
                 <option value="1hour">一時間後</option>
                 <option value="1hour">１２時間後</option>
@@ -281,7 +282,7 @@
             <br>
             <br>
              <p>一度削除したトークは戻せません。よろしいですか？</p>
-            <input type="submit" name="ccc" value="削除">
+            <input type="submit" name="ccc" value="削除" class="square_btn5">
             </form>
         </div>
     </div>
@@ -295,7 +296,7 @@
         <?php if (isset($folders)): ?>
         <?php foreach($folders as $folder_each) :?>
         <form method="GET" action="">
-        <input type="submit" name="folder" class="box13" value="<?php echo $folder_each['folder_name'] ?>">
+        <input type="submit" name="folder" class="square_btn6" value="<?php echo $folder_each['folder_name'] ?>">
         <input type="hidden" name="folder_id" value="<?php echo $folder_each['id']?>">
         </form>
         <?php endforeach; ?>
@@ -315,8 +316,8 @@
         <?php if($friend_each['folder_id'] == $folder_id): ?>
         <div>
         <form method="GET" action="">
-        <button class="font">🍒<?php echo $friend_each['user_name'] ?></button>
-        <input type="hidden" name="friend_id" value="<?php echo $friend_each['friend_id']?>">
+        <button class="square_btn7">🍒<?php echo $friend_each['user_name'] ?></button>
+        <input type="hidden" name="friend_id"  value="<?php echo $friend_each['friend_id']?>">
         <input type="hidden" name="folder_id" value="<?php echo $friend_each['folder_id']?>">
         </form>
         </div>
