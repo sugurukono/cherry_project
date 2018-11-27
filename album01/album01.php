@@ -2,8 +2,8 @@
 
     $time_limit = array('6時間','24時間','3日','１週間','無期限');
 
-    $num = array('1', '2', '3', '4', '5', '6', '7', '8', '9' );
-    $d = count($num);
+    //$num = array('1', '2', '3', '4', '5', '6', '7', '8', '9' );
+    //$d = count($num);
 
     $time_num = -1; //0以外のデータを初期化
     if (!empty($_POST)) {
@@ -11,6 +11,35 @@
     }
 
     $c = count($time_limit);
+
+    session_start();
+    require('../functions.php');
+    require('../dbconnect.php');
+
+    $data = array();
+    $sql = 'SELECT * FROM `users` WHERE `id` = 4';
+
+    $stmt = $dbh->prepare($sql);//アロー演算子の左側をオブジェクトという
+    $stmt->execute($data);
+    $signin_user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    $validations = array();
+    $feed = '';
+
+    $feed = $stmt->fetch(PDO::FETCH_ASSOC);
+        //$feed連想配列にlike数を格納するキーを用意し、数字を代入する
+        //代入するlike数を取得するSQL文の実行
+        $friends_sql = 'SELECT COUNT(*) as `friends_count` FROM `friends` WHERE `id` = ?';
+        $friends_data = array($feed['id']);
+        $friends_stmt = $dbh->prepare($friends_sql);
+        $friends_stmt->execute($friends_data);
+
+        $friends_count_data = $friends_stmt->fetch(PDO::FETCH_ASSOC);
+
+        $feed['friends_count'] = $friends_count_data['friends_count'];
+
+        //v($feed,'$feed');
+        //[]は、配列の末尾にデータを追加するという意味
 
 
 ?>
