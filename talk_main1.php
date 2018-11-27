@@ -14,7 +14,6 @@
 
     $user_id="";
     $user_id=$signin_user['id'];
-    $_SESSION['cherry']['user_id']=$user_id;
     $folder='';
     v($user_id,'$user_id');
 

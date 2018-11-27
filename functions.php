@@ -36,4 +36,10 @@
     // echo '<h1>ほげ</h1>'; // 普通に出力した場合
     // echo htmlspecialchars('<h1>ほげ</h1>'); // 普通にhtmlspeacialcharsを使った場合
     // echo h('<h1>ほげ</h1>'); // h関数を使った場合
+
+    // function magic($change_massage,$created){
+    //     $sql='SELECT `magic_changes` WHERE'
+    // }
+
+
 ?>
