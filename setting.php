@@ -17,6 +17,7 @@
     $user_id="";
     $signin_user['id'] = $user_id;
     $folder='';
+
 //foldersテーブルからデータ取得①
     $sql = 'SELECT * FROM `folders` WHERE `user_id`=?';
     $data = array($_SESSION['id']);//WHEREで入れたやつだけでOK
