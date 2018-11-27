@@ -14,6 +14,7 @@
 
     $user_id="";
     $user_id=$signin_user['id'];
+    $_SESSION['cherry']['user_id']=$user_id;
     $folder='';
     v($user_id,'$user_id');
 
@@ -153,6 +154,10 @@
 
     // v($_SESSION,('$_SESSION'));
 
+
+
+
+
 ?>
 
 
@@ -222,6 +227,7 @@
     <br>
     <br>
 <!-- モーダル チェックボックス-->
+<!-- 文字変換機能設定 -->
     <div class="modal_wrap">
     <input id="trigger" type="checkbox">
     <label for="trigger" style="color:pink; font-size:15px;">文字変換設定</label>
@@ -232,20 +238,20 @@
             <label for="trigger" class="close_button">✖️</label>
             <h2>文字変換設定</h2>
             <p>※注※全てのチャットルームに適応されます。</p>
-            <form submit="GET" action="">
-            「<input type="text" name="aaa" value="好きだよ"> 」を
-            「<input type="text" name="bbb" value="おはよう">」へ
+            <form method="GET" action="magic.php">
+            「<input type="text" name="comment" value=""> 」を
+            「<input type="text" name="magic_com" value="">」へ
             <select name="time">
-                <option value="1hour">今すぐ</option>
+                <option value="now">今すぐ</option>
                 <option value="1hour">一時間後</option>
-                <option value="1hour">１２時間後</option>
-                <option value="1hour">２４時間後</option>
+                <option value="12hour">１２時間後</option>
+                <option value="24hour">２４時間後</option>
             </select>
             に変更
             <br>
             <br>
              <p>変更履歴はSettingメニューにてご覧ください。</p>
-            <input type="submit" name="ccc" value="設定">
+            <input type="submit" value="設定">
             </form>
         </div>
     </div>
@@ -253,7 +259,7 @@
     <br>
     <br>
 
-
+<!-- トーク削除設定 -->
     <div class="modal_wrap">
     <input id="trigger2" type="checkbox">
     <label for="trigger2" style="color:pink; font-size:12px;">トークルーム削除</label>
@@ -281,9 +287,6 @@
         </div>
     </div>
     </div>
-
-
-
     </div>
 
 
