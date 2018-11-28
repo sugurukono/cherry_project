@@ -34,6 +34,7 @@
 
     }
     // v($folders,'$folders');
+    
     if (!empty($_GET['folder'])) {
         $folder=$_GET['folder'];
        // v($folder,"$folder");
@@ -153,6 +154,40 @@
 
     // v($_SESSION,('$_SESSION'));
 
+    // ＊＊文字変換ファンクション＊＊
+    // ①変更したいルールを取得
+    $sql='SELECT * FROM `magic_changes` WHERE user_id=?';
+    $data=array($user_id);
+    $stmt = $dbh->prepare($sql);
+    $stmt->execute($data);
+    $rule=$stmt->fetch(PDO::FETCH_ASSOC);
+
+    v($rule,'$rule');
+
+    // ②変更したい発言が１２時間後かどうか確認
+    // if (true) {
+    //     date('Y-m-d H:i;s') == $talks['send_date'];
+   
+    // // ③YESの場合、変換したい文字があるか確認
+
+    // // ④なかったら元のメッセージのまま
+
+    // }
+
+    $replace=str_replace($rule['comment'],$rule['magic_comment'],$talk_each['massage']);
+    echo $replace;
+
+//トーク削除トライ中
+    // if (!empty($_GET['name_folder']&&$_GET['name_friend']&&$_GET['delete_time'])) {
+    //     $name_folder=$_GET['name_folder'];
+    //     $name_friend=$_GET['name_friend'];
+    //     $delete_time=$_GET['delete_time'];
+
+    //     if()
+
+
+    // }
+
 
 
 
@@ -269,14 +304,22 @@
         <div class="modal_content">
             <label for="trigger2" class="close_button">✖️</label>
             <h2>トークルーム削除</h2>
+
             <form submit="GET" action="">
-            「<input type="text" class="textbox" name="aaa" value="学校"> 」フォルダーの
-            「<input type="text" class="textbox" name="bbb" value="さくらんぼちゃん">」とのトークを
-            <select name="time" class="select">
-                <option value="1hour">今すぐ</option>
+            <!-- フレンドセレクト -->
+            <select class="select" name="name_friend">
+            <?php if (isset($folder_id)): ?>
+            <?php foreach($friends as $friend_each): ?>
+            <option value=<?php echo $friend_each['friend_id'] ?>><?php echo $friend_each['user_name']?><option>
+            <?php endforeach; ?>
+            <?php endif; ?>
+            </select>
+            さんとのトークを
+            <select name="delet_time" class="select">
+                <option value="NOW">今すぐ</option>
                 <option value="1hour">一時間後</option>
-                <option value="1hour">１２時間後</option>
-                <option value="1hour">２４時間後</option>
+                <option value="12hour">１２時間後</option>
+                <option value="24hour">２４時間後</option>
             </select>
             に削除
             <br>
@@ -360,7 +403,7 @@
                 <div class="bms_message bms_left">
                     <div class="bms_message_box">
                         <div class="bms_message_content">
-                            <div class="bms_message_text"><?php echo $talk_each['message'] ?></div>
+                            <div class="bms_message_text"><?php echo magic($talk_each['message'],$talk_each['send_date'],$rule); ?></div>
                         </div>
                     </div>
                 </div>
@@ -372,7 +415,7 @@
                 <div class="bms_message bms_right">
                     <div class="bms_message_box">
                         <div class="bms_message_content">
-                            <div class="bms_message_text"><?php echo $talk_each['message']?></div>
+                            <div class="bms_message_text"><?php echo magic($talk_each['message'],$talk_each['send_date'],$rule); ?></div>
                         </div>
                     </div>
                 </div>
