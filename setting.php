@@ -64,7 +64,7 @@
 
 
 // ID検索ファンクション
-    if (!empty($_GET)) {
+    if (!empty($_GET['search_friend'])) {
         $search_friend= $_GET['search_friend'];
         $sql= "SELECT * FROM `users` WHERE `search_id`=?";
         $data= array($search_friend);
@@ -221,24 +221,24 @@
     <div class="img background2">
       <div class="container">
         <div>
-          <h1><span class="title_2">♦︎お友達検索♦︎</span></h1>
+          <h1><span class="title_2">♦︎友達検索♦︎</span></h1>
           <div class="row">
             <div class="col-xs-6" style="height: 600px; background-color: #37b8e061; margin:30px 0px;">
 
               <!-- ID検索 -->
               <div class="id">
-                <b style="font-size: 20px;">ID検索：</b>
+                <b style="font-size: 20px;">IDを検索：</b>
                 <form action="" method="GET">
                   <input type="text" name="search_friend" value="" class="text">
                   <input type="submit" value="検索" class="square_btn "><br>
-                  <b style="font-size: 20px">検索結果:<?php if(!empty($_GET)): ?><?php echo $related_friend['user_name'] ?>
+                  <b style="font-size: 20px">検索結果:<?php if(!empty($_GET['search_friend'])): ?><?php echo $related_friend['user_name'] ?>
                   <?php endif; ?>
                   </b>
                 </form>
               </div>
 
               <div class="pic">
-                <?php if(empty($_GET)): ?>
+                <?php if(empty($_GET['search_friend'])): ?>
                 <img src="img/profile_first.jpg" style="width: 300px; height: 300px;">
                 <?php elseif($related_friend['user_img'] == '') : ?>
                 <img src="img/profile_first.jpg" style="width: 300px; height: 300px;">
@@ -248,7 +248,7 @@
               </div>
               
               <form method="POST" action="request_friend.php">
-                <input type="submit" value="友だち申請を送る" class="square_btn3" style="float: right; ">
+                <input type="submit" value="友達申請を送る" class="square_btn3" style="float: right; ">
               </form>
 
             </div>
@@ -256,9 +256,9 @@
             <div class="col-xs-6" style="height: 600px; background-color: #37b8e061; margin: 30px 0px;">
               <br>
               <b class=asking>
-                友だち申請を送り終わりましたら、<br>
-                こちらで友だちを"フォルダ登録"しましょう！<br>
-                友だちが承諾した後に、実際にトークができます<br>
+                友達申請を送り終わりましたら、<br>
+                こちらで友達をフォルダに登録しましょう！<br>
+                ※友達が承諾した後に、実際にトークができます<br>
               </b>
 <!-- 友達検索・フォルダー作成 -->
               <br>
@@ -273,18 +273,18 @@
                 <div class="scrol_box">
                   <?php foreach($folders as $folder_each) :?>
                   <input type="checkbox" name="check_folder" value="<?php echo $folder_each['id']?>"><?php echo $folder_each['folder_name'] ;?>
-                  <button class="square_btn2"><a onclick="return confirm('フォルダーを削除しますか？');" href="delete_folders.php?folder_id=<?php echo $folder_each['id']; ?>">削除</a></button>
+                  <button class="square_btn2"><a onclick="return confirm('フォルダーを削除しますか？');" href="delete_folders.php?folder_id=<?php echo $folder_each['id']; ?>">フォルダーの削除</a></button>
                   <br><br>
                    <?php endforeach; ?>
                 </div>
-                <input type="submit" value="登録" class="square_btn3" style="float: right; ">
+                <input type="submit" value="友達をフォルダーに登録" class="square_btn3" style="float: right; ">
               </form>
         </div>
       </div>
     </div>
 <!-- 友達一覧 -->
       <div>
-        <h1><span class="title_2">♦︎お友達一覧♦︎</span></h1>
+        <h1><span class="title_2">♦︎友達一覧♦︎</span></h1>
         <div class="row">
           <div class="col-xs-6" style="height: 450px; background-color: #37b8e061; margin:30px 0px;">
             <br>
@@ -311,11 +311,11 @@
           <?php foreach($friends as $friend_each): ?>
           <?php if($friend_each['folder_id']== $_GET['folder_id']): ?>
           <b><?php echo $friend_each['user_name'] ?></b>
-          <button class="square_btn2">フォルダ移動</button>
-          <button class="square_btn2">ブロックする</button><br><br>
+          <button class="square_btn2">友達削除</button>
+          <button class="square_btn2">フォルダー追加</button><br><br>
           <?php endif; ?>
           <?php endforeach; ?>
-          <button class="delet_button2 ">空にする</button>
+          <button class="delet_button2" >中身を<br>空にする</button>
           <?php endif ;?>
             
           </div>
