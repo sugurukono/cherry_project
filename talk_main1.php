@@ -12,11 +12,27 @@
 
     // v($signin_user,'$signin_user');
 
-
     $user_id="";
     $user_id=$signin_user['id'];
     $folder='';
     v($user_id,'$user_id');
+
+    $sql= 'SELECT * FROM `friends` WHERE `requester_id`=?';
+    $data = array($_SESSION['id']);
+    $stmt = $dbh->prepare($sql);
+    $stmt->execute($data);
+    $have_friend=$stmt->fetch(PDO::FETCH_ASSOC);
+
+    v($have_friend,'$have_friend');
+
+    if (empty($have_friend)) {
+        header('Location: setting.php');
+    }
+
+    $_SESSION['cherry']['folder_id']='';
+    $_SESSION['cherry']['friend_id']='';
+    $_SESSION['cherry']['chatroom_id']='';
+
 
 
 //foldersテーブルからデータ取得①
