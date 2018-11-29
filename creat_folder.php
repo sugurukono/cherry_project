@@ -18,6 +18,7 @@
     $stmt->execute($data);
 
 
+
     header('Location: talk_main1.php');
     exit();
 

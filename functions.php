@@ -37,6 +37,7 @@
     // echo htmlspecialchars('<h1>ほげ</h1>'); // 普通にhtmlspeacialcharsを使った場合
     // echo h('<h1>ほげ</h1>'); // h関数を使った場合
 
+
     function magic($change_massage,$send_date,$rule){
 
         //$change_massage=$talk_each['massage'];という代入が関数の呼び出しの時起こってる

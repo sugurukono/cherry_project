@@ -3,6 +3,7 @@
     require('functions.php');
     require('dbconnect.php');
 
+
     $sql = 'SELECT * FROM `users` WHERE `id`=?';
     $data = array($_SESSION["id"]);//WHEREで入れたやつだけでOK
     $stmt = $dbh->prepare($sql);
@@ -179,7 +180,6 @@
 
 
 
-
 ?>
 
 
@@ -198,6 +198,7 @@
 
     <link rel="stylesheet" type="text/css"  href="css/header.css">
     <link rel="stylesheet" type="text/css"  href="header_only.css">
+
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 
 </head>
@@ -230,7 +231,9 @@
     </li>
 
     <li class="words">
+
         <a href="signout.php">Log Out</a>
+
     </li>
 
          </ul>
@@ -352,7 +355,7 @@
         <?php endif; ?>
         <?php endforeach; ?>
         <?php endif; ?>
-        
+
     </div>
 
 

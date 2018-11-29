@@ -4,7 +4,6 @@
     require('dbconnect.php');
 
     // v($_POST, '$_POST');
-    // var_dump($_POST);
 
     $validations = array();
 
@@ -20,7 +19,7 @@
           $stmt->execute($data);
           $record = $stmt->fetch(PDO::FETCH_ASSOC);
 
-          // var_dump($record);
+
 
           if ($record == false) {
               $validations['signin'] = 'failed';
