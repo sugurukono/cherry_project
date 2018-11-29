@@ -164,19 +164,6 @@
 
     v($rule,'$rule');
 
-    // ②変更したい発言が１２時間後かどうか確認
-    // if (true) {
-    //     date('Y-m-d H:i;s') == $talks['send_date'];
-   
-    // // ③YESの場合、変換したい文字があるか確認
-
-    // // ④なかったら元のメッセージのまま
-
-    // }
-
-    $replace=str_replace($rule['comment'],$rule['magic_comment'],$talk_each['massage']);
-    echo $replace;
-
 //トーク削除トライ中
     // if (!empty($_GET['name_folder']&&$_GET['name_friend']&&$_GET['delete_time'])) {
     //     $name_folder=$_GET['name_folder'];
@@ -308,11 +295,9 @@
             <form submit="GET" action="">
             <!-- フレンドセレクト -->
             <select class="select" name="name_friend">
-            <?php if (isset($folder_id)): ?>
             <?php foreach($friends as $friend_each): ?>
             <option value=<?php echo $friend_each['friend_id'] ?>><?php echo $friend_each['user_name']?><option>
             <?php endforeach; ?>
-            <?php endif; ?>
             </select>
             さんとのトークを
             <select name="delet_time" class="select">

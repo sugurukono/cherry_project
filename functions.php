@@ -47,21 +47,26 @@
 
         $display_message=str_replace($rule['comment'],$rule['magic_comment'],$change_massage);
 
-        if ($rule['change_time']==1) {
+        // 変更したい発言が何時間後に消える設定か
+        if ($rule['change_time']==0){
+            return $display_message;
+        }
+        elseif($rule['change_time']==1) {
             $change_time=date($send_date,strtotime("+1 hour"));
         }
         elseif ($rule['change_time']==2) {
             $change_time=date($send_date,strtotime("+12 hour"));
         }
 
-        else ($rule['change_time']==3) {
+        elseif ($rule['change_time']==3) {
             $change_time=date($send_date,strtotime("+24 hour"));
         }
-        // 過去か未来かを確認するifを作る
-        if(){
 
+        // 過去か未来かを確認するifを作る
+        if(!empty($change_time) && $change_time > $send_date){
+            return $display_message;
         }
-        return $display_message;
+        
 
     }
 
