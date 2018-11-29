@@ -79,10 +79,25 @@
 
 //友達申請を送る
     if (!empty($_POST['request_friend'])) {
-        $sql = 'INSERT INTO `friends` SET `requester_id`=?, `accepter_id`=?, `status`=1,`create_date`= NOW()';
-        $data = array($signin_user['id'],$related_friend['id']);
+        $sql = 'SELECT * FROM `friends` WHERE `requester_id`=? AND`accepter_id`=?';
+        $data= array($signin_user['id'],$related_friend['id']);
         $stmt = $dbh->prepare($sql);
         $stmt->execute($data);
+        $record = $stmt->fetch(PDO::FETCH_ASSOC);
+      //初めてのリクエストだったら
+      if ($record == false) {
+            //相手からのリクエストがないか確認しなきゃいけない
+            $sql = 'INSERT INTO `friends` SET `requester_id`=?, `accepter_id`=?, `status`=1,`create_date`= NOW()';
+            $data = array($signin_user['id'],$related_friend['id']);
+            $stmt = $dbh->prepare($sql);
+            $stmt->execute($data);
+      //２回目以降のリクエストだったら
+      }else{
+            $update_sql = 'UPDATE `friends` SET `status`=1,`update_date`= NOW() WHERE `requester_id`=? AND`accepter_id`=?';
+            $data = array($signin_user['id'],$related_friend['id']);
+            $stmt = $dbh->prepare($update_sql);
+            $stmt->execute($data);
+      }
     }
 
     v($signin_user,'$signin_user');
