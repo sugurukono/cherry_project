@@ -14,7 +14,7 @@
         <h2 class="text-center content_header">写真保存完了</h2>
         <div class="text-center">
           <p>写真の保存が完了しました。</p>
-          <a href="../album/album.php" class="btn btn-info">プロフィール画面</a>
+          <a href="../album01/album01.php" class="btn btn-info">プロフィール画面</a>
         </div>
       </div>
     </div>

@@ -1,5 +1,10 @@
 <?php
 
+    session_start();
+    require('../functions.php');
+    require('../dbconnect.php');
+
+
     $time_limit = array('6時間','24時間','3日','１週間','無期限');
 
     //$num = array('1', '2', '3', '4', '5', '6', '7', '8', '9' );
@@ -12,9 +17,6 @@
 
     $c = count($time_limit);
 
-    session_start();
-    require('../functions.php');
-    require('../dbconnect.php');
 
     $data = array();
     $sql = 'SELECT * FROM `users` WHERE `id` = 4';
@@ -25,6 +27,23 @@
 
     $validations = array();
     $feed = '';
+
+    if (!empty($_POST)) {
+        $feed = $_POST['feed'];
+
+        if ($feed == '') {
+            $validations['feed'] = 'blank';
+        }else{
+            //データベースに投稿データを保存
+            //DB登録処理
+            //usersテーブルにユーザー情報の登録処理
+            $sql = 'INSERT INTO `feeds` SET `user_id` = ?, `feed` = ?, `created` = NOW()';
+            $stmt = $dbh->prepare($sql);
+            $data = array($signin_user['id'], $feed);
+            $stmt->execute($data);
+        }
+    }
+
 
     $feed = $stmt->fetch(PDO::FETCH_ASSOC);
         //$feed連想配列にlike数を格納するキーを用意し、数字を代入する
@@ -37,6 +56,8 @@
         $friends_count_data = $friends_stmt->fetch(PDO::FETCH_ASSOC);
 
         $feed['friends_count'] = $friends_count_data['friends_count'];
+
+    $feeds = []; //投稿データを全て格納する配列
 
         //v($feed,'$feed');
         //[]は、配列の末尾にデータを追加するという意味
@@ -112,7 +133,7 @@
       </div>
     </div>
       <span hidden id="signin-user"><?php echo $signin_user['id']; ?></span>
-      <div class="box3"><br><h2>ユーザー名：すぐるちゃん</h2><h2>ID：1234567</h2><h2><span class="friends_count">友達：</span>100人</h2></div>
+      <div class="box3"><br><h2>ユーザー名：<?php echo $signin_user['user_name']; ?></h2><h2>ID：<?php echo $signin_user['id']; ?></h2><h2><span class="friends_count">友達：</span><?= $feed['friends_count']; ?>人</h2></div>
       <div class="box2"><h1><img src="img/IMG_7352.jpg" width="150" class="img-circle""></h1></div>
       <div class="box2"><h1><br>PROFILE</h1></div><br>
 
@@ -126,7 +147,8 @@
         <img src="img/img7.jpg" width="300" height="225" class="btn btn-primary" data-toggle="modal" data-target="#demoNormalModal_7" >
         <img src="img/img8.gif" width="300" height="225" class="btn btn-primary" data-toggle="modal" data-target="#demoNormalModal_8" >
         <img src="img/img9.jpg" width="300" height="225" class="btn btn-primary" data-toggle="modal" data-target="#demoNormalModal_9" ><br>
-        <br><input type="submit" value="全ての写真をみる">
+        <!-- <br><input type="submit" value="全ての写真をみる"> -->
+        <br><a href="../album02/album02.php"><h4>全ての写真をみる</h4></a>
       </center>
     </div>
 
@@ -149,6 +171,8 @@
                         <h3>＜コメント＞</h3>
                         <textarea name="content" placeholder="自由記入欄" cols="90" rows="5"></textarea>
                     </div>
+                    <?php foreach ($feeds as $feed_each ): ?>
+                    <?php if ($_SESSION["id"]==$feed_each['user_id']) :?>
                     <div class="modal-body">
                         <h3>＜公開期間＞</h3>
                         <select name="time">
@@ -169,6 +193,8 @@
                       <button type="button" class="btn btn-secondary" data-dismiss="modal"><h4>閉じる</h4></button>
                       <button type="button" class="btn btn-primary"><h4>更新</h4></button>
                     </div>
+                    <?php endif;?>
+                    <?php endforeach; ?>
                 </div>
             </div>
         </div>
