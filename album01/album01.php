@@ -171,8 +171,6 @@
                         <h3>＜コメント＞</h3>
                         <textarea name="content" placeholder="自由記入欄" cols="90" rows="5"></textarea>
                     </div>
-                    <?php foreach ($feeds as $feed_each ): ?>
-                    <?php if ($_SESSION["id"]==$feed_each['user_id']) :?>
                     <div class="modal-body">
                         <h3>＜公開期間＞</h3>
                         <select name="time">
@@ -193,8 +191,6 @@
                       <button type="button" class="btn btn-secondary" data-dismiss="modal"><h4>閉じる</h4></button>
                       <button type="button" class="btn btn-primary"><h4>更新</h4></button>
                     </div>
-                    <?php endif;?>
-                    <?php endforeach; ?>
                 </div>
             </div>
         </div>
