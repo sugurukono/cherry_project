@@ -15,7 +15,7 @@
     // v($_SESSION,'$_SESSION');
     // v($signin_user,'$signin_user');
     $user_id="";
-    $signin_user['id'] = $user_id;
+    $user_id = $signin_user['id'];
     $folder='';
 
 //foldersテーブルからデータ取得①
@@ -74,6 +74,19 @@
 
         $_SESSION['cherry']['related_friend']=$related_friend;
     }
+
+    V($related_friend,'related_friend');
+
+//友達申請を送る
+    if (!empty($_POST['request_friend'])) {
+        $sql = 'INSERT INTO `friends` SET `requester_id`=?, `accepter_id`=?, `status`=1,`create_date`= NOW()';
+        $data = array($signin_user['id'],$related_friend['id']);
+        $stmt = $dbh->prepare($sql);
+        $stmt->execute($data);
+    }
+
+    v($signin_user,'$signin_user');
+    v($user_id,'user_id');
 // プロフィール情報の読み込み
 
     $user_img = $signin_user['user_img'];
@@ -247,8 +260,8 @@
                 <?php endif; ?>
               </div>
               
-              <form method="POST" action="request_friend.php">
-                <input type="submit" value="友達申請を送る" class="square_btn3" style="float: right; ">
+              <form method="POST" action="">
+                <input type="submit" name="request_friend" value="友達申請を送る" class="square_btn3" style="float: right; ">
               </form>
 
             </div>
