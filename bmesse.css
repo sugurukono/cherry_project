@@ -5,7 +5,7 @@
     ここで充てた高さと横幅がそのままスタイルになる仕組み */
 
     height:600px;/*ここはご自由に*/
-    width: 5%;/*ここはご自由に*/
+    width: 10%;/*ここはご自由に*/
     }
 #container{
     float: left;
@@ -14,7 +14,7 @@
     ここで充てた高さと横幅がそのままスタイルになる仕組み */
 
     height:600px;/*ここはご自由に*/
-    width: 15%;/*ここはご自由に*/
+    width: 11%;/*ここはご自由に*/
     }
     .box8 {
     padding: 0.5em 1em;
@@ -101,7 +101,7 @@
 #bms_messages_container{
     float: right;
     height: 100%;/*your_containerに対して100%になる */
-    width: 100%;/*your_containerに対して100%になる */
+    width: 104%;/*your_containerに対して100%になる */
     background-color: #eee;
 }
 
@@ -183,7 +183,7 @@
         box-sizing: border-box;/*paddingとborderの要素の高さと幅の影響をなくす（要素に高さと幅を含める）*/
 
     }
-    #bms_send_btn {
+#bms_send_btn {
         width: 72px;
         height: 48px;
         font-size: 16px;
@@ -197,56 +197,244 @@
         border-radius: 4px;/*角丸*/
         box-sizing: border-box;/*paddingとborderの要素の高さと幅の影響をなくす（要素に高さと幅を含める）*/
     }
-    #bms_send_btn:hover {
+#bms_send_btn:hover {
         background: #13178E; /*マウスポインタを当てた時にアクティブな色になる*/
         cursor: pointer;/*マウスポインタを当てた時に、カーソルが指の形になる*/
     }
-     .bms_message {
+.bms_message {
         ・・・
     }
         /*
          *追加
          */
-        .bms_message_box{
-            margin-top: 20px;/*上下の吹き出しがひっつかない様に隙間を入れる*/
-            max-width: 100%;/*文字が長くなった時に吹き出しがタイムラインからはみ出さない様にする*/
-            font-size: 16px;
+.bms_message_box{
+margin-top: 20px;/*上下の吹き出しがひっつかない様に隙間を入れる*/
+max-width: 100%;/*文字が長くなった時に吹き出しがタイムラインからはみ出さない様にする*/
+font-size: 16px;
         }
             /*
             *追加
             */
-            .bms_message_content{
-                padding: 20px;/*文字や画像（コンテンツ）の外側に隙間を入れる*/
+.bms_message_content{
+padding: 20px;/*文字や画像（コンテンツ）の外側に隙間を入れる*/
             }
 
         /* メッセージ１（左側） */
-        .bms_left {
-            float: left;/*吹き出しをbms_messagesに対して左寄せ*/
-            line-height: 1.3em;
-        }
+.bms_left {
+float: left;/*吹き出しをbms_messagesに対して左寄せ*/
+line-height: 1.3em;
+}
             /*
             *追加
             */
-            .bms_left .bms_message_box {
-                color: #333;/*テキストを黒にする*/
-                background: #fff;
-                border: 2px solid #13178E;
-                border-radius: 30px 30px 30px 0px;/*左下だけ尖らせて吹き出し感を出す*/
-                margin-right: 50px;/*左側の発言だとわかる様に、吹き出し右側に隙間を入れる*/
+.bms_left .bms_message_box {
+color: #333;/*テキストを黒にする*/
+background: #fff;
+border: 2px solid #13178E;
+border-radius: 30px 30px 30px 0px;/*左下だけ尖らせて吹き出し感を出す*/
+margin-right: 50px;/*左側の発言だとわかる様に、吹き出し右側に隙間を入れる*/
             }
 
         /* メッセージ２（右側） */
-        .bms_right {
-            float: right;/*吹き出しをbms_messagesに対して右寄せ*/
-            line-height: 1.3em;
-        }
+.bms_right {
+float: right;/*吹き出しをbms_messagesに対して右寄せ*/
+line-height: 1.3em;
+}
             /*
             *追加
             */
-            .bms_right .bms_message_box {
-                color: #fff;/*テキストを白にする*/
-                background: #13178E;
-                border: 2px solid #13178E;
-                border-radius: 30px 30px 0px 30px;/*右下だけ尖らせて吹き出し感を出す*/
-                margin-left: 50px;/*右側の発言だとわかる様に、吹き出し左側に隙間を入れる*/
+.bms_right .bms_message_box {
+color: #fff;/*テキストを白にする*/
+background: #13178E;
+border: 2px solid #13178E;
+border-radius: 30px 30px 0px 30px;/*右下だけ尖らせて吹き出し感を出す*/
+margin-left: 50px;/*右側の発言だとわかる様に、吹き出し左側に隙間を入れる*/
             }
+
+/*吹き出し河江*/
+.balloon1-right {
+    position: relative;
+    display: inline-block;
+    margin: 1.5em 15px 1.5em 0;
+    padding: 7px 10px;
+    min-width: 120px;
+    max-width: 100%;
+    color: #555;
+    font-size: 16px;
+    background: #e0edff;
+    float:right;
+}
+
+.balloon1-right:before{
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    margin-top: -15px;
+    border: 15px solid transparent;
+    border-left: 15px solid #e0edff;
+}
+
+.balloon1-right p {
+    margin:15px;
+    padding: 0;
+}
+
+.img{
+    width:30%;
+    margin-top: 15px;
+}
+
+.karaage{
+    color:pink;
+    font-size: 20px; 
+    margin-top:15px;
+    
+}
+/*.modal_wrap input{
+    width:20px;
+    color:red;
+}*/
+
+.modal_overlay{
+    display: flex;
+    justify-content: center;
+    overflow: auto;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    opacity: 0;
+    transition: opacity 0.5s, transform 0s 0.5s;
+    transform: scale(0);
+}
+
+.modal_trigger{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.modal_content{
+    align-self: center;
+    width: 60%;
+    max-width: 800px;
+    padding: 30px 30px 15px;
+    box-sizing: border-box;
+    background: #fff;
+    line-height: 1.4em;
+    transform: scale(0.3);
+    transition: 0.5s;
+}
+
+.close_button{
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.modal_wrap input:checked ~ .modal_overlay{
+    opacity: 1;
+    transform: scale(1);
+    transition: opacity 0.5s;
+}
+
+.modal_wrap input:checked ~ .modal_overlay .modal_content{
+    transform: scale(1);
+}
+
+.open_button{
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 200px;
+    height: 30px;
+    margin: auto;
+    padding: 8px 16px;
+    color: red;
+    font-weight: bold;
+    font-family: 'Montserrat', sans-serif;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.6);
+    border-radius: 16px;
+    cursor: pointer;
+}
+
+input#trigger.checkbox1{
+    color:red;
+}
+/*最初のモーダル最後*/
+
+.textbox{
+    border:solid 0px;
+    border-width:0px;
+    border-style:None; 
+    outline: 0;
+    border: 0px;
+    border-bottom: dotted 2px #87CEFA;
+}
+
+.select{
+    padding: 50px;
+    background-color: white;
+    border-color: #0d9de4b5;
+    width: 115px;
+    height: 39px;
+}
+
+.square_btn5{
+    display: inline-block;
+    padding: 0.5em 3em;
+    text-decoration: none;
+    color: #67c5ff;
+    border: dashed 1px #67c5ff;
+    border-radius: 3px;
+    transition: .4s;
+    float: right;
+}
+
+.square_btn5:hover {
+    border-style: dotted;
+    color: #679efd;
+}
+
+.square_btn6{
+    display: inline-block;
+    padding: 0.5em 2em;
+    text-decoration: none;
+    color: black;
+    border: dashed 1px #d0d669c9;
+    border-radius: 3px;
+    transition: .4s;
+}
+
+.square_btn6:hover {
+    border-style: dotted;
+    color: #fe5f95;
+}
+
+.square_btn7{
+    display: inline-block;
+    padding: 7px;
+    text-decoration: none;
+    color: black;
+    border: dashed 1px pink;
+    border-radius: 3px;
+    transition: .4s;
+}
+
+.square_btn7:hover {
+    border-style: dotted;
+    color: blue;
+}
+
+
