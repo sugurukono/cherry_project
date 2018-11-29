@@ -1,47 +1,48 @@
 <?php
     session_start();
-    require('functions.php');
+    // require('functions.php');
+    require('dbconnect.php');
 
     // v($_POST, '$_POST');
 
+    $validations = array();
 
-    // $validations = array();
+    if (!empty($_POST)) {
+        $email = $_POST['email'];
+        $password = $_POST['password'];
 
-    // if (!empty($_POST)) {
-    //     $email = $_POST['email'];
-    //     $password = $_POST['password'];
+        if ($email != '' && $password != '') {
+          // 空じゃなければSQLぶんをここに書く。
+          $sql = 'SELECT * FROM `users` WHERE `email` =?';
+          $stmt = $dbh->prepare($sql);
+          $data = [$email];
+          $stmt->execute($data);
+          $record = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    //     if ($email != '' && $password != '') {
-    //       空じゃなければSQLぶんをここに書く。
-    //       $sql = 'SELECT * FROM `users` WHERE `email` =?';
-    //       $stmt = $dbh->prepare($sql);
-    //       $data = [$email];
-    //       $stmt->execute($data);
-    //       $record = $stmt->fetch(PDO::FETCH_ASSOC);//
 
-    //       if ($record == false) {
-    //           $validations['signin'] = 'failed';
-    //       }else{
-    //           //パスワードの照合をかける
-    //           $verify=password_verify($password, $record['password']);//一致していたらtrue
-    //           if ($verify == true) {
-    //               //サインイン成功
-    //               $_SESSION["id"] = $record["id"];
-    //               header('Location: timeline.php');
-    //               exit();
-    //           }else{
-    //               //パスワードミスったら
-    //               $validations['signin'] = 'failed';
 
-    //           }
-    //           }
-    //       }else{
-    //       //そうじゃなければblank
-    //       $validations['signin'] = 'blank';
+          if ($record == false) {
+              $validations['signin'] = 'failed';
+          }else{
+              //パスワードの照合をかける
+              $verify=password_verify($password, $record['password']);//一致していたらtrue
+              if ($verify == true) {
+                  //サインイン成功
+                  $_SESSION["id"] = $record["id"];
+                  header('Location: talk_main1.php');
+                  exit();
+              }else{
+                  //パスワードミスったら
+                  $validations['signin'] = 'failed';
+
+              }
+              }
+          }else{
+          //そうじゃなければblank
+          $validations['signin'] = 'blank';
           
-    //     }
-    // }
-
+        }
+    }
 ?>
 
 
@@ -60,7 +61,7 @@
 <body>
 <!-- ヘッダー 開始-->
   <div class="row" >
-    <div class="col-xs-12" style="background-color: pink; height: 90px">
+    <div class="col-xs-12" style="background-color: pink; height: 90px" id="header">
       <h1 class="title" style="color:white;">🍒Cherry</h1>
       <ul class="list"> 
             <li class="words"><a href="#1">About Us</a>
@@ -83,19 +84,17 @@
       <br>
       <form method="POST" action="" >
       <input class="login" type="email" name="email" placeholder="Email address" >
-       <!--<?php if(isset($validations['signin'])&& $validations['signin'] == 'failed'): ?>
-        <span class="error_msg">サインインに失敗しました。</span>
-      <?php endif; ?> -->
-      </div>
-      <div>
-      <input class="login" type="password" name="password" placeholder="password">
-      <!-- 
-       <?php if(isset($validations['signin'])&& $validations['signin'] == 'failed'): ?>
+      <?php if(isset($validations['signin'])&& $validations['signin'] == 'blank'): ?>
+        <span class="error_msg">メールアドレスが間違っています。</span>
+      <?php endif; ?>
+
+      <?php if(isset($validations['signin'])&& $validations['signin'] == 'failed'): ?>
         <span class="error_msg">サインインに失敗しました。</span>
       <?php endif; ?>
-       -->
       </div>
+
       <div>
+        <input class="login" type="password" name="password" placeholder="password"></div>
       <input class="login_button" type="submit" value="Login">
       </form>
     </div>

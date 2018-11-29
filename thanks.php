@@ -1,6 +1,8 @@
 <?php
 
+    require('functions.php');
 
+    v($_POST,'$_POST');
 
 
 
