@@ -40,8 +40,6 @@
     }
 
 
-
-
 // フォルダーを押すと友達一覧が表示される処理
     $sql='SELECT `user_name`,`folder_id`,`friend_id` FROM `users` INNER JOIN `friends_folders`
     ON `friends_folders`.`friend_id`= `users`.`id` WHERE `friends_folders`.`folder_owner_id`=?';
@@ -61,6 +59,7 @@
     // v($friends,'$friends');
     // v($_GET['folder'],'$_GET[folder]');
     // v($_GET['folder_id'],'$_GET[foler_id');
+    // v($friend_each,'$friend_each');
 
 
 // ID検索ファンクション
@@ -75,11 +74,11 @@
         $_SESSION['cherry']['related_friend']=$related_friend;
     }
 
-    V($related_friend,'related_friend');
+    // V($related_friend,'related_friend');
 
 //友達申請を送る
     if (!empty($_POST['request_friend'])) {
-        $sql = 'SELECT * FROM `friends` WHERE `requester_id`=? AND`accepter_id`=?';
+        $sql = 'SELECT * FROM `friends` WHERE `requester_id`=? AND `accepter_id`=?';
         $data= array($signin_user['id'],$related_friend['id']);
         $stmt = $dbh->prepare($sql);
         $stmt->execute($data);
@@ -99,9 +98,9 @@
             $stmt->execute($data);
       }
     }
+    // v($signin_user,'$signin_user');
+    // v($user_id,'user_id');
 
-    v($signin_user,'$signin_user');
-    v($user_id,'user_id');
 // プロフィール情報の読み込み
 
     $user_img = $signin_user['user_img'];
@@ -117,6 +116,29 @@
         $error['email'] = $_SESSION['error']['email'];
   }
 
+//友達削除
+    if(!empty($_POST['delete_friend'])) {
+          //signin_userがrequesterだった場合
+          // friendsフォルダを消す
+          $sql = 'DELETE FROM `friends` WHERE `requester_id`=? AND `accepter_id`=?';
+          $data = array($signin_user['id'],$_POST['delete_friend_id']);
+          $stmt = $dbh->prepare($sql);
+          $stmt->execute($data);
+          // chatroomフォルダを消す
+          $sql = 'DELETE FROM `chatroom` WHERE `owner_id`=? AND `menber_id`=?';
+          $data = array($signin_user['id'],$_POST['delete_friend_id']);
+          $stmt = $dbh->prepare($sql);
+          $stmt->execute($data);
+      }
+
+//フォルダーの全件削除
+    if(!empty($_POST['delete_all_folder'])) {
+        $sql = 'DELETE FROM `friends_folders` WHERE `folder_owner_id`=?';
+        $data = array($signin_user['id']);
+        $stmt = $dbh->prepare($sql);
+        $stmt->execute($data);
+    }
+// v($signin_user['id'],'$signin_user');
 
 ?>
 
@@ -125,7 +147,7 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <title></title>
+  <title>Settings</title>
   <meta charset="utf-8">
   <link rel="stylesheet" type="text/css"  href="header_only.css">
   <link rel="stylesheet" type="text/css"  href="setting.css">
@@ -139,7 +161,7 @@
 </head>
 <body>
 <!-- ヘッダー 開始-->
-  <div class="row" id="header">
+<!--   <div class="row" id="header">
     <div class="col-xs-12" style="background-color: #003366; height: 90px">
       <h1 class="title" style="color:white;">🍒Cherry</h1>
 
@@ -190,7 +212,7 @@
 
     </div>
   </div>
-  </div>
+  </div> -->
 
   <div class="img background">
     <div class="container">
@@ -310,7 +332,7 @@
         </div>
       </div>
     </div>
-<!-- 友達一覧 -->
+      <!-- 友達一覧 -->
       <div>
         <h1><span class="title_2">♦︎友達一覧♦︎</span></h1>
         <div class="row">
@@ -320,13 +342,12 @@
             <br>
 
             <?php foreach($folders as $folder_each) :?>
-            <form method="GET" action="" style="float: left">
-            <input type="submit" name="folder" class="friends_folder" data-toggle="modal" data-target="#demoNormalModal" value="<?php echo $folder_each['folder_name']?>">
-            <input type="hidden" name="folder_id" value="<?php echo $folder_each['id']?>">
-            </form>
-            <?php endforeach; ?>
-            <button class="delet_button" style="float: right;">フォルダーの全件削除</button>
-        </div>
+              <form method="GET" action="" style="float: left">
+                <input type="submit" name="folder" class="friends_folder" data-toggle="modal" data-target="#demoNormalModal" value="<?php echo $folder_each['folder_name']?>">
+                <input type="hidden" name="folder_id" value="<?php echo $folder_each['id']?>">
+                <?php endforeach; ?>
+                <button class="square_btn3" onclick="return confirm('フォルダーを全件削除しますか？');"style="float: right;">フォルダーの全件削除</a></button>
+          </div>
         <div class="col-xs-6" style="height: 450px; background-color: #37b8e061; margin: 30px 0px;">
         <div>
           <br>
@@ -339,19 +360,43 @@
           <?php foreach($friends as $friend_each): ?>
           <?php if($friend_each['folder_id']== $_GET['folder_id']): ?>
           <b><?php echo $friend_each['user_name'] ?></b>
-          <button class="square_btn2">友達削除</button>
+          <!-- 友達削除ボタンには警告を表示 -->
+          <button type="button" class="square_btn2" data-toggle="modal" data-target="#demoNormalModal">友達削除</button>
+          <!-- モーダルダイアログ -->
+          <div class="modal fade" id="demoNormalModal" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="demoModalTitle">友達削除</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  友達削除すると、その友達とのトーク履歴が消え、相手からのメッセージを受信することができなくなります。<br>
+                  削除した後にメッセージを送るためには再度リクエストを送信する必要があります。
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">戻る</button>
+                  <form method="POST" action="">
+                  <input type="hidden" name="delete_friend_id" value="<?php echo $friend_each['friend_id'] ?>">
+                  <input type="submit" name="delete_friend" class="btn btn-primary" value="友達を削除する">
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
           <button class="square_btn2">フォルダー追加</button><br><br>
           <?php endif; ?>
           <?php endforeach; ?>
           <button class="delet_button2" >中身を<br>空にする</button>
           <?php endif ;?>
-            
           </div>
         </div>
         </div>
+        </div>
       </div>
-    </div>
-    </div>
+
 
   <div class="row">
     <div class="col-xs-12" style="background-color:black; height:50px;" ></div>
