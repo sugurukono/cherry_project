@@ -53,7 +53,7 @@
             return $display_message;
         }
         elseif($rule['change_time']==1) {
-            $change_time=date($send_date,strtotime("+1 hour"));
+            $change_time=date($send_date,strtotime("+3 second"));
         }
         elseif ($rule['change_time']==2) {
             $change_time=date($send_date,strtotime("+12 hour"));
@@ -64,12 +64,15 @@
         }
 
         // 過去か未来かを確認するifを作る
-        if(!empty($change_time) && $change_time > $send_date){
+        if(!empty($change_time) && $change_time < date("Y-m-d H:i:s") ){
             return $display_message;
+        }else{
+            //まだ変更時間に達していない
+            return $change_massage;
         }
-        
 
     }
+
 
 
 ?>

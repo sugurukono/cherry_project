@@ -166,15 +166,26 @@
     v($rule,'$rule');
 
 //トーク削除トライ中
-    // if (!empty($_GET['name_folder']&&$_GET['name_friend']&&$_GET['delete_time'])) {
-    //     $name_folder=$_GET['name_folder'];
-    //     $name_friend=$_GET['name_friend'];
-    //     $delete_time=$_GET['delete_time'];
+    if (!empty($_GET['name_friend'] && $_GET['delete_time'])) {
+        $name_friend=$_GET['name_friend'];
+        $delete_time=$_GET['delete_time'];
 
-    //     if()
+        if($delete_time == 0){
+// 表示させない、と言うコードを書く。
+
+        }elseif($delete_time == 1){
+            $delete_time=date($send_date,strtotime("+ 1hour"));
+
+        }elseif($delete_time == 2){
+            $delete_time=date($send_date,strtotime("+ 12hour"));
 
 
-    // }
+        }elseif($delete_time == 3){
+            $delete_time=date($send_date,strtotime("+ 13hour"));
+
+        }
+
+    }
 
 
 
@@ -275,7 +286,6 @@
             に変更
             <br>
             <br>
-             <p>変更履歴はSettingメニューにてご覧ください。</p>
             <input type="submit" value="設定" class="square_btn5">
             </form>
         </div>
