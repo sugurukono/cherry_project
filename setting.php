@@ -130,6 +130,7 @@
           $stmt = $dbh->prepare($sql);
           $stmt->execute($data);
       }
+      // v($_POST['delete_friend'],'friend');
 
 //フォルダーの全件削除
     if(!empty($_POST['delete_all_folder'])) {
@@ -139,6 +140,7 @@
         $stmt->execute($data);
     }
 // v($signin_user['id'],'$signin_user');
+    // v($_POST['delete_all_folder'],'folder');
 
 ?>
 
@@ -161,7 +163,7 @@
 </head>
 <body>
 <!-- ヘッダー 開始-->
-<!--   <div class="row" id="header">
+  <div class="row" id="header">
     <div class="col-xs-12" style="background-color: #003366; height: 90px">
       <h1 class="title" style="color:white;">🍒Cherry</h1>
 
@@ -212,7 +214,7 @@
 
     </div>
   </div>
-  </div> -->
+  </div>
 
   <div class="img background">
     <div class="container">
@@ -345,8 +347,11 @@
               <form method="GET" action="" style="float: left">
                 <input type="submit" name="folder" class="friends_folder" data-toggle="modal" data-target="#demoNormalModal" value="<?php echo $folder_each['folder_name']?>">
                 <input type="hidden" name="folder_id" value="<?php echo $folder_each['id']?>">
-                <?php endforeach; ?>
-                <button class="square_btn3" onclick="return confirm('フォルダーを全件削除しますか？');"style="float: right;">フォルダーの全件削除</a></button>
+              </form>
+            <?php endforeach; ?>
+              <form method="POST" action="">
+                <input type="submit" name="delete_all_folder" class="square_btn3" onclick="return confirm('フォルダーを全件削除しますか？');"style="float: right;" value="フォルダーの全件削除">
+              </form>
           </div>
         <div class="col-xs-6" style="height: 450px; background-color: #37b8e061; margin: 30px 0px;">
         <div>
