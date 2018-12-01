@@ -17,7 +17,6 @@
     $user_id="";
     $user_id = $signin_user['id'];
     $folder='';
-
 //foldersテーブルからデータ取得①
     $sql = 'SELECT * FROM `folders` WHERE `user_id`=?';
     $data = array($_SESSION['id']);//WHEREで入れたやつだけでOK
@@ -129,12 +128,23 @@
           $data = array($signin_user['id'],$_POST['delete_friend_id']);
           $stmt = $dbh->prepare($sql);
           $stmt->execute($data);
+          //friends_foldersを消す
+          $sql = 'DELETE FROM `friends_folders` WHERE `folder_owner_id`=? AND `friend_id`=?';
+          $data = array($signin_user['id'],$_POST['delete_friend_id']);
+          $stmt = $dbh->prepare($sql);
+          $stmt->execute($data);
       }
       // v($_POST['delete_friend'],'friend');
 
 //フォルダーの全件削除
     if(!empty($_POST['delete_all_folder'])) {
+
         $sql = 'DELETE FROM `friends_folders` WHERE `folder_owner_id`=?';
+        $data = array($signin_user['id']);
+        $stmt = $dbh->prepare($sql);
+        $stmt->execute($data);
+
+        $sql = 'DELETE FROM `folders` WHERE `user_id`=?';
         $data = array($signin_user['id']);
         $stmt = $dbh->prepare($sql);
         $stmt->execute($data);
@@ -225,7 +235,6 @@
           <form method="POST" action="update_profile.php" enctype="multipart/form-data">
           <div class="col-xs-6" style="height: 600px; background-color: #37b8e061; margin:30px 0px;">
             <div class="profile1">
-              
                 <b>プロフィール画像</b> 
                   <?php if($user_img == '') :?>
                   <img src="img/profile_first.jpg" style="width: 300px; height: 300px;">
@@ -255,7 +264,6 @@
                 <b>ひとこと</b>
                 <textarea placeholder="🍒チェリー" class="text" name="comments"><?php echo htmlspecialchars($comments); ?></textarea>
                 <input type="submit" value="更新" class="square_btn4" style="float: right;">
-              
             </div>
           </div>
           </form>
@@ -279,7 +287,7 @@
 
               <!-- ID検索 -->
               <div class="id">
-                <b style="font-size: 20px;">IDを検索：</b>
+                <b style="font-size: 20px;">ID検索：</b>
                 <form action="" method="GET">
                   <input type="text" name="search_friend" value="" class="text">
                   <input type="submit" value="検索" class="square_btn "><br>
@@ -298,13 +306,10 @@
                 <img src="user_img/<?php echo $related_friend['user_img']; ?>" style="width: 300px; height: 300px;">
                 <?php endif; ?>
               </div>
-              
               <form method="POST" action="">
                 <input type="submit" name="request_friend" value="友達申請を送る" class="square_btn3" style="float: right; ">
               </form>
-
             </div>
-
             <div class="col-xs-6" style="height: 600px; background-color: #37b8e061; margin: 30px 0px;">
               <br>
               <b class=asking>
@@ -319,15 +324,20 @@
                 <input type="text" name="folder_name" class="text">
                 <input type="submit" value="新規作成" class="square_btn">
               </form>
-              <b style="font-size: 20px">フォルダー選択：</b>
+              <b style="font-size: 20px">フォルダー選択：</b><br>
+              <b style="font-size: 20px">※チェックボックスを選択してから操作してください！</b><br>
 <!-- フォルダーの行を作成 -->
               <form action="folder_related_friend.php" method="GET">
                 <div class="scrol_box">
+                  <?php if(isset($folders)) :?>
                   <?php foreach($folders as $folder_each) :?>
                   <input type="checkbox" name="check_folder" value="<?php echo $folder_each['id']?>"><?php echo $folder_each['folder_name'] ;?>
                   <button class="square_btn2"><a onclick="return confirm('フォルダーを削除しますか？');" href="delete_folders.php?folder_id=<?php echo $folder_each['id']; ?>">フォルダーの削除</a></button>
                   <br><br>
                    <?php endforeach; ?>
+                   <?php else :?>
+                  <b style="font-size: 20px">フォルダを作成しよう！</b>
+                   <?php endif; ?>
                 </div>
                 <input type="submit" value="友達をフォルダーに登録" class="square_btn3" style="float: right; ">
               </form>
@@ -342,13 +352,16 @@
             <br>
             <b style="font-size: 20px">♦︎フォルダー♦︎</b><br>
             <br>
-
+            <?php if(isset($folders)) :?>
             <?php foreach($folders as $folder_each) :?>
               <form method="GET" action="" style="float: left">
                 <input type="submit" name="folder" class="friends_folder" data-toggle="modal" data-target="#demoNormalModal" value="<?php echo $folder_each['folder_name']?>">
                 <input type="hidden" name="folder_id" value="<?php echo $folder_each['id']?>">
               </form>
             <?php endforeach; ?>
+            <?php else :?>
+              <b style="font-size: 20px">フォルダを作成しよう！</b>
+            <?php endif; ?>
               <form method="POST" action="">
                 <input type="submit" name="delete_all_folder" class="square_btn3" onclick="return confirm('フォルダーを全件削除しますか？');"style="float: right;" value="フォルダーの全件削除">
               </form>
@@ -450,7 +463,7 @@
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    </body>
+
 
 </body>
 </html>
