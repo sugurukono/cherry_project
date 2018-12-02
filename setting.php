@@ -189,7 +189,7 @@
 </head>
 <body>
 <!-- ヘッダー 開始-->
-<!--   <div class="row" id="header">
+  <div class="row" id="header">
     <div class="col-xs-12" style="background-color: #003366; height: 90px">
       <h1 class="title" style="color:white;">🍒Cherry</h1>
 
@@ -240,7 +240,7 @@
 
     </div>
   </div>
-  </div> -->
+  </div>
 
   <div class="img background">
     <div class="container">
