@@ -114,6 +114,20 @@
         $error['search_id'] = $_SESSION['error']['search_id'];
         $error['email'] = $_SESSION['error']['email'];
   }
+//フォルダから友達の登録を外す
+    if(!empty($_POST['delete_folder_friend'])) {
+          // chatroomフォルダを消す
+          $sql = 'DELETE FROM `chatroom` WHERE `room_name`=? AND`owner_id`=? AND `menber_id`=?';
+          $data = array($_POST['omit_folder_id'],$signin_user['id'],$_POST['omit_friend_id']);
+          $stmt = $dbh->prepare($sql);
+          $stmt->execute($data);
+          //friends_foldersを消す
+          $sql = 'DELETE FROM `friends_folders` WHERE `folder_id`=? AND `folder_owner_id`=? AND `friend_id`=?';
+          $data = array($_POST['omit_folder_id'],$signin_user['id'],$_POST['omit_friend_id']);
+          $stmt = $dbh->prepare($sql);
+          $stmt->execute($data);
+    }
+
 
 //友達削除
     if(!empty($_POST['delete_friend'])) {
@@ -380,8 +394,15 @@
           <?php foreach($friends as $friend_each): ?>
           <?php if($friend_each['folder_id']== $_GET['folder_id']): ?>
           <b><?php echo $friend_each['user_name'] ?></b>
+
+          <!-- 友達をフォルダから外す -->
+          <form method="POST" action="">
+             <input type="hidden" name="omit_folder_id" value="<?php echo $friend_each['folder_id'] ?>">
+             <input type="hidden" name="omit_friend_id"value="<?php echo $friend_each['friend_id'] ?>">
+            <input type="submit" name="delete_folder_friend" class="square_btn2" value="フォルダから外す">
+          </form>
           <!-- 友達削除ボタンには警告を表示 -->
-          <button type="button" class="square_btn2" data-toggle="modal" data-target="#demoNormalModal">友達削除</button>
+          <button type="button" class="square_btn2" data-toggle="modal" data-target="#demoNormalModal" style="float: right;">友達削除</button><br>
           <!-- モーダルダイアログ -->
           <div class="modal fade" id="demoNormalModal" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
             <div class="modal-dialog" role="document">
