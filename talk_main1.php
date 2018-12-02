@@ -59,6 +59,7 @@
             // v($friends,'$friends');
             // $friend_each
     }
+    v($friends,'$friends');
 
 //フォルダー選択→友達選択
     if (!empty($_GET['folder_id'])) {
@@ -224,7 +225,39 @@
 
     }
 
+// リクエストを送られた場合の処理挑戦中
+    $sql='SELECT `users`.`id`,`users`.`user_name` FROM `users` INNER JOIN `friends` ON `friends`.`requester_id`= `users`.`id` WHERE `friends`.`accepter_id`=? AND `friends`.`status`=1';
+    $data= array($user_id);
+    $stmt = $dbh->prepare($sql);
+    $stmt->execute($data);
+    $reqs=[];
 
+    while(true){
+        $requesting=$stmt->fetch(PDO::FETCH_ASSOC);
+
+        if($requesting == false){
+            break;
+        }
+            $reqs[]=$requesting;
+    }
+    v($reqs, '$reqs');
+
+// リクエストを受け付けた場合
+    if (!empty($_GET['accept'])) {
+        v($_GET['accepted'],'$_GET[accepted]');
+        $accepts=array();
+        $accepts=$_GET['accepted'];
+        foreach ($accepts as $accept) {
+            v($accept,'$accept');
+            $sql='UPDATE `friends` SET `status`=2,`update_date`=NOW() WHERE `requester_id`=? AND `accepter_id`=?';
+            $data=array($accept,$user_id);
+            $stmt = $dbh->prepare($sql);
+            $stmt->execute($data);
+        }
+        
+    }
+
+// リクエストを削除した場合
 
 
 
@@ -340,11 +373,11 @@
 
 <!-- トーク削除設定 -->
     <div class="modal_wrap">
-    <input id="trigger2" type="checkbox">
-    <label for="trigger2" style="color:pink; font-size:12px;">トークルーム削除</label>
+    <input id="trigger3" type="checkbox">
+    <label for="trigger3" style="color:pink; font-size:12px;">トークルーム削除</label>
 
     <div class="modal_overlay">
-        <label for="trigger2" class="modal_trigger"></label>
+        <label for="trigger3" class="modal_trigger"></label>
         <div class="modal_content">
             <label for="trigger2" class="close_button">✖️</label>
             <h2>トークルーム削除</h2>
@@ -373,7 +406,41 @@
         </div>
     </div>
     </div>
+    <br>
+    <br>
+
+<!-- リクエスト -->
+    <?php if (!empty($reqs)): ?>
+    <div class="modal_wrap">
+    <input id="trigger2" type="checkbox">
+    <label for="trigger2" style="color:pink; font-size:12px;">
+    ❗️リクエスト</label>
+
+    <div class="modal_overlay">
+        <label for="trigger2" class="modal_trigger"></label>
+        <div class="modal_content">
+            <label for="trigger2" class="close_button">✖️</label>
+            <h2>❗️リクエストが届いています。</h2><br>
+            <p>見覚えのない申請はBlockを押して削除できます。</p>
+           
+            <!-- リクエストを送られた場合 -->
+            <form submit="GET" action="">
+            <?php foreach ($reqs as $reqs_each): ?>
+                <input type="checkbox" name="accepted[]" value="<?php echo $reqs_each['id']?>"><b style="font-size: 20px; float: center;"><?php echo $reqs_each['user_name'] ?></b><input type="submit" value="Block" class="square_btn8" name="block"><br><br>
+            <?php endforeach; ?>
+            <br>
+            <br>
+             <p>友達リクエストを承認しますか？よろしければボタンを押してください</p>
+            <input type="submit" name="accept" value="承認" class="square_btn5">
+            </form>
+        </div>
     </div>
+    </div>
+        <?php endif ;?>
+
+    </div>
+
+    
 
 
     <!-- フォルダー -->

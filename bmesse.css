@@ -437,4 +437,18 @@ input#trigger.checkbox1{
     color: blue;
 }
 
+.square_btn8{
+    display: inline-block;
+    padding: 0.5em 3em;
+    text-decoration: none;
+    color: red;
+    border: dashed 1px red;
+    border-radius: 3px;
+    transition: .4s;
+    float: right;
+}
 
+.square_btn8:hover {
+    border-style: dotted;
+    color: red;
+}
