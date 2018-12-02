@@ -163,26 +163,38 @@
     $stmt->execute($data);
     $rule=$stmt->fetch(PDO::FETCH_ASSOC);
 
-    // v($rule,'$rule');
+    v($rule,'$rule');
+
+    if (!empty($_GET['magic_delete'])) {
+        $sql='DELETE FROM `magic_changes` WHERE user_id=?';
+        $data=array($user_id);
+        $stmt = $dbh->prepare($sql);
+        $stmt->execute($data);
+    }
+
 
 //トーク削除トライ中
-    v($_GET['delete_time'],'$_GET[delete_time]');
-    v($_GET['friend_id'],'$_GET[friend_id]');
+    echo date_default_timezone_get();  //ベルリンになっている・・・
+    date_default_timezone_set('');      //セブにするにはどうしたらいいのか・・・
+    echo date("Y/m/d H:i:s");       //めちゃくちゃな時間になる・・・泣
+    v($_GET['delete_time'],'$_GET[delete_time]'); //合ってる
+    v($_GET['friend_id'],'$_GET[friend_id]');       //合ってる
 
-    if (!empty($_GET['delete_time'])) {
+    if (!empty($_GET['delete_time']) && !empty($_GET['friend_id'])) {
         $delete_time=$_GET['delete_time'];
         $friend_id=$_GET['friend_id'];
-        $send_date=date("Y/m/d H:i:s");
-
         $sql='SELECT * FROM `chatroom` WHERE `owner_id`=? AND`member_id`=?';
         $data = array($user_id,$friend_id);
         $stmt = $dbh->prepare($sql);
         $stmt->execute($data);
         $chatroom_data3=$stmt->fetch(PDO::FETCH_ASSOC);
-        v($chatroom_data3,'$chatroom_data3');
+        v($chatroom_data3,'$chatroom_data3');//合ってる
+
+        $send_date=date("Y/m/d H:i:s");
+        v($send_date,'$send_date');//データ出て来さえしない。
 
         if($delete_time == 0){
-        $delete_time=date($send_date,strtotime());
+        $delete_time=date($send_date,strtotime($send_date));
         $sql='UPDATE `chatroom` SET `status`=0,`delete_time`=? WHERE `id`=?';
         $data=array($delete_time,$chatroom_data3['id']);
         $stmt = $dbh->prepare($sql);
@@ -296,6 +308,14 @@
         <div class="modal_content">
             <label for="trigger" class="close_button">✖️</label>
             <h2>文字変換設定</h2>
+            <?php if(!empty($rule)): ?>
+                <p>※すでに登録済みです。※</p>
+                <p>もし登録を削除される場合はボタンを押して再登録してください。</p>
+                <form method="GET" action="">
+                    <input type="submit" name="magic_delete" value="削除" class="square_btn5">
+                </form>
+            <?php endif; ?>
+            <?php if(empty($rule)): ?>
             <p>※注※全てのチャットルームに適応されます。</p>
             <form method="GET" action="magic.php">
             「<input type="text" name="comment" class="textbox"value=""> 」を
@@ -311,6 +331,7 @@
             <br>
             <input type="submit" value="設定" class="square_btn5">
             </form>
+        <?php endif; ?>
         </div>
     </div>
     </div>
@@ -394,7 +415,7 @@
 
 
 
-
+<!-- トーク -->
     <div id="your_container">
         <!-- チャットの外側部分① -->
         <div id="bms_messages_container">
@@ -416,6 +437,7 @@
 
             <!-- タイムライン部分③ -->
             <div id="bms_messages">
+                <?php if (isset($_GET['friend_id'])): ?>
                 <?php foreach ($talks as $talk_each):?>
                 <!--メッセージ１（左側）-->
                 <?php if ($talk_each['sender_id']==$_SESSION['cherry']['friend_id']): ?>
@@ -441,6 +463,7 @@
                 <div class="bms_clear"></div><!-- 回り込みを解除（スタイルはcssで充てる） -->
                 <?php endif; ?>
                 <?php endforeach; ?>
+                <?php endif ?>
             </div>
 
 
