@@ -242,22 +242,6 @@
     }
     v($reqs, '$reqs');
 
-// リクエストを受け付けた場合
-    if (!empty($_GET['accept'])) {
-        v($_GET['accepted'],'$_GET[accepted]');
-        $accepts=array();
-        $accepts=$_GET['accepted'];
-        foreach ($accepts as $accept) {
-            v($accept,'$accept');
-            $sql='UPDATE `friends` SET `status`=2,`update_date`=NOW() WHERE `requester_id`=? AND `accepter_id`=?';
-            $data=array($accept,$user_id);
-            $stmt = $dbh->prepare($sql);
-            $stmt->execute($data);
-        }
-        
-    }
-
-// リクエストを削除した場合
 
 
 
@@ -415,26 +399,26 @@
     <input id="trigger2" type="checkbox">
     <label for="trigger2" style="color:pink; font-size:12px;">
     ❗️リクエスト</label>
-
-    <div class="modal_overlay">
+        <div class="modal_overlay">
         <label for="trigger2" class="modal_trigger"></label>
-        <div class="modal_content">
+            <div class="modal_content">
             <label for="trigger2" class="close_button">✖️</label>
             <h2>❗️リクエストが届いています。</h2><br>
-            <p>見覚えのない申請はBlockを押して削除できます。</p>
+            <p>承認したい人を選んで、承認ボタンを押してください。</p>
+            <p>見覚えのない申請がある場合は、選択しBlockボタンを押してください。削除されます。</p>
            
             <!-- リクエストを送られた場合 -->
-            <form submit="GET" action="">
+            <form submit="GET" action="rec_accepted.php">
             <?php foreach ($reqs as $reqs_each): ?>
-                <input type="checkbox" name="accepted[]" value="<?php echo $reqs_each['id']?>"><b style="font-size: 20px; float: center;"><?php echo $reqs_each['user_name'] ?></b><input type="submit" value="Block" class="square_btn8" name="block"><br><br>
+                <input type="checkbox" name="accepted[]" value="<?php echo $reqs_each['id']?>"><b style="font-size: 20px; float: center;"><?php echo $reqs_each['user_name'] ?></b><br><br>
             <?php endforeach; ?>
             <br>
             <br>
-             <p>友達リクエストを承認しますか？よろしければボタンを押してください</p>
-            <input type="submit" name="accept" value="承認" class="square_btn5">
+            <input type="submit" value="Block" class="square_btn8" name="block">
+            <input type="submit" style="margin-right:30px;" name="accept" value="承認" class="square_btn5">
             </form>
+            </div>
         </div>
-    </div>
     </div>
         <?php endif ;?>
 

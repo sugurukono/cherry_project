@@ -143,7 +143,7 @@
     <div class="col-xs-12"  style="background-color:black; height:70px"><span class="a" float=center>Register</span></div>
   </div>
 
-    <div class="img bottom_img">
+    <div class="img2 bottom_img">
     <div class="container">
       <div class="register">
         <h4 >ご登録はこちらから</h4>
