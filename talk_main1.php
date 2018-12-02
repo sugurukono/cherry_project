@@ -12,27 +12,11 @@
 
     // v($signin_user,'$signin_user');
 
+
     $user_id="";
     $user_id=$signin_user['id'];
     $folder='';
     v($user_id,'$user_id');
-
-    $sql= 'SELECT * FROM `friends` WHERE `requester_id`=?';
-    $data = array($_SESSION['id']);
-    $stmt = $dbh->prepare($sql);
-    $stmt->execute($data);
-    $have_friend=$stmt->fetch(PDO::FETCH_ASSOC);
-
-    v($have_friend,'$have_friend');
-
-    if (empty($have_friend)) {
-        header('Location: setting.php');
-    }
-
-    $_SESSION['cherry']['folder_id']='';
-    $_SESSION['cherry']['friend_id']='';
-    $_SESSION['cherry']['chatroom_id']='';
-
 
 
 //foldersテーブルからデータ取得①
@@ -143,7 +127,7 @@
             v($_SESSION['cherry']['chatroom_id'],'$chatroom_id');
         }
     }
-
+    // v($_SESSION['cherry']['chatroom_id'],'$_SESSION[cherry][chatroom_id]');
 
 // 送信ボタンを押されたら、自分のトークが表示される
     if (!empty($_GET['sending'])) {
@@ -179,18 +163,54 @@
     $stmt->execute($data);
     $rule=$stmt->fetch(PDO::FETCH_ASSOC);
 
-    v($rule,'$rule');
+    // v($rule,'$rule');
 
 //トーク削除トライ中
-    // if (!empty($_GET['name_folder']&&$_GET['name_friend']&&$_GET['delete_time'])) {
-    //     $name_folder=$_GET['name_folder'];
-    //     $name_friend=$_GET['name_friend'];
-    //     $delete_time=$_GET['delete_time'];
+    v($_GET['delete_time'],'$_GET[delete_time]');
+    v($_GET['friend_id'],'$_GET[friend_id]');
 
-    //     if()
+    if (!empty($_GET['delete_time'])) {
+        $delete_time=$_GET['delete_time'];
+        $friend_id=$_GET['friend_id'];
+        $send_date=date("Y/m/d H:i:s");
 
+        $sql='SELECT * FROM `chatroom` WHERE `owner_id`=? AND`member_id`=?';
+        $data = array($user_id,$friend_id);
+        $stmt = $dbh->prepare($sql);
+        $stmt->execute($data);
+        $chatroom_data3=$stmt->fetch(PDO::FETCH_ASSOC);
+        v($chatroom_data3,'$chatroom_data3');
 
-    // }
+        if($delete_time == 0){
+        $delete_time=date($send_date,strtotime());
+        $sql='UPDATE `chatroom` SET `status`=0,`delete_time`=? WHERE `id`=?';
+        $data=array($delete_time,$chatroom_data3['id']);
+        $stmt = $dbh->prepare($sql);
+        $stmt->execute($data);
+
+        }elseif($delete_time == 1){
+            $delete_time=date($send_date,strtotime("+ 1hour"));
+            $sql='UPDATE `chatroom` SET `status`=1,`delete_time`=? WHERE `id`=?';
+            $data=array($delete_time,$chatroom_data3['id']);
+            $stmt = $dbh->prepare($sql);
+            $stmt->execute($data);
+
+        }elseif($delete_time == 2){
+            $delete_time=date($send_date,strtotime("+ 12hour"));
+            $sql='UPDATE `chatroom` SET `status`=2,`delete_time`=? WHERE `id`=?';
+            $data=array($delete_time,$chatroom_data3['id']);
+            $stmt = $dbh->prepare($sql);
+            $stmt->execute($data);
+
+        }elseif($delete_time == 3){
+            $delete_time=date($send_date,strtotime("+ 13hour"));
+            $sql='UPDATE `chatroom` SET `status`=3,`delete_time`=? WHERE `id`=?';
+            $data=array($delete_time,$chatroom_data3['id']);
+            $stmt = $dbh->prepare($sql);
+            $stmt->execute($data);
+        }
+
+    }
 
 
 
@@ -211,10 +231,8 @@
 
 
     <link type="text/css" rel="stylesheet" href="bmesse.css" />
-
     <link rel="stylesheet" type="text/css"  href="css/header.css">
     <link rel="stylesheet" type="text/css"  href="header_only.css">
-
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 
 </head>
@@ -291,7 +309,6 @@
             に変更
             <br>
             <br>
-             <p>変更履歴はSettingメニューにてご覧ください。</p>
             <input type="submit" value="設定" class="square_btn5">
             </form>
         </div>
@@ -311,25 +328,26 @@
             <label for="trigger2" class="close_button">✖️</label>
             <h2>トークルーム削除</h2>
 
-            <form submit="GET" action="">
+           <form submit="GET" action="">
             <!-- フレンドセレクト -->
-            <select class="select" name="name_friend">
+            <select class="select" name="friend_id">
             <?php foreach($friends as $friend_each): ?>
             <option value=<?php echo $friend_each['friend_id'] ?>><?php echo $friend_each['user_name']?><option>
             <?php endforeach; ?>
             </select>
             さんとのトークを
-            <select name="delet_time" class="select">
-                <option value="NOW">今すぐ</option>
-                <option value="1hour">一時間後</option>
-                <option value="12hour">１２時間後</option>
-                <option value="24hour">２４時間後</option>
+
+            <select name="delete_time" class="select">
+                <option value="0">今すぐ</option>
+                <option value="1">一時間後</option>
+                <option value="2">１２時間後</option>
+                <option value="3">２４時間後</option>
             </select>
             に削除
             <br>
             <br>
              <p>一度削除したトークは戻せません。よろしいですか？</p>
-            <input type="submit" name="ccc" value="削除" class="square_btn5">
+            <input type="submit" value="削除" class="square_btn5">
             </form>
         </div>
     </div>
@@ -397,10 +415,7 @@
             </div>
 
             <!-- タイムライン部分③ -->
-
             <div id="bms_messages">
-
-                
                 <?php foreach ($talks as $talk_each):?>
                 <!--メッセージ１（左側）-->
                 <?php if ($talk_each['sender_id']==$_SESSION['cherry']['friend_id']): ?>
@@ -426,8 +441,6 @@
                 <div class="bms_clear"></div><!-- 回り込みを解除（スタイルはcssで充てる） -->
                 <?php endif; ?>
                 <?php endforeach; ?>
-            
-
             </div>
 
 
