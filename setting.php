@@ -135,6 +135,8 @@
           $stmt->execute($data);
       }
       // v($_POST['delete_friend'],'friend');
+      // v($signin_user['id'],'$signin_user_id');
+      // v($_POST['delete_friend_id'],'delete_friend_id');
 
 //フォルダーの全件削除
     if(!empty($_POST['delete_all_folder'])) {
@@ -173,7 +175,7 @@
 </head>
 <body>
 <!-- ヘッダー 開始-->
-  <div class="row" id="header">
+<!--   <div class="row" id="header">
     <div class="col-xs-12" style="background-color: #003366; height: 90px">
       <h1 class="title" style="color:white;">🍒Cherry</h1>
 
@@ -224,7 +226,7 @@
 
     </div>
   </div>
-  </div>
+  </div> -->
 
   <div class="img background">
     <div class="container">
@@ -398,13 +400,12 @@
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">戻る</button>
                   <form method="POST" action="">
                   <input type="hidden" name="delete_friend_id" value="<?php echo $friend_each['friend_id'] ?>">
-                  <input type="submit" name="delete_friend" class="btn btn-primary" value="友達を削除する">
+                  <input type="submit" name="delete_friend" class="btn btn-primary" value="友達を削除する"><br>
                   </form>
                 </div>
               </div>
             </div>
           </div>
-          <button class="square_btn2">フォルダー追加</button><br><br>
           <?php endif; ?>
           <?php endforeach; ?>
           <button class="delet_button2" >中身を<br>空にする</button>
