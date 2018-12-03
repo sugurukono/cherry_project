@@ -135,21 +135,21 @@
       <h1 class="title" style="color:white;">🍒Cherry</h1>
 
     <li class="words">
-        <a href="#">My Page</a>
+        <a href="album/album.php">My Page</a>
     </li>
     <li class="words"><a href="talk_main1.php">Talk</a>
     </li>
     <li class="words">
-        <a href="#">Add Friends</a>
+        <a href="#friends">Add Friends</a>
     </li>
     <li class="words">
-        <a href="#">Setting</a>
+        <a href="setting.php">Setting</a>
     </li>
      <li class="words">
-        <a href="#">Fake Page</a>
+        <a href="fake.php">Fake Page</a>
     </li>
     <li class="words">
-        <a href="#">Log Out</a>
+        <a href="signout.php">Log Out</a>
     </li>
     </div>
      <div class=row>
@@ -159,23 +159,23 @@
         Setting Menu:
       </li>
       <li class="words2">
-        <a href="#">Profile</a>
+        <a href="#profile">Profile</a>
       </li>
 
       <li class="words2">
-        <a href="#">Friends</a>
+        <a href="#friends">Friends</a>
       </li>
 
       <li class="words2">
-        <a href="#">Friends list</a>
+        <a href="#friends_list">Friends list</a>
       </li>
 
       <li class="words2">
-        <a href="#">help</a>
+        <a href="#help">help</a>
       </li>
 
       <li class="words2">
-        <a href="#">Q&A</a>
+        <a href="#qanda">Q&A</a>
       </li>
 
 
@@ -186,7 +186,7 @@
   <div class="img background">
     <div class="container">
       <div>
-        <h1><span class="title_1">♦︎プロフィール編集♦︎</span></h1>
+        <h1 id="profile"><span class="title_1">♦︎プロフィール編集♦︎</span></h1>
 
         <div class="row">
           <form method="POST" action="update_profile.php" enctype="multipart/form-data">
@@ -236,7 +236,7 @@
 <div class="img background2">
   <div class="container">
         <div>
-          <h1><span class="title_2">♦︎友達検索♦︎</span></h1>
+          <h1 id="friends"><span class="title_2">♦︎友達検索♦︎</span></h1>
           <div class="row">
             <div class="col-xs-6" style="height: 600px; background-color: #37b8e061; margin:30px 0px;">
               <!-- ID検索 -->
@@ -301,7 +301,7 @@
 
       <!-- 友達一覧 -->
       <div>
-        <h1><span class="title_2">♦︎友達一覧♦︎</span></h1>
+        <h1 id="friends_list"><span class="title_2">♦︎友達一覧♦︎</span></h1>
         <div class="row">
           <div class="col-xs-6" style="height: 450px; background-color: #37b8e061; margin:30px 0px;">
             <br>
@@ -385,7 +385,7 @@
   </div>
 
     <div class="col-xs-12" style="background-color: white; height:200px">
-       Help 使い方ガイド（TOPでも使用したもの？）
+       <h1 id="help"><span class="title_1">♦Help 使い方ガイド♦</span></h1>（TOPでも使用したもの？）
     </div>
 
 <div class="row">
@@ -394,7 +394,7 @@
   </div>
 
 <div class="col-xs-12" style="background-color: white; height:200px">
-      Q&A  また後で適当に入れましょう
+      <h1 id="qanda"><span class="title_1">♦Ｑ＆Ａ♦</span></h1>
     </div>
 
 
