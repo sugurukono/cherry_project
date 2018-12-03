@@ -1,7 +1,8 @@
 <?php 
     require('dbconnect.php');
     require('functions.php');
-    v($_GET['folder_id'],"folder_id");
+    // v($_GET['folder_id'],"folder_id");
+
 
 // 削除したいFeedのIDを取得
     $folder_id = $_GET['folder_id'];
@@ -22,10 +23,6 @@
 // タイムライン一覧にもどる
     header('Location: setting.php');
     exit();
-
-
-
-
 
 
 
