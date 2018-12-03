@@ -59,13 +59,13 @@
             // v($friends,'$friends');
             // $friend_each
     }
-    v($friends,'$friends');
+    // v($friends,'$friends');
 
 //フォルダー選択→友達選択
     if (!empty($_GET['folder_id'])) {
         $folder_id= "";
         $folder_id= $_GET['folder_id'];
-        v($folder_id,'$folder_id');
+        // v($folder_id,'$folder_id');
         $_SESSION['cherry']['folder_id']=$folder_id;
     }
     if (!empty($_GET['friend_id'])) {
@@ -80,7 +80,7 @@
         $stmt = $dbh->prepare($sql);
         $stmt->execute($data);
         $select_friend=$stmt->fetch(PDO::FETCH_ASSOC);
-        v($select_friend,'$select_friend');
+        // v($select_friend,'$select_friend');
     }
 
 
@@ -100,7 +100,7 @@
         $stmt = $dbh->prepare($sql);
         $stmt->execute($data);
         $chatroom_data=$stmt->fetch(PDO::FETCH_ASSOC);
-        v($chatroom_data,'$chatroom_data');
+        // v($chatroom_data,'$chatroom_data');
         // IDの反対の組み合わせでないか確認
         if (empty($chatroom_data)) {
             $sql='SELECT * FROM `chatroom` WHERE `owner_id`=? AND`member_id`=?';
@@ -125,10 +125,10 @@
         }else{//存在している時はチャットルームIDを取得
             $chatroom_id=$chatroom_data['id'];
             $_SESSION['cherry']['chatroom_id']=$chatroom_id;
-            v($_SESSION['cherry']['chatroom_id'],'$chatroom_id');
+            // v($_SESSION['cherry']['chatroom_id'],'$chatroom_id');
         }
     }
-    // v($_SESSION['cherry']['chatroom_id'],'$_SESSION[cherry][chatroom_id]');
+    v($_SESSION['cherry']['chatroom_id'],'$_SESSION[cherry][chatroom_id]');
 
 // 送信ボタンを押されたら、自分のトークが表示される
     if (!empty($_GET['sending'])) {
@@ -164,7 +164,7 @@
     $stmt->execute($data);
     $rule=$stmt->fetch(PDO::FETCH_ASSOC);
 
-    v($rule,'$rule');
+    // v($rule,'$rule');
 
     if (!empty($_GET['magic_delete'])) {
         $sql='DELETE FROM `magic_changes` WHERE user_id=?';
@@ -174,58 +174,8 @@
     }
 
 
-//トーク削除トライ中
-    echo date_default_timezone_get();  //ベルリンになっている・・・
-    date_default_timezone_set('');      //セブにするにはどうしたらいいのか・・・
-    echo date("Y/m/d H:i:s");       //めちゃくちゃな時間になる・・・泣
-    v($_GET['delete_time'],'$_GET[delete_time]'); //合ってる
-    v($_GET['friend_id'],'$_GET[friend_id]');       //合ってる
 
-    if (!empty($_GET['delete_time']) && !empty($_GET['friend_id'])) {
-        $delete_time=$_GET['delete_time'];
-        $friend_id=$_GET['friend_id'];
-        $sql='SELECT * FROM `chatroom` WHERE `owner_id`=? AND`member_id`=?';
-        $data = array($user_id,$friend_id);
-        $stmt = $dbh->prepare($sql);
-        $stmt->execute($data);
-        $chatroom_data3=$stmt->fetch(PDO::FETCH_ASSOC);
-        v($chatroom_data3,'$chatroom_data3');//合ってる
-
-        $send_date=date("Y/m/d H:i:s");
-        v($send_date,'$send_date');//データ出て来さえしない。
-
-        if($delete_time == 0){
-        $delete_time=date($send_date,strtotime($send_date));
-        $sql='UPDATE `chatroom` SET `status`=0,`delete_time`=? WHERE `id`=?';
-        $data=array($delete_time,$chatroom_data3['id']);
-        $stmt = $dbh->prepare($sql);
-        $stmt->execute($data);
-
-        }elseif($delete_time == 1){
-            $delete_time=date($send_date,strtotime("+ 1hour"));
-            $sql='UPDATE `chatroom` SET `status`=1,`delete_time`=? WHERE `id`=?';
-            $data=array($delete_time,$chatroom_data3['id']);
-            $stmt = $dbh->prepare($sql);
-            $stmt->execute($data);
-
-        }elseif($delete_time == 2){
-            $delete_time=date($send_date,strtotime("+ 12hour"));
-            $sql='UPDATE `chatroom` SET `status`=2,`delete_time`=? WHERE `id`=?';
-            $data=array($delete_time,$chatroom_data3['id']);
-            $stmt = $dbh->prepare($sql);
-            $stmt->execute($data);
-
-        }elseif($delete_time == 3){
-            $delete_time=date($send_date,strtotime("+ 13hour"));
-            $sql='UPDATE `chatroom` SET `status`=3,`delete_time`=? WHERE `id`=?';
-            $data=array($delete_time,$chatroom_data3['id']);
-            $stmt = $dbh->prepare($sql);
-            $stmt->execute($data);
-        }
-
-    }
-
-// リクエストを送られた場合の処理挑戦中
+// リクエストを送られた場合
     $sql='SELECT `users`.`id`,`users`.`user_name` FROM `users` INNER JOIN `friends` ON `friends`.`requester_id`= `users`.`id` WHERE `friends`.`accepter_id`=? AND `friends`.`status`=1';
     $data= array($user_id);
     $stmt = $dbh->prepare($sql);
@@ -240,10 +190,37 @@
         }
             $reqs[]=$requesting;
     }
-    v($reqs, '$reqs');
+    // v($reqs, '$reqs');
+
+//リクエスト中の処理
+    // $sql='SELECT * FROM `friends` WHERE `requester_id`=? AND `status`=1';
+    // $data= array($user_id);
+    // $stmt = $dbh->prepare($sql);
+    // $stmt->execute($data);
+    // $var=$stmt->fetch(PDO::FETCH_ASSOC);
 
 
+    $sql='SELECT `users`.`id`,`users`.`user_name` FROM `users` INNER JOIN `friends` ON `friends`.`accepter_id`= `users`.`id` WHERE `friends`.`requester_id`=? AND `friends`.`status`=1';
+    $data= array($user_id);
+    $stmt = $dbh->prepare($sql);
+    $stmt->execute($data);
+    $waits=[];
 
+    while(true){
+        $wait=$stmt->fetch(PDO::FETCH_ASSOC);
+        if($wait == false){
+            break;
+        }
+        $waits[]=$wait;
+    }
+    // v($waits, '$waits');
+
+    // foreach ($waits as $waits_each) {
+    // $sql='INSERT INTO `friends_folders`SET `folder_id`=1, `friend_id`=?, `folder_owner_id`=?';
+    // $data= array($waits_each['id'],$user_id);
+    // $stmt = $dbh->prepare($sql);
+    // $stmt->execute($data);
+    // }
 
 ?>
 
@@ -366,7 +343,7 @@
             <label for="trigger2" class="close_button">✖️</label>
             <h2>トークルーム削除</h2>
 
-           <form submit="GET" action="">
+           <form submit="GET" action="delete_magic.php">
             <!-- フレンドセレクト -->
             <select class="select" name="friend_id">
             <?php foreach($friends as $friend_each): ?>
@@ -376,7 +353,7 @@
             さんとのトークを
 
             <select name="delete_time" class="select">
-                <option value="0">今すぐ</option>
+                <option value="-1">今すぐ</option>
                 <option value="1">一時間後</option>
                 <option value="2">１２時間後</option>
                 <option value="3">２４時間後</option>
@@ -392,8 +369,36 @@
     </div>
     <br>
     <br>
+<!-- リクエスト申請中 -->
+    <div class="modal_wrap">
+    <input id="trigger4" type="checkbox">
+    <label for="trigger4" style="color:pink; font-size:12px;">
+    ＊リクエスト中＊</label>
+        <div class="modal_overlay">
+        <label for="trigger4" class="modal_trigger"></label>
+            <div class="modal_content">
+            <label for="trigger4" class="close_button">✖️</label>
+            <h2>リクエストを申請中の友だち一覧</h2><br>
+            <?php if (!empty($waits)): ?>
+            <p>友だちがリクエストを承認すると、全友だちフォルダに追加されます。</p>
+            <p>友だちが承認しない場合は、直接連絡を取ってみてくださいね。</p>
+            <!-- リクエストを送られた場合 -->
+            <form submit="GET" action="">
+            <?php foreach ($waits as $waits_each): ?>
+                <input type="checkbox" name="requested[]" value="<?php echo $waits_each['id']?>"><b style="font-size: 20px; float: center;"><?php echo $waits_each['user_name']?></b><br><br>
+            <?php endforeach; ?>
+            <input type="submit" value="申請をやめる" class="square_btn8" name="delete">
+            <br>
+            <br>
+            </form>
+            <?php elseif (empty($waits)):?>
+            <p>リクエスト中のお友達はいません。</p>
+            <?php endif; ?>
+            </div>
+        </div>
+    </div>
 
-<!-- リクエスト -->
+<!-- リクエスト送られて来た場合 -->
     <?php if (!empty($reqs)): ?>
     <div class="modal_wrap">
     <input id="trigger2" type="checkbox">

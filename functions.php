@@ -28,6 +28,7 @@
     // v($hoge); // v関数
 
 
+
     // htmlspecialcharsのカスタマイズ
     function h($val) {
         return htmlspecialchars($val);
@@ -53,14 +54,13 @@
             return $display_message;
         }
         elseif($rule['change_time']==1) {
-            $change_time=date($send_date,strtotime("+1 hour"));
+            $change_time=date("Y/m/d H:i:s", strtotime($send_date." +20 SECONDS"));
         }
         elseif ($rule['change_time']==2) {
-            $change_time=date($send_date,strtotime("+12 hour"));
-        }
+            $change_time=date("Y/m/d H:i:s", strtotime($send_date." +12 HOURS"));
 
-        elseif ($rule['change_time']==3) {
-            $change_time=date($send_date,strtotime("+24 hour"));
+        }elseif ($rule['change_time']==3) {
+            $change_time=date("Y/m/d H:i:s", strtotime($send_date." +24 HOURS"));
         }
 
         // 過去か未来かを確認するifを作る

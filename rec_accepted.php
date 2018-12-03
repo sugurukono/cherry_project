@@ -38,10 +38,10 @@
 
         //   v($exist_f_each,'$exist_f_each');
 
-          $sql='INSERT INTO `friends_folders` SET `folder_id`=1,`friend_id`=?, `folder_owner_id`=?';
-          $data=array($accept,$user_id);
-          $stmt = $dbh->prepare($sql);
-          $stmt->execute($data);
+          // $sql='INSERT INTO `friends_folders` SET `folder_id`=1,`friend_id`=?, `folder_owner_id`=?';
+          // $data=array($accept,$user_id);
+          // $stmt = $dbh->prepare($sql);
+          // $stmt->execute($data);
         }
         // v($exist_friend,'$exist_friend');
         // v($exist_friend2,'$exist_friend2');
