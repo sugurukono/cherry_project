@@ -11,6 +11,8 @@
     $stmt->execute($data);
     $signin_user = $stmt->fetch(PDO::FETCH_ASSOC);
 
+    $_SESSION['Cherry']['signin_user_id'] = $signin_user['id'];
+
 
     // v($_SESSION,'$_SESSION');
     // v($signin_user,'$signin_user');
@@ -18,7 +20,7 @@
     $user_id = $signin_user['id'];
     $folder='';
 //foldersテーブルからデータ取得①
-    $sql = 'SELECT * FROM `folders` WHERE `user_id`=?';
+    $sql = 'SELECT * FROM `folders` WHERE `user_id`=?';//1以外
     $data = array($_SESSION['id']);//WHEREで入れたやつだけでOK
     $stmt = $dbh->prepare($sql);
     $stmt->execute($data);
@@ -113,60 +115,8 @@
         $error['user_name'] = $_SESSION['error']['name'];
         $error['search_id'] = $_SESSION['error']['search_id'];
         $error['email'] = $_SESSION['error']['email'];
-  }
-//フォルダから友達の登録を外す
-    if(!empty($_POST['delete_folder_friend'])) {
-          // chatroomフォルダを消す
-          $sql = 'DELETE FROM `chatroom` WHERE `room_name`=? AND`owner_id`=? AND `menber_id`=?';
-          $data = array($_POST['omit_folder_id'],$signin_user['id'],$_POST['omit_friend_id']);
-          $stmt = $dbh->prepare($sql);
-          $stmt->execute($data);
-          //friends_foldersを消す
-          $sql = 'DELETE FROM `friends_folders` WHERE `folder_id`=? AND `folder_owner_id`=? AND `friend_id`=?';
-          $data = array($_POST['omit_folder_id'],$signin_user['id'],$_POST['omit_friend_id']);
-          $stmt = $dbh->prepare($sql);
-          $stmt->execute($data);
     }
 
-
-//友達削除
-    if(!empty($_POST['delete_friend'])) {
-          //signin_userがrequesterだった場合
-          // friendsフォルダを消す
-          $sql = 'DELETE FROM `friends` WHERE `requester_id`=? AND `accepter_id`=?';
-          $data = array($signin_user['id'],$_POST['delete_friend_id']);
-          $stmt = $dbh->prepare($sql);
-          $stmt->execute($data);
-          // chatroomフォルダを消す
-          $sql = 'DELETE FROM `chatroom` WHERE `owner_id`=? AND `menber_id`=?';
-          $data = array($signin_user['id'],$_POST['delete_friend_id']);
-          $stmt = $dbh->prepare($sql);
-          $stmt->execute($data);
-          //friends_foldersを消す
-          $sql = 'DELETE FROM `friends_folders` WHERE `folder_owner_id`=? AND `friend_id`=?';
-          $data = array($signin_user['id'],$_POST['delete_friend_id']);
-          $stmt = $dbh->prepare($sql);
-          $stmt->execute($data);
-      }
-      // v($_POST['delete_friend'],'friend');
-      // v($signin_user['id'],'$signin_user_id');
-      // v($_POST['delete_friend_id'],'delete_friend_id');
-
-//フォルダーの全件削除
-    if(!empty($_POST['delete_all_folder'])) {
-
-        $sql = 'DELETE FROM `friends_folders` WHERE `folder_owner_id`=?';
-        $data = array($signin_user['id']);
-        $stmt = $dbh->prepare($sql);
-        $stmt->execute($data);
-
-        $sql = 'DELETE FROM `folders` WHERE `user_id`=?';
-        $data = array($signin_user['id']);
-        $stmt = $dbh->prepare($sql);
-        $stmt->execute($data);
-    }
-// v($signin_user['id'],'$signin_user');
-    // v($_POST['delete_all_folder'],'folder');
 
 ?>
 
@@ -284,23 +234,20 @@
           </div>
           </form>
         </div>
-
-
-    </div>
-    </div>
-    </div>
+        </div>
+      </div>
+    </div><!-- class="img background" -->
 
     <div class="row">
       <div class="col-xs-12" style="background-color:black; height:50px;" ></div>
     </div>
 
-    <div class="img background2">
-      <div class="container">
+<div class="img background2">
+  <div class="container">
         <div>
           <h1><span class="title_2">♦︎友達検索♦︎</span></h1>
           <div class="row">
             <div class="col-xs-6" style="height: 600px; background-color: #37b8e061; margin:30px 0px;">
-
               <!-- ID検索 -->
               <div class="id">
                 <b style="font-size: 20px;">ID検索：</b>
@@ -312,7 +259,6 @@
                   </b>
                 </form>
               </div>
-
               <div class="pic">
                 <?php if(empty($_GET['search_friend'])): ?>
                 <img src="img/profile_first.jpg" style="width: 300px; height: 300px;">
@@ -357,9 +303,10 @@
                 </div>
                 <input type="submit" value="友達をフォルダーに登録" class="square_btn3" style="float: right; ">
               </form>
-        </div>
+              </div>
       </div>
     </div>
+
       <!-- 友達一覧 -->
       <div>
         <h1><span class="title_2">♦︎友達一覧♦︎</span></h1>
@@ -378,7 +325,7 @@
             <?php else :?>
               <b style="font-size: 20px">フォルダを作成しよう！</b>
             <?php endif; ?>
-              <form method="POST" action="">
+              <form method="POST" action="delete_all_folder.php">
                 <input type="submit" name="delete_all_folder" class="square_btn3" onclick="return confirm('フォルダーを全件削除しますか？');"style="float: right;" value="フォルダーの全件削除">
               </form>
           </div>
@@ -396,7 +343,7 @@
           <b><?php echo $friend_each['user_name'] ?></b>
 
           <!-- 友達をフォルダから外す -->
-          <form method="POST" action="">
+          <form method="POST" action="omit_friend.php">
              <input type="hidden" name="omit_folder_id" value="<?php echo $friend_each['folder_id'] ?>">
              <input type="hidden" name="omit_friend_id"value="<?php echo $friend_each['friend_id'] ?>">
             <input type="submit" name="delete_folder_friend" class="square_btn2" value="フォルダから外す">
@@ -419,7 +366,7 @@
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-dismiss="modal">戻る</button>
-                  <form method="POST" action="">
+                  <form method="POST" action="delete_friend.php">
                   <input type="hidden" name="delete_friend_id" value="<?php echo $friend_each['friend_id'] ?>">
                   <input type="submit" name="delete_friend" class="btn btn-primary" value="友達を削除する"><br>
                   </form>
@@ -436,15 +383,13 @@
         </div>
         </div>
       </div>
-
-
-  <div class="row">
-    <div class="col-xs-12" style="background-color:black; height:50px;" ></div>
-  </div>
-
+    </div>
+  </div><!-- class="container" -->
+</div><!-- class="img background2" -->
 
   <div class="row">
-    <div class="col-xs-12" style="background-color:black; height:50px;" ></div>
+    <div class="col-xs-12" style="background-color:black; height:50px;" >
+    </div>
   </div>
 
     <div class="col-xs-12" style="background-color: white; height:200px">
@@ -457,9 +402,7 @@
   </div>
 
 <div class="col-xs-12" style="background-color: white; height:200px">
-      Q&A  また後で適当に入れましょう。
-
-
+      Q&A  また後で適当に入れましょう
     </div>
 
 
@@ -467,7 +410,6 @@
     <div class="col-xs-12" style="background-color:black; height:50px;" >
     </div>
   </div>
-
 
 
 
