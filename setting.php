@@ -75,32 +75,6 @@
         $_SESSION['cherry']['related_friend']=$related_friend;
     }
 
-    // V($related_friend,'related_friend');
-
-//友達申請を送る
-    if (!empty($_POST['request_friend'])) {
-        $sql = 'SELECT * FROM `friends` WHERE `requester_id`=? AND `accepter_id`=?';
-        $data= array($signin_user['id'],$related_friend['id']);
-        $stmt = $dbh->prepare($sql);
-        $stmt->execute($data);
-        $record = $stmt->fetch(PDO::FETCH_ASSOC);
-      //初めてのリクエストだったら
-      if ($record == false) {
-            //相手からのリクエストがないか確認しなきゃいけない
-            $sql = 'INSERT INTO `friends` SET `requester_id`=?, `accepter_id`=?, `status`=1,`create_date`= NOW()';
-            $data = array($signin_user['id'],$related_friend['id']);
-            $stmt = $dbh->prepare($sql);
-            $stmt->execute($data);
-      //２回目以降のリクエストだったら
-      }else{
-            $update_sql = 'UPDATE `friends` SET `status`=1,`update_date`= NOW() WHERE `requester_id`=? AND`accepter_id`=?';
-            $data = array($signin_user['id'],$related_friend['id']);
-            $stmt = $dbh->prepare($update_sql);
-            $stmt->execute($data);
-      }
-    }
-    // v($signin_user,'$signin_user');
-    // v($user_id,'user_id');
 
 // プロフィール情報の読み込み
 
@@ -117,7 +91,24 @@
         $error['email'] = $_SESSION['error']['email'];
     }
 
+//友達一覧があるかどうかの確認
+    $sql = 'SELECT * FROM `folders` WHERE `folder_name`="友達一覧" AND `user_id`=?';
+    $data= array($signin_user['id']);
+    $stmt = $dbh->prepare($sql);
+    $stmt->execute($data);
+    $all_friend_folder =$stmt->fetch(PDO::FETCH_ASSOC);
+      if ($all_friend_folder == false) {
+            $sql = 'INSERT INTO `folders` SET `folder_name`="友達一覧",`user_id`=?, `created`= NOW()';
+            $data = array($signin_user['id']);
+            $stmt = $dbh->prepare($sql);
+            $stmt->execute($data);
+            $_SESSION['cherry']['all_friend_folder_id']=$dbh->lastInsertId();
+      }else{
+        //ある場合
+        $_SESSION['cherry']['all_friend_folder_id']=$all_friend_folder['id'];
+      }
 
+      // v($all_friend_folder['id'],'all_friend_folder_id');
 ?>
 
 
@@ -268,7 +259,8 @@
                 <img src="user_img/<?php echo $related_friend['user_img']; ?>" style="width: 300px; height: 300px;">
                 <?php endif; ?>
               </div>
-              <form method="POST" action="">
+              <form method="POST" action="request_friend.php">
+                <input type="hidden" name="request_friend_id" value="<?php echo $related_friend['id']?>">
                 <input type="submit" name="request_friend" value="友達申請を送る" class="square_btn3" style="float: right; ">
               </form>
             </div>
