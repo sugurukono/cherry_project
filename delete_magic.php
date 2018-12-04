@@ -22,57 +22,67 @@
         $chatroom_data3=$stmt->fetch(PDO::FETCH_ASSOC);
         v($chatroom_data3,'$chatroom_data3');//合ってる
 
-        $send_date=date("Y/m/d H:i:s");
+        $send_date=date("Y-m-d H:i:s");
         v($send_date,'$send_date');
         // $send_date20=date("Y/m/d H:i:s", strtotime($send_date." +1 HOUR"));
         // v($send_date20,'$send_date20');
 
         if($delete_time == -1){//0だとエンプティになるので-1
-        $delete_time=date($send_date,strtotime($send_date));
+        $delete_date_time=date($send_date,strtotime($send_date));
         $sql='UPDATE `chatroom` SET `status`=0,`delete_time`=? WHERE `id`=?';
-        $data=array($delete_time,$chatroom_data3['id']);
+        $data=array($delete_date_time,$chatroom_data3['id']);
         $stmt = $dbh->prepare($sql);
         $stmt->execute($data);
 
+        $chatroom_data3["status"]=0;
+        $chatroom_data3["delete_time"]=$delete_date_time;
+
         }elseif($delete_time == 1){
-            $delete_time=date("Y/m/d H:i:s", strtotime($send_date." +20 SECONDS"));
-            v($delete_time,'$delete_time');
+            $delete_date_time=date("Y-m-d H:i:s", strtotime($send_date." +20 SECONDS"));
+            v($delete_date_time,'$delete_time');
             $sql='UPDATE `chatroom` SET `status`=1,`delete_time`=? WHERE `id`=?';
-            $data=array($delete_time,$chatroom_data3['id']);
+            $data=array($delete_date_time,$chatroom_data3['id']);
             $stmt = $dbh->prepare($sql);
             $stmt->execute($data);
+
+            $chatroom_data3["status"]=1;
+            $chatroom_data3["delete_time"]=$delete_date_time;
+
 
         }elseif($delete_time == 2){
-            $delete_time=date("Y/m/d H:i:s", strtotime($send_date." +12 HOURS"));
-            v($delete_time,'$delete_time');
+            $delete_date_time=date("Y-m-d H:i:s", strtotime($send_date." +12 HOURS"));
+            v($delete_date_time,'$delete_time');
             $sql='UPDATE `chatroom` SET `status`=2,`delete_time`=? WHERE `id`=?';
-            $data=array($delete_time,$chatroom_data3['id']);
+            $data=array($delete_date_time,$chatroom_data3['id']);
             $stmt = $dbh->prepare($sql);
             $stmt->execute($data);
+
+            $chatroom_data3["status"]=2;
+            $chatroom_data3["delete_time"]=$delete_date_time;
 
         }elseif($delete_time == 3){
-            $delete_time=date("Y/m/d H:i:s", strtotime($send_date." +24 HOURS"));
-            v($delete_time,'$delete_time');
+            $delete_date_time=date("Y-m-d H:i:s", strtotime($send_date." +24 HOURS"));
+            v($delete_date_time,'$delete_time');
             $sql='UPDATE `chatroom` SET `status`=3,`delete_time`=? WHERE `id`=?';
-            $data=array($delete_time,$chatroom_data3['id']);
+            $data=array($delete_date_time,$chatroom_data3['id']);
             $stmt = $dbh->prepare($sql);
             $stmt->execute($data);
+
+
+            $chatroom_data3["status"]=3;
+            $chatroom_data3["delete_time"]=$delete_date_time;
         }
         
-        if (!empty($chatroom_data3) && $chatroom_data3['delete_time'] < $send_date){
-            $sql='DELETE FROM `chatroom` WHERE `id`=?';
-            $data=array($chatroom_data3['id']);
-            $stmt = $dbh->prepare($sql);
-            $stmt->execute($data);
-        }
+        $_SESSION['cherry']['data3']=$chatroom_data3;
 
+        v($_SESSION['cherry']['data3'],'session');
 
 
     }
 
 
-    // header('Location: talk_main1.php');
-    // exit();
+    header('Location: talk_main1.php');
+    exit();
 
 
 

@@ -10,13 +10,20 @@
     $stmt->execute($data);
     $signin_user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // v($signin_user,'$signin_user');
-
-
     $user_id="";
     $user_id=$signin_user['id'];
     $folder='';
     v($user_id,'$user_id');
+
+// v($signin_user,'$signin_user');
+//時間を取ってくる作業
+    $d_time=$_SESSION['cherry']['data3']['delete_time'];
+    $d_room_id=$_SESSION['cherry']['data3']['id'];
+    v($_SESSION['cherry']['data3']['delete_time'],'session');
+    v($d_time,'$d_time');
+    date_default_timezone_set('Asia/Manila');
+    $send_date=date("Y-m-d H:i:s");
+    v($send_date,'$send_date');
 
 
 //foldersテーブルからデータ取得①
@@ -215,12 +222,14 @@
     }
     // v($waits, '$waits');
 
-    // foreach ($waits as $waits_each) {
-    // $sql='INSERT INTO `friends_folders`SET `folder_id`=1, `friend_id`=?, `folder_owner_id`=?';
-    // $data= array($waits_each['id'],$user_id);
-    // $stmt = $dbh->prepare($sql);
-    // $stmt->execute($data);
-    // }
+
+//オートマでデリート処理　途中
+    if (!empty($d_time) && $d_time < $send_date) {
+        $sql='DELETE FROM `chatroom` WHERE `id`=?';
+        $data=array($d_room_id);
+        $stmt = $dbh->prepare($sql);
+        $stmt->execute($data);
+    }
 
 ?>
 
