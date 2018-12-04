@@ -9,12 +9,13 @@
     // echo date_default_timezone_get();  //ベルリンになっている・・・
     date_default_timezone_set('Asia/Manila');
     echo date("Y/m/d H:i:s");
-    v($_GET['delete_time'],'$_GET[delete_time]'); //合ってる
-    v($_GET['friend_id'],'$_GET[friend_id]');       //合ってる
+    v($_GET['delete_time'],'$_POST[delete_time]'); //合ってる
+    v($_GET['friend_id'],'$_POST[friend_id]');       //合ってる
 
     if (!empty($_GET['delete_time']) && !empty($_GET['friend_id'])) {
         $delete_time=$_GET['delete_time'];
         $friend_id=$_GET['friend_id'];
+
         $sql='SELECT * FROM `chatroom` WHERE `owner_id`=? AND`member_id`=?';
         $data = array($user_id,$friend_id);
         $stmt = $dbh->prepare($sql);

@@ -13,14 +13,14 @@
     $user_id="";
     $user_id=$signin_user['id'];
     $folder='';
-    v($user_id,'$user_id');
 
-// v($signin_user,'$signin_user');
+
 //時間を取ってくる作業
     $d_time=$_SESSION['cherry']['data3']['delete_time'];
     $d_room_id=$_SESSION['cherry']['data3']['id'];
-    v($_SESSION['cherry']['data3']['delete_time'],'session');
+    v($_SESSION['cherry']['data3']['delete_time'],'$_SESSION[cherry][data3][delete_time]');
     v($d_time,'$d_time');
+    v($d_room_id,'$d_room_id');
     date_default_timezone_set('Asia/Manila');
     $send_date=date("Y-m-d H:i:s");
     v($send_date,'$send_date');
@@ -39,17 +39,16 @@
             break;
         }
         $folders[] = $folder;
-
     }
-    // v($folders,'$folders');
-    
-    if (!empty($_GET['folder'])) {
-        $folder=$_GET['folder'];
-       // v($folder,"$folder");
+
+// フォルダーを押したら
+    if (!empty($_POST['folder'])) {
+        $folder=$_POST['folder'];
+       v($folder,'$folder');//フォルダーの名前が入っている
     }
 
 // フォルダーを押すと友達一覧が表示される処理
-    $sql='SELECT `user_name`,`folder_id`,`friend_id` FROM `users` INNER JOIN `friends_folders`
+    $sql='SELECT `user_name`,`folder_id`,`friend_id`,`user_img` FROM `users` INNER JOIN `friends_folders`
     ON `friends_folders`.`friend_id`= `users`.`id` WHERE `friends_folders`.`folder_owner_id`=?';
     $data= array($_SESSION['id']);
     $stmt = $dbh->prepare($sql);
@@ -63,31 +62,37 @@
             break;
         }
             $friends[]=$friend;
-            // v($friends,'$friends');
+             // v($friends,'$friends');
             // $friend_each
     }
     // v($friends,'$friends');
 
 //フォルダー選択→友達選択
-    if (!empty($_GET['folder_id'])) {
+    if (!empty($_POST['folder_id'])) {
         $folder_id= "";
-        $folder_id= $_GET['folder_id'];
-        // v($folder_id,'$folder_id');
+        $folder_id= $_POST['folder_id'];
+        v($folder_id,'$folder_id');
         $_SESSION['cherry']['folder_id']=$folder_id;
+        v($_SESSION['cherry']['folder_id'],'$_SESSION[cherry][folder_id]');//フォルダーのidが入っている
     }
+
     if (!empty($_GET['friend_id'])) {
         $friend_id= "";
         $friend_id= $_GET['friend_id'];
-        v($friend_id,'$friend_id');
+        // v($friend_id,'$friend_id');
         $_SESSION['cherry']['friend_id']=$friend_id;
         $friend_id2=$_SESSION['cherry']['friend_id'];
+        v($_SESSION['cherry']['friend_id'],'$_SESSION[cherry][friend_id]');
 
         $sql='SELECT `user_name`FROM `users` WHERE `id`=?';
         $data= array($friend_id2);
         $stmt = $dbh->prepare($sql);
         $stmt->execute($data);
         $select_friend=$stmt->fetch(PDO::FETCH_ASSOC);
-        // v($select_friend,'$select_friend');
+        $_SESSION['cherry']['select_friend']=$select_friend;
+        v($select_friend,'$select_friend');
+        v($_SESSION['cherry']['select_friend']['user_name'],'$_SESSION[select_friend]');
+        $selected_friend=$_SESSION['cherry']['select_friend']['user_name'];
     }
 
 
@@ -132,15 +137,15 @@
         }else{//存在している時はチャットルームIDを取得
             $chatroom_id=$chatroom_data['id'];
             $_SESSION['cherry']['chatroom_id']=$chatroom_id;
-            // v($_SESSION['cherry']['chatroom_id'],'$chatroom_id');
+            v($_SESSION['cherry']['chatroom_id'],'$chatroom_id');
         }
     }
-    v($_SESSION['cherry']['chatroom_id'],'$_SESSION[cherry][chatroom_id]');
+    // v($_SESSION['cherry']['chatroom_id'],'$_SESSION[cherry][chatroom_id]');
 
 // 送信ボタンを押されたら、自分のトークが表示される
-    if (!empty($_GET['sending'])) {
+    if (!empty($_POST['sending'])) {
         $sql= 'INSERT INTO `talk` SET `chatroom_id`=?, `sender_id`=?, `receiver_id`=?, `message_type`=1, `message`=?,`send_date`=NOW()';
-        $data = array($_SESSION['cherry']['chatroom_id'],$signin_user['id'],$_SESSION['cherry']['friend_id'],$_GET['sending'],);
+        $data = array($_SESSION['cherry']['chatroom_id'],$signin_user['id'],$_SESSION['cherry']['friend_id'],$_POST['sending'],);
         $stmt = $dbh->prepare($sql);
         $stmt->execute($data);
     }
@@ -180,8 +185,6 @@
         $stmt->execute($data);
     }
 
-
-
 // リクエストを送られた場合
     $sql='SELECT `users`.`id`,`users`.`user_name` FROM `users` INNER JOIN `friends` ON `friends`.`requester_id`= `users`.`id` WHERE `friends`.`accepter_id`=? AND `friends`.`status`=1';
     $data= array($user_id);
@@ -200,13 +203,6 @@
     // v($reqs, '$reqs');
 
 //リクエスト中の処理
-    // $sql='SELECT * FROM `friends` WHERE `requester_id`=? AND `status`=1';
-    // $data= array($user_id);
-    // $stmt = $dbh->prepare($sql);
-    // $stmt->execute($data);
-    // $var=$stmt->fetch(PDO::FETCH_ASSOC);
-
-
     $sql='SELECT `users`.`id`,`users`.`user_name` FROM `users` INNER JOIN `friends` ON `friends`.`accepter_id`= `users`.`id` WHERE `friends`.`requester_id`=? AND `friends`.`status`=1';
     $data= array($user_id);
     $stmt = $dbh->prepare($sql);
@@ -222,14 +218,14 @@
     }
     // v($waits, '$waits');
 
-
-//オートマでデリート処理　途中
+// オートマでデリート処理
     if (!empty($d_time) && $d_time < $send_date) {
         $sql='DELETE FROM `chatroom` WHERE `id`=?';
         $data=array($d_room_id);
         $stmt = $dbh->prepare($sql);
         $stmt->execute($data);
     }
+
 
 ?>
 
@@ -292,7 +288,7 @@
 <!-- ヘッダー終わり -->
 
 <!--トークの設定 -->
-    <div id="sub_container" class="col-xs-3" style="background-color:black; height:690px">
+    <div id="sub_container" class="col-xs-3" style="background-color:black; height:715px">
     <img class="img" src="images/icon_setting.jpg">
     <img class="img" src="images/icon_setting.jpg">
     <img class="img" src="images/icon_setting.jpg">
@@ -349,7 +345,7 @@
     <div class="modal_overlay">
         <label for="trigger3" class="modal_trigger"></label>
         <div class="modal_content">
-            <label for="trigger2" class="close_button">✖️</label>
+            <label for="trigger3" class="close_button">✖️</label>
             <h2>トークルーム削除</h2>
 
            <form submit="GET" action="delete_magic.php">
@@ -378,6 +374,7 @@
     </div>
     <br>
     <br>
+
 <!-- リクエスト申請中 -->
     <div class="modal_wrap">
     <input id="trigger4" type="checkbox">
@@ -442,11 +439,11 @@
 
 
     <!-- フォルダー -->
-    <div id="container" class="col-xs-3" style="background-color:pink; height:690px">
+    <div id="container" class="col-xs-3" style="background-color:pink; height:715px">
         <div class="font" style="font-size: 25px;"><p>Folders</p></div>
         <?php if (isset($folders)): ?>
         <?php foreach($folders as $folder_each) :?>
-        <form method="GET" action="">
+        <form method="POST" action="">
         <input type="submit" name="folder" class="square_btn6" value="<?php echo $folder_each['folder_name'] ?>">
         <input type="hidden" name="folder_id" value="<?php echo $folder_each['id']?>">
         </form>
@@ -456,7 +453,7 @@
 
 
 
-    <div id="container" class="col-xs-3" style="background-color:white; height:690px">
+    <div id="container" class="col-xs-3" style="background-color:white; height:715px">
     <div class="font" style="font-size: 25px;"><p>Friends</p></div>
 
 
@@ -467,7 +464,15 @@
         <?php if($friend_each['folder_id'] == $folder_id): ?>
         <div>
         <form method="GET" action="">
-        <button class="square_btn7">🍒<?php echo $friend_each['user_name'] ?></button>
+        <button class="square_btn7" value="">🍒<?php echo $friend_each['user_name'] ?></button>
+
+
+        <?php foreach($waits as $waits_each) ?>
+        <?php if($friend_each['friend_id'] == $waits_each['id']) :?>
+            <b style="font-size: 15px;"><br>リクエスト中</b>
+        <?php endif; ?>
+
+
         <input type="hidden" name="friend_id"  value="<?php echo $friend_each['friend_id']?>">
         <input type="hidden" name="folder_id" value="<?php echo $friend_each['folder_id']?>">
         </form>
@@ -493,22 +498,29 @@
                     <!--ユーザー名-->
                     <!-- <div id="bms_chat_user_name" "><?php echo $signin_user['user_name'] ?></div>
  -->
-                    <?php if (isset($_GET['friend_id'])): ?>
+                    <?php if (isset($chatroom_id)): ?>
                     <div id="bms_status_icon" ">🍒</div>
-                    <div id="bms_chat_user_name" ><?php echo $select_friend['user_name'] ?>さん</div>
+                    <div id="bms_chat_user_name" ><?php echo $_SESSION['cherry']['select_friend']['user_name'] ?>さん</div>
                     <?php endif ?>
                 </div>
             </div>
             <!-- タイムライン部分③ -->
+            <div >
+                <?php if ($chatroom_id==$d_room_id && !empty($d_time) && $d_time !== "0000-00-00 00:00:00" && $d_time > $send_date) :?>
+                <b>削除設定中：<?php echo $d_time ?></b><?php endif; ?>
+                <?php if(empty($d_time)): ?>
+                    <b>enjoy!</b>
+                <?php endif; ?>
+            </div>
             <div id="bms_messages">
-                <?php if (isset($_GET['friend_id'])): ?>
+                <?php if (isset($_SESSION['cherry']['friend_id'])): ?>
                 <?php foreach ($talks as $talk_each):?>
                 <!--メッセージ１（左側）-->
-                <?php if ($talk_each['sender_id']==$_SESSION['cherry']['friend_id']): ?>
+                <?php if ($talk_each['sender_id']==$_SESSION['cherry']['friend_id'] ): ?>
                 <div class="bms_message bms_left">
                     <div class="bms_message_box">
                         <div class="bms_message_content">
-                            <div class="bms_message_text"><?php echo magic($talk_each['message'],$talk_each['send_date'],$rule); ?></div>
+                            <div class="bms_message_text"><span></span><?php echo magic($talk_each['message'],$talk_each['send_date'],$rule); ?></div>
                         </div>
                     </div>
                 </div>
@@ -527,11 +539,11 @@
                 <div class="bms_clear"></div><!-- 回り込みを解除（スタイルはcssで充てる） -->
                 <?php endif; ?>
                 <?php endforeach; ?>
-                <?php endif ?>
+                <?php endif; ?>
             </div>
             <!-- テキストボックス、送信ボタン④ -->
             <div id="bms_send">
-                <form method="GET" action="">
+                <form method="POST" action="">
                 <input type="text" name="sending" id="bms_send_message">
                 <input type="submit"  id="bms_send_btn"value="送信">
             </div>
