@@ -14,8 +14,6 @@
     $_SESSION['Cherry']['signin_user_id'] = $signin_user['id'];
 
 
-    // v($_SESSION,'$_SESSION');
-    // v($signin_user,'$signin_user');
     $user_id="";
     $user_id = $signin_user['id'];
     $folder='';
@@ -34,12 +32,9 @@
       $folders[] = $folder;
 
     }
-    v($folders,$folders);
     if (!empty($_GET['folder'])) {
       $folder=$_GET['folder'];
 
-
-      // v($folder,"$folder");
     }
 
 // フォルダーを押すと友達一覧が表示される処理
@@ -57,11 +52,6 @@
         }
             $friends[]=$friend;
     }
-
-    // v($friends,'$friends');
-    // v($_GET['folder'],'$_GET[folder]');
-    // v($_GET['folder_id'],'$_GET[foler_id');
-    // v($friend_each,'$friend_each');
 
 
 // ID検索ファンクション
@@ -109,7 +99,6 @@
         $_SESSION['cherry']['all_friend_folder_id']=$all_friend_folder['id'];
       }
 
-      // v($all_friend_folder['id'],'all_friend_folder_id');
 ?>
 
 
@@ -286,11 +275,18 @@
                 <div class="scrol_box">
                   <?php if(isset($folders)) :?>
                   <?php foreach($folders as $folder_each) :?>
-                  <input type="checkbox" name="check_folder" value="<?php echo $folder_each['id']?>"><?php echo $folder_each['folder_name'] ;?>
-                  <?php if($folder_each['id'] != $all_friend_folder['id']) :?>
-                  <button class="square_btn2"><a onclick="return confirm('フォルダーを削除しますか？');" href="delete_folders.php?folder_id=<?php echo $folder_each['id']; ?>">フォルダーの削除</a></button>
-                  <br><br>
+                    <div class="row">
+                    <div style="float:left;margin-top: 5; " class="col-md-5">
+                    <input type="checkbox" name="check_folder" value="<?php echo $folder_each['id']?>"><?php echo $folder_each['folder_name'] ;?>
+                    </div>
+                    <?php if($folder_each['id'] != $all_friend_folder['id']) :?>
+                      <div class="col-md-7">
+                      <button style="float:right;" class="square_btn2"><a onclick="return confirm('フォルダーを削除しますか？');" href="delete_folders.php?folder_id=<?php echo $folder_each['id']; ?>">フォルダーの削除</a></button>
+                      </div>
+                    <?php else: ?>
+                      <div style="float:right;width:178px;height: 37px;" class="col-md-7"></div>
                     <?php endif; ?>
+                    </div>
                    <?php endforeach; ?>
                    <?php else :?>
                   <b style="font-size: 20px">フォルダを作成しよう！</b>
@@ -329,55 +325,42 @@
           <br>
           <b style="font-size: 20px">友達一覧：</b>
           <br>
-          <div class="scrol_box2">
-
-
-          <?php if (isset($_GET['folder_id'])): ?>
-          <?php foreach($friends as $friend_each): ?>
+    <div class="scrol_box2">
+      <?php if (isset($_GET['folder_id'])): ?>
+        <?php foreach($friends as $friend_each): ?>
           <?php if($friend_each['folder_id']== $_GET['folder_id']): ?>
-          <b><?php echo $friend_each['user_name'] ?></b>
-
-          <!-- 友達をフォルダから外す -->
-          <form method="POST" action="omit_friend.php">
-             <input type="hidden" name="omit_folder_id" value="<?php echo $friend_each['folder_id'] ?>">
-             <input type="hidden" name="omit_friend_id"value="<?php echo $friend_each['friend_id'] ?>">
-            <input type="submit" name="delete_folder_friend" class="square_btn2" value="フォルダから外す">
-          </form>
-          <?php if($_GET['folder_id'] != $all_friend_folder['id']) :?>
-          <!-- 友達削除ボタンには警告を表示 -->
-          <button type="button" class="square_btn2" data-toggle="modal" data-target="#demoNormalModal" style="float: right;">友達削除</button>
-          <!-- モーダルダイアログ -->
-          <div class="modal fade" id="demoNormalModal" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="demoModalTitle">友達削除</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
+            <?php if($_GET['folder_id'] == $all_friend_folder['id']) :?>
+              <div class="row">
+                <div style="float:left;margin-top: 5; " class="col-md-5">
+                  <b><?php echo $friend_each['user_name'] ?></b>
                 </div>
-                <div class="modal-body">
-                  友達削除すると、その友達とのトーク履歴が消え、相手からのメッセージを受信することができなくなります。<br>
-                  削除した後にメッセージを送るためには再度リクエストを送信する必要があります。
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">戻る</button>
-                  <form method="POST" action="delete_friend.php">
-                  <input type="hidden" name="delete_friend_id" value="<?php echo $friend_each['friend_id'] ?>">
-                  <input type="submit" name="delete_friend" class="btn btn-primary" value="友達を削除する"><br>
-                  </form>
-                  <?php endif; ?>
+                <div style="float:right;" class="col-md-7">
+                  <?php include("delete_friend_modal.php"); ?>
                 </div>
               </div>
-            </div>
-          </div>
+            <?php else: ?>
+              <div class="row">
+                <div style="float:left;margin-top: 5; " class="col-md-4">
+                  <b><?php echo $friend_each['user_name'] ?></b>
+                </div>
+                <div class="col-md-8">
+                  <form method="POST" action="omit_friend.php">
+                    <input type="submit" name="delete_folder_friend" class="square_btn2" value="フォルダから外す" style="float:left;">
+                    <input type="hidden" name="omit_folder_id" value="<?php echo $friend_each['folder_id'] ?>">
+                    <input type="hidden" name="omit_friend_id"value="<?php echo $friend_each['friend_id'] ?>">
+                  </form>
+                  <?php include("delete_friend_modal.php"); ?>
+                </div>
+              </div>
+            <?php endif; ?>
           <?php endif; ?>
-          <?php endforeach; ?>
-          <?php if($_GET['folder_id'] != $all_friend_folder['id']) :?>
+        <?php endforeach; ?>
+        <?php if($_GET['folder_id'] != $all_friend_folder['id']) :?>
           <button class="delet_button2" >中身を<br>空にする</button>
         <?php endif; ?>
-          <?php endif ;?>
-          </div>
+      <?php endif ;?>
+    </div>
+
         </div>
         </div>
         </div>

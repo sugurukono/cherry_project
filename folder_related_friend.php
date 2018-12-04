@@ -9,7 +9,7 @@
     $friend_id=$_SESSION["cherry"]["related_friend"]["id"];
     // 空が左、右がデータが入っている。
 
-    v($friend_id,'$friend_id');
+    // v($friend_id,'$friend_id');
 
 
     $check_folder = $_GET['check_folder'];
