@@ -100,14 +100,16 @@
 /* チャットの外側部分① */
 #bms_messages_container{
     float: right;
-    height: 100%;/*your_containerに対して100%になる */
-    width: 104%;/*your_containerに対して100%になる */
+    height: 107%;/*your_containerに対して100%になる */
+    width: 100%;/*your_containerに対して100%になる */
     background-color: #eee;
+
 }
 
 /* ヘッダー部分② */
 #bms_chat_header {
-    padding: 6px;/*隙間調整*/
+    /*padding: 6px;/*隙間調整**//
+
     font-size: 16px;
     height: 34px;
     background: #ddd;
@@ -132,7 +134,7 @@
 /* タイムライン部分③ */
 #bms_messages {
     overflow: auto;/* スクロールを効かせつつ、メッセージがタイムラインの外に出ないようにする */
-    height:100%;/*テキストエリアが下に張り付く様にする*/
+    height:94%;/*テキストエリアが下に張り付く様にする*/
     border-right: 1px solid #ddd;
     border-left: 1px solid #ddd;
     background-color: #fff9f5;

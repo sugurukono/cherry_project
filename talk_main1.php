@@ -499,7 +499,6 @@
                     <?php endif ?>
                 </div>
             </div>
-
             <!-- タイムライン部分③ -->
             <div id="bms_messages">
                 <?php if (isset($_GET['friend_id'])): ?>
@@ -530,8 +529,6 @@
                 <?php endforeach; ?>
                 <?php endif ?>
             </div>
-
-
             <!-- テキストボックス、送信ボタン④ -->
             <div id="bms_send">
                 <form method="GET" action="">
