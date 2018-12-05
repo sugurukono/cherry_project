@@ -417,6 +417,7 @@ input#trigger.checkbox1{
     border: dashed 1px #d0d669c9;
     border-radius: 3px;
     transition: .4s;
+    margin: 10px;
 }
 
 .square_btn6:hover {
@@ -426,12 +427,13 @@ input#trigger.checkbox1{
 
 .square_btn7{
     display: inline-block;
-    padding: 7px;
+    padding: 10px 12px;
     text-decoration: none;
     color: black;
     border: dashed 1px pink;
     border-radius: 3px;
     transition: .4s;
+    margin: 10px;
 }
 
 .square_btn7:hover {
