@@ -14,13 +14,11 @@
     $_SESSION['Cherry']['signin_user_id'] = $signin_user['id'];
 
 
-    // v($_SESSION,'$_SESSION');
-    // v($signin_user,'$signin_user');
     $user_id="";
     $user_id = $signin_user['id'];
     $folder='';
 //foldersテーブルからデータ取得①
-    $sql = 'SELECT * FROM `folders` WHERE `user_id`=?';//1以外
+    $sql = 'SELECT * FROM `folders` WHERE `user_id`=?';
     $data = array($_SESSION['id']);//WHEREで入れたやつだけでOK
     $stmt = $dbh->prepare($sql);
     $stmt->execute($data);
@@ -34,12 +32,10 @@
       $folders[] = $folder;
 
     }
-    // v($folders,$folders);
     if (!empty($_GET['folder'])) {
       $folder=$_GET['folder'];
-       // v($folder,"$folder");
-    }
 
+    }
 
 // フォルダーを押すと友達一覧が表示される処理
     $sql='SELECT `user_name`,`folder_id`,`friend_id` FROM `users` INNER JOIN `friends_folders`
@@ -57,11 +53,6 @@
             $friends[]=$friend;
     }
 
-    // v($friends,'$friends');
-    // v($_GET['folder'],'$_GET[folder]');
-    // v($_GET['folder_id'],'$_GET[foler_id');
-    // v($friend_each,'$friend_each');
-
 
 // ID検索ファンクション
     if (!empty($_GET['search_friend'])) {
@@ -75,32 +66,6 @@
         $_SESSION['cherry']['related_friend']=$related_friend;
     }
 
-    // V($related_friend,'related_friend');
-
-//友達申請を送る
-    if (!empty($_POST['request_friend'])) {
-        $sql = 'SELECT * FROM `friends` WHERE `requester_id`=? AND `accepter_id`=?';
-        $data= array($signin_user['id'],$related_friend['id']);
-        $stmt = $dbh->prepare($sql);
-        $stmt->execute($data);
-        $record = $stmt->fetch(PDO::FETCH_ASSOC);
-      //初めてのリクエストだったら
-      if ($record == false) {
-            //相手からのリクエストがないか確認しなきゃいけない
-            $sql = 'INSERT INTO `friends` SET `requester_id`=?, `accepter_id`=?, `status`=1,`create_date`= NOW()';
-            $data = array($signin_user['id'],$related_friend['id']);
-            $stmt = $dbh->prepare($sql);
-            $stmt->execute($data);
-      //２回目以降のリクエストだったら
-      }else{
-            $update_sql = 'UPDATE `friends` SET `status`=1,`update_date`= NOW() WHERE `requester_id`=? AND`accepter_id`=?';
-            $data = array($signin_user['id'],$related_friend['id']);
-            $stmt = $dbh->prepare($update_sql);
-            $stmt->execute($data);
-      }
-    }
-    // v($signin_user,'$signin_user');
-    // v($user_id,'user_id');
 
 // プロフィール情報の読み込み
 
@@ -117,6 +82,22 @@
         $error['email'] = $_SESSION['error']['email'];
     }
 
+//友達一覧があるかどうかの確認
+    $sql = 'SELECT * FROM `folders` WHERE `folder_name`="友達一覧" AND `user_id`=?';
+    $data= array($signin_user['id']);
+    $stmt = $dbh->prepare($sql);
+    $stmt->execute($data);
+    $all_friend_folder =$stmt->fetch(PDO::FETCH_ASSOC);
+      if ($all_friend_folder == false) {
+            $sql = 'INSERT INTO `folders` SET `folder_name`="友達一覧",`user_id`=?, `created`= NOW()';
+            $data = array($signin_user['id']);
+            $stmt = $dbh->prepare($sql);
+            $stmt->execute($data);
+            $_SESSION['cherry']['all_friend_folder_id']=$dbh->lastInsertId();
+      }else{
+        //ある場合
+        $_SESSION['cherry']['all_friend_folder_id']=$all_friend_folder['id'];
+      }
 
 ?>
 
@@ -144,21 +125,21 @@
       <h1 class="title" style="color:white;">🍒Cherry</h1>
 
     <li class="words">
-        <a href="#">My Page</a>
+        <a href="album/album.php">My Page</a>
     </li>
     <li class="words"><a href="talk_main1.php">Talk</a>
     </li>
     <li class="words">
-        <a href="#">Add Friends</a>
+        <a href="#friends">Add Friends</a>
     </li>
     <li class="words">
-        <a href="#">Setting</a>
+        <a href="setting.php">Setting</a>
     </li>
      <li class="words">
-        <a href="#">Fake Page</a>
+        <a href="fake.php">Fake Page</a>
     </li>
     <li class="words">
-        <a href="#">Log Out</a>
+        <a href="signout.php">Log Out</a>
     </li>
     </div>
      <div class=row>
@@ -168,23 +149,23 @@
         Setting Menu:
       </li>
       <li class="words2">
-        <a href="#">Profile</a>
+        <a href="#profile">Profile</a>
       </li>
 
       <li class="words2">
-        <a href="#">Friends</a>
+        <a href="#friends">Friends</a>
       </li>
 
       <li class="words2">
-        <a href="#">Friends list</a>
+        <a href="#friends_list">Friends list</a>
       </li>
 
       <li class="words2">
-        <a href="#">help</a>
+        <a href="#help">help</a>
       </li>
 
       <li class="words2">
-        <a href="#">Q&A</a>
+        <a href="#qanda">Q&A</a>
       </li>
 
 
@@ -195,7 +176,7 @@
   <div class="img background">
     <div class="container">
       <div>
-        <h1><span class="title_1">♦︎プロフィール編集♦︎</span></h1>
+        <h1 id="profile"><span class="title_1">♦︎プロフィール編集♦︎</span></h1>
 
         <div class="row">
           <form method="POST" action="update_profile.php" enctype="multipart/form-data">
@@ -245,7 +226,7 @@
 <div class="img background2">
   <div class="container">
         <div>
-          <h1><span class="title_2">♦︎友達検索♦︎</span></h1>
+          <h1 id="friends"><span class="title_2">♦︎友達検索♦︎</span></h1>
           <div class="row">
             <div class="col-xs-6" style="height: 600px; background-color: #37b8e061; margin:30px 0px;">
               <!-- ID検索 -->
@@ -268,7 +249,8 @@
                 <img src="user_img/<?php echo $related_friend['user_img']; ?>" style="width: 300px; height: 300px;">
                 <?php endif; ?>
               </div>
-              <form method="POST" action="">
+              <form method="POST" action="request_friend.php">
+                <input type="hidden" name="request_friend_id" value="<?php echo $related_friend['id']?>">
                 <input type="submit" name="request_friend" value="友達申請を送る" class="square_btn3" style="float: right; ">
               </form>
             </div>
@@ -293,9 +275,18 @@
                 <div class="scrol_box">
                   <?php if(isset($folders)) :?>
                   <?php foreach($folders as $folder_each) :?>
-                  <input type="checkbox" name="check_folder" value="<?php echo $folder_each['id']?>"><?php echo $folder_each['folder_name'] ;?>
-                  <button class="square_btn2"><a onclick="return confirm('フォルダーを削除しますか？');" href="delete_folders.php?folder_id=<?php echo $folder_each['id']; ?>">フォルダーの削除</a></button>
-                  <br><br>
+                    <div class="row">
+                    <div style="float:left;margin-top: 5; " class="col-md-5">
+                    <input type="checkbox" name="check_folder" value="<?php echo $folder_each['id']?>"><?php echo $folder_each['folder_name'] ;?>
+                    </div>
+                    <?php if($folder_each['id'] != $all_friend_folder['id']) :?>
+                      <div class="col-md-7">
+                      <button style="float:right;" class="square_btn2"><a onclick="return confirm('フォルダーを削除しますか？');" href="delete_folders.php?folder_id=<?php echo $folder_each['id']; ?>">フォルダーの削除</a></button>
+                      </div>
+                    <?php else: ?>
+                      <div style="float:right;width:178px;height: 37px;" class="col-md-7"></div>
+                    <?php endif; ?>
+                    </div>
                    <?php endforeach; ?>
                    <?php else :?>
                   <b style="font-size: 20px">フォルダを作成しよう！</b>
@@ -309,7 +300,7 @@
 
       <!-- 友達一覧 -->
       <div>
-        <h1><span class="title_2">♦︎友達一覧♦︎</span></h1>
+        <h1 id="friends_list"><span class="title_2">♦︎友達一覧♦︎</span></h1>
         <div class="row">
           <div class="col-xs-6" style="height: 450px; background-color: #37b8e061; margin:30px 0px;">
             <br>
@@ -334,51 +325,42 @@
           <br>
           <b style="font-size: 20px">友達一覧：</b>
           <br>
-          <div class="scrol_box2">
-
-
-          <?php if (isset($_GET['folder_id'])): ?>
-          <?php foreach($friends as $friend_each): ?>
+    <div class="scrol_box2">
+      <?php if (isset($_GET['folder_id'])): ?>
+        <?php foreach($friends as $friend_each): ?>
           <?php if($friend_each['folder_id']== $_GET['folder_id']): ?>
-          <b><?php echo $friend_each['user_name'] ?></b>
-
-          <!-- 友達をフォルダから外す -->
-          <form method="POST" action="omit_friend.php">
-             <input type="hidden" name="omit_folder_id" value="<?php echo $friend_each['folder_id'] ?>">
-             <input type="hidden" name="omit_friend_id"value="<?php echo $friend_each['friend_id'] ?>">
-            <input type="submit" name="delete_folder_friend" class="square_btn2" value="フォルダから外す">
-          </form>
-          <!-- 友達削除ボタンには警告を表示 -->
-          <button type="button" class="square_btn2" data-toggle="modal" data-target="#demoNormalModal" style="float: right;">友達削除</button><br>
-          <!-- モーダルダイアログ -->
-          <div class="modal fade" id="demoNormalModal" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="demoModalTitle">友達削除</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
+            <?php if($_GET['folder_id'] == $all_friend_folder['id']) :?>
+              <div class="row">
+                <div style="float:left;margin-top: 5; " class="col-md-5">
+                  <b><?php echo $friend_each['user_name'] ?></b>
                 </div>
-                <div class="modal-body">
-                  友達削除すると、その友達とのトーク履歴が消え、相手からのメッセージを受信することができなくなります。<br>
-                  削除した後にメッセージを送るためには再度リクエストを送信する必要があります。
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">戻る</button>
-                  <form method="POST" action="delete_friend.php">
-                  <input type="hidden" name="delete_friend_id" value="<?php echo $friend_each['friend_id'] ?>">
-                  <input type="submit" name="delete_friend" class="btn btn-primary" value="友達を削除する"><br>
-                  </form>
+                <div style="float:right;" class="col-md-7">
+                  <?php include("delete_friend_modal.php"); ?>
                 </div>
               </div>
-            </div>
-          </div>
+            <?php else: ?>
+              <div class="row">
+                <div style="float:left;margin-top: 5; " class="col-md-4">
+                  <b><?php echo $friend_each['user_name'] ?></b>
+                </div>
+                <div class="col-md-8">
+                  <form method="POST" action="omit_friend.php">
+                    <input type="submit" name="delete_folder_friend" class="square_btn2" value="フォルダから外す" style="float:left;">
+                    <input type="hidden" name="omit_folder_id" value="<?php echo $friend_each['folder_id'] ?>">
+                    <input type="hidden" name="omit_friend_id"value="<?php echo $friend_each['friend_id'] ?>">
+                  </form>
+                  <?php include("delete_friend_modal.php"); ?>
+                </div>
+              </div>
+            <?php endif; ?>
           <?php endif; ?>
-          <?php endforeach; ?>
+        <?php endforeach; ?>
+        <?php if($_GET['folder_id'] != $all_friend_folder['id']) :?>
           <button class="delet_button2" >中身を<br>空にする</button>
-          <?php endif ;?>
-          </div>
+        <?php endif; ?>
+      <?php endif ;?>
+    </div>
+
         </div>
         </div>
         </div>
@@ -393,7 +375,7 @@
   </div>
 
     <div class="col-xs-12" style="background-color: white; height:200px">
-       Help 使い方ガイド（TOPでも使用したもの？）
+       <h1 id="help"><span class="title_1">♦Help 使い方ガイド♦</span></h1>（TOPでも使用したもの？）
     </div>
 
 <div class="row">
@@ -402,7 +384,7 @@
   </div>
 
 <div class="col-xs-12" style="background-color: white; height:200px">
-      Q&A  また後で適当に入れましょう
+      <h1 id="qanda"><span class="title_1">♦Ｑ＆Ａ♦</span></h1>
     </div>
 
 

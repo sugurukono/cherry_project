@@ -221,7 +221,7 @@ li{float:left;}
 
 .scrol_box {
     overflow:auto;
-    width: 380px;
+    width: 450px;
     height:120px;
     padding:5px 20px;
     border: double 2px  #ffffff;
@@ -293,7 +293,7 @@ li{float:left;}
 
 .scrol_box2 {
     overflow:auto;
-    width: 420px;
+    width: 475px;
     height: 260px;
     padding:5px 20px;
     border: double 2px  #ffffff;
