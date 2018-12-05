@@ -29,9 +29,6 @@
         header('Location: setting.php');
     }
 
-    $_SESSION['cherry']['folder_id']='';
-    $_SESSION['cherry']['friend_id']='';
-    $_SESSION['cherry']['chatroom_id']='';
 
 
 
@@ -82,7 +79,11 @@
         $folder_id= $_GET['folder_id'];
         v($folder_id,'$folder_id');
         $_SESSION['cherry']['folder_id']=$folder_id;
+    }else{
+        //トークでの発言機能をつかったときは、GET送信されないパターン（ここの処理を実行する）
+        $folder_id=$_SESSION['cherry']['folder_id'];
     }
+
     if (!empty($_GET['friend_id'])) {
         $friend_id= "";
         $friend_id= $_GET['friend_id'];
@@ -96,8 +97,15 @@
         $stmt->execute($data);
         $select_friend=$stmt->fetch(PDO::FETCH_ASSOC);
         v($select_friend,'$select_friend');
+        $_SESSION['cherry']['select_friend']=$select_friend;
+    }else{
+        //トークでの発言機能をつかったときは、GET送信されないパターン（ここの処理を実行する）
+        $friend_id=$_SESSION['cherry']['friend_id'];
+        $select_friend=$_SESSION['cherry']['select_friend'];
     }
 
+
+    v($folder_id,'$folder_idfolder_id');
 
     // v($friend_id2,'$friend_id2');
 
@@ -193,7 +201,7 @@
     // }
 
 
-
+v($folder_id,'$folder_idfolder_id');
 
 
 ?>
@@ -389,7 +397,7 @@
                     <!--ユーザー名-->
                     <!-- <div id="bms_chat_user_name" "><?php echo $signin_user['user_name'] ?></div>
  -->
-                    <?php if (isset($_GET['friend_id'])): ?>
+                    <?php if (isset($friend_id)): ?>
                     <div id="bms_status_icon" ">🍒</div>
                     <div id="bms_chat_user_name" ><?php echo $select_friend['user_name'] ?>さん</div>
                     <?php endif ?>
