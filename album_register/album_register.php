@@ -7,12 +7,17 @@
     session_start();
     require('../functions.php');
 
-    v($_POST, '$_POST');
+    //v($_POST, '$_POST');
 
     $time_limit = array('6時間','24時間','3日','１週間','無期限');
 
     $content = '';
     $validations = array();
+
+    //デリート機能
+    date_default_timezone_set('Asia/Manila');
+    echo date("Y/m/d H:i:s");
+
 
     if (!empty($_POST)) {
         
