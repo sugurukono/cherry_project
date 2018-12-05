@@ -115,25 +115,25 @@
                 <a href="#">My Page</a>
             </li>
              
-            <li class="words"><a href="#">Talk</a>
+            <li class="words"><a href="../talk_main1.php">Talk</a>
             </li>
 
 
             <li class="words">
-                <a href="#">Add Friends</a>
+                <a href="../setting.php#friends">Add Friends</a>
             </li>
              
 
             <li class="words">
-                <a href="#">Setting</a>
+                <a href="../setting.php">Setting</a>
             </li>
              
              <li class="words">
-                <a href="#">Fake Page</a>
+                <a href="../fake.php">Fake Page</a>
             </li>
 
             <li class="words">
-                <a href="#">Log Out</a>
+                <a href="../signout.php">Log Out</a>
             </li>
                  </ul>
             </div>
