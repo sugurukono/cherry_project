@@ -27,7 +27,7 @@
     $stmt = $dbh->prepare($sql);//アロー演算子の左側をオブジェクトという
     $stmt->execute($data);
     $signin_user = $stmt->fetch(PDO::FETCH_ASSOC);
-    v($signin_user,'$signin_user');
+    // v($signin_user,'$signin_user');
 
     $validations = array();
     $feed = '';
