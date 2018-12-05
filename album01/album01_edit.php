@@ -1,64 +1,58 @@
-<?php
+<?php 
 
-    //echo '<pre>';
-    //var_dump($_POST);
-    //echo '</pre>';
+session_start();
+require('../functions.php');
+require('../dbconnect.php');
 
-    session_start();
-    require('../functions.php');
+//v($_GET['feed_id'],"feed_id");
 
-    v($_POST, '$_POST');
+//公開期間の選択
+$time_limit = array('6時間','24時間','3日','１週間','無期限');
 
-    $time_limit = array('6時間','24時間','3日','１週間','無期限');
+//$num = array('1', '2', '3', '4', '5', '6', '7', '8', '9' );
+//$d = count($num);
 
-    $content = '';
-    $validations = array();
+$time_num = -1; //0以外のデータを初期化
+if (!empty($_POST)) {
+    $time_num = $_POST['time_limit'];
+}
 
-    if (!empty($_POST)) {
-        
-        $content=$_POST['content'];
-        $time=$_POST['time'];
-        
-        if ($content == '') {
-            $validations['content'] = 'blank';
-        }
-
-        $pic_name = $_FILES['img_name']['name'];
-        v($pic_name, '$pic_name');
-        if ($pic_name == '') {
-            $validations['img_name'] = 'blank';
-        }
-
-        if (empty($validations)) {
-
-            //画像アップロード処理
-            v($_FILES, '$_FILES');
-
-            //move_uploaded_file(送りたいファイルデータ, 送信先);
-            $tmp_file = $_FILES['img_name']['tmp_name'];//選択した画像データ
-            $pic_name = date('YmdHis') . $_FILES['img_name']['name'];
-            $destination = 'images/'. $pic_name;//登録先と保存名
-            move_uploaded_file($tmp_file, $destination);
-
-            $_SESSION['Cherry']['content'] = $content;
-            $_SESSION['Cherry']['time'] = $time;
-            $_SESSION['Cherry']['pic_name'] = $pic_name;
-
-            //HTMLのaタグと同じ処理をする関数
-            //要は指定した文字列をURLを書き換えて実行する
-            header('Location: album_register_edit.php');
-            exit();
-        }
-
-    }
+$c = count($time_limit);
+//公開期間の選択終わり
 
 
-    $time_num = -1; //0以外のデータを初期化
-    if (!empty($_POST)) {
-        $time_num = $_POST['time_limit'];
-    }
+$pic_id = '';
+$pic_id = $_GET['pic_id'];
+// $pics = array();
 
-    $c = count($time_limit);
+$sql = 'SELECT `p`.*, `u`.`id`, `u`.`user_name` FROM `pics` AS `p` LEFT JOIN `users` AS `u` ON `p`.`user_id`=`u`.`id` WHERE `p`.`id` = ?' ;
+$data = array($pic_id);
+
+$stmt = $dbh->prepare($sql);
+$stmt->execute($data);
+
+//取得できた編集対象のデータを$feedに格納
+$pic = $stmt->fetch(PDO::FETCH_ASSOC);
+
+$s = $pic["time"];
+
+//v($_GET['pic_id'],"pic_id");
+
+//今データを格納した$feedを使って、画面に編集データを表示しましょう。
+//更新処理（更新ボタンが押された時発動）
+if (!empty($_POST)) {
+    $update_sql = "UPDATE `pics` SET `content` = ? WHERE `pics`.`id` = ?";//更新したつぶやきをDBに上書き保存する
+
+    $data = array($_POST["content"],$pic_id);
+    //SQL文の実行
+    $stmt = $dbh->prepare($update_sql);
+    $stmt->execute($data);
+    //タイムラインへの遷移
+    header("Location: album01.php");
+    exit();
+}
+
+
 
 ?>
 
@@ -69,7 +63,7 @@
   <meta charset="utf-8">
   <link rel="stylesheet" type="text/css"  href="css/header.css">
   <link rel="stylesheet" type="text/css"  href="css/barnar.css">
-  <link rel="stylesheet" type="text/css"  href="css/style.css">
+  <link rel="stylesheet" type="text/css"  href="css/style_1.css">
   <style>
     .error_msg {
       color: red;
@@ -116,20 +110,15 @@
 
   <div class="row">
     <div class="col-xs-9" style="background-color:white; height:700px">
-      <form method="POST" action="album_register.php" enctype="multipart/form-data">
+      <form method="post" enctype="multipart/form-data">
 
 
         <div class="box1">
-          <h1><img src="images/icon_camera1.jpeg"></h1>
-          <h3>写真をアップロードする</h3>
-              <input type="file" name="img_name" accept="image/*">
-              <?php if(isset($validations['img_name']) && $validations['img_name'] == 'blank'): ?>
-                <span class="error_msg">画像を選択してください</span>
-              <?php endif; ?>
+          <h1><img src="../album_register/images/<?php echo $pic['pic_name']; ?>" width="400" height="300"></h1>
         </div>
 
         <div id="a_box" class="col-xs-9"><h4>＜コメント＞</h4>
-            <textarea value="<?php echo $content ?>" name="content" id="content" placeholder="自由記入欄" cols="135" rows="3" ></textarea><br>
+            <textarea value="<?php echo $content ?>" name="content" id="content" placeholder="自由記入欄" cols="135" rows="3" ><?php echo $pic["content"]; ?></textarea><br>
             <?php if(isset($validations['content']) && $validations['content'] == 'blank'): ?>
               <span class="error_msg">コメントを入力してください</span>
             <?php endif; ?>
@@ -137,7 +126,7 @@
 
         <div id="b_box" class="col-xs-9"><h4>＜公開期間＞</h4>
             <select name="time">
-              <option value="-1">選択してください</option>
+              <option value="-1"><?php echo $time_limit["$s"]; ?></option>
               <?php for($i=0; $i < $c; $i++): ?>
                 <?php if ($i == $time_num): ?>
                   <!--前回選択されたvalue（都道府県）なのでoptionタグにselected属性をつける　-->
@@ -153,7 +142,7 @@
         <div id="c_box" class="col-xs-9">
           <center>
             <div><br>
-              <input type="submit" value="内容確認">
+              <input type="submit" value="更新" class="btn btn-warning btn-xs">
             </div>
           </center>
         </div>
@@ -163,7 +152,7 @@
     </div>
 
 <!-- 広告部分 -->
-    <div class="col-xs-3" style="background-color:#DDDDDD; height:700px">
+    <div class="col-xs-3" style="background-color:#DDDDDD; height:850px">
       <div class="box5">
       <p>広告</p>
       </div>

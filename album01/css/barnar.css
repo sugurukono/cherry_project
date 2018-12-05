@@ -1,0 +1,11 @@
+.box5 {
+    padding: 10px;
+    margin: 10px;
+    border: double 5px #4ec4d3;
+
+}
+.box5 p {
+    margin: 50px; 
+    padding: 30px;
+
+}
