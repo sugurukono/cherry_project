@@ -73,7 +73,10 @@
         $folder_id= $_POST['folder_id'];
         v($folder_id,'$folder_id');
         $_SESSION['cherry']['folder_id']=$folder_id;
-        v($_SESSION['cherry']['folder_id'],'$_SESSION[cherry][folder_id]');//フォルダーのidが入っている
+
+    }else{
+        //トークでの発言機能をつかったときは、GET送信されないパターン（ここの処理を実行する）
+        $folder_id=$_SESSION['cherry']['folder_id'];
     }
 
     if (!empty($_GET['friend_id'])) {
@@ -91,10 +94,17 @@
         $select_friend=$stmt->fetch(PDO::FETCH_ASSOC);
         $_SESSION['cherry']['select_friend']=$select_friend;
         v($select_friend,'$select_friend');
-        v($_SESSION['cherry']['select_friend']['user_name'],'$_SESSION[select_friend]');
-        $selected_friend=$_SESSION['cherry']['select_friend']['user_name'];
+
+        $_SESSION['cherry']['select_friend']=$select_friend;
+    }else{
+        //トークでの発言機能をつかったときは、GET送信されないパターン（ここの処理を実行する）
+        $friend_id=$_SESSION['cherry']['friend_id'];
+        $select_friend=$_SESSION['cherry']['select_friend'];
+
     }
 
+
+    v($folder_id,'$folder_idfolder_id');
 
     // v($friend_id2,'$friend_id2');
 
@@ -209,6 +219,7 @@
     $stmt->execute($data);
     $waits=[];
 
+
     while(true){
         $wait=$stmt->fetch(PDO::FETCH_ASSOC);
         if($wait == false){
@@ -218,13 +229,14 @@
     }
     // v($waits, '$waits');
 
-// オートマでデリート処理
-    if (!empty($d_time) && $d_time < $send_date) {
-        $sql='DELETE FROM `chatroom` WHERE `id`=?';
-        $data=array($d_room_id);
-        $stmt = $dbh->prepare($sql);
-        $stmt->execute($data);
-    }
+// // オートマでデリート処理
+//     if (!empty($d_time) && $d_time < $send_date) {
+//         $sql='DELETE FROM `chatroom` WHERE `id`=?';
+//         $data=array($d_room_id);
+//         $stmt = $dbh->prepare($sql);
+//         $stmt->execute($data);
+//     }
+
 
 
 ?>
@@ -498,7 +510,8 @@
                     <!--ユーザー名-->
                     <!-- <div id="bms_chat_user_name" "><?php echo $signin_user['user_name'] ?></div>
  -->
-                    <?php if (isset($chatroom_id)): ?>
+
+                    <?php if (isset($friend_id)): ?>
                     <div id="bms_status_icon" ">🍒</div>
                     <div id="bms_chat_user_name" ><?php echo $_SESSION['cherry']['select_friend']['user_name'] ?>さん</div>
                     <?php endif ?>
@@ -507,7 +520,12 @@
             <!-- タイムライン部分③ -->
             <div >
                 <?php if ($chatroom_id==$d_room_id && !empty($d_time) && $d_time !== "0000-00-00 00:00:00" && $d_time > $send_date) :?>
-                <b>削除設定中：<?php echo $d_time ?></b><?php endif; ?>
+                <b>削除設定中：<?php echo $d_time ?></b>
+                <?php else: 
+                //削除時間を過ぎてるので$talksの中身を空にする
+                $talks = [];
+
+                endif; ?>
                 <?php if(empty($d_time)): ?>
                     <b>enjoy!</b>
                 <?php endif; ?>
