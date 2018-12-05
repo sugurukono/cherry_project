@@ -281,7 +281,7 @@
 
 
     <li class="words">
-        <a href="#">Add Friends</a>
+        <a href="setting.php#friends">Add Friends</a>
     </li>
      
 
