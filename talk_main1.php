@@ -273,7 +273,7 @@
     <a href="top.php"><h1 class="title" style="color:white;">🍒Cherry</h1></a>
 
     <li class="words">
-        <a href="">My Page</a>
+        <a href="album01/album01.php">My Page</a>
     </li>
      
     <li class="words"><a href="">Talk</a>
@@ -290,7 +290,7 @@
     </li>
      
      <li class="words">
-        <a href="#">Fake Page</a>
+        <a href="fake.php">Fake Page</a>
     </li>
 
     <li class="words">
