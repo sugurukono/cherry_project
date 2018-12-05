@@ -18,12 +18,12 @@
 //時間を取ってくる作業
     $d_time=$_SESSION['cherry']['data3']['delete_time'];
     $d_room_id=$_SESSION['cherry']['data3']['id'];
-    v($_SESSION['cherry']['data3']['delete_time'],'$_SESSION[cherry][data3][delete_time]');
-    v($d_time,'$d_time');
-    v($d_room_id,'$d_room_id');
+    // v($_SESSION['cherry']['data3']['delete_time'],'$_SESSION[cherry][data3][delete_time]');
+    // v($d_time,'$d_time');
+    // v($d_room_id,'$d_room_id');
     date_default_timezone_set('Asia/Manila');
     $send_date=date("Y-m-d H:i:s");
-    v($send_date,'$send_date');
+    // v($send_date,'$send_date');
 
 
 //foldersテーブルからデータ取得①
@@ -44,7 +44,7 @@
 // フォルダーを押したら
     if (!empty($_POST['folder'])) {
         $folder=$_POST['folder'];
-       v($folder,'$folder');//フォルダーの名前が入っている
+       // v($folder,'$folder');//フォルダーの名前が入っている
     }
 
 // フォルダーを押すと友達一覧が表示される処理
@@ -71,7 +71,7 @@
     if (!empty($_POST['folder_id'])) {
         $folder_id= "";
         $folder_id= $_POST['folder_id'];
-        v($folder_id,'$folder_id');
+        // v($folder_id,'$folder_id');
         $_SESSION['cherry']['folder_id']=$folder_id;
 
     }else{
@@ -85,7 +85,7 @@
         // v($friend_id,'$friend_id');
         $_SESSION['cherry']['friend_id']=$friend_id;
         $friend_id2=$_SESSION['cherry']['friend_id'];
-        v($_SESSION['cherry']['friend_id'],'$_SESSION[cherry][friend_id]');
+        // v($_SESSION['cherry']['friend_id'],'$_SESSION[cherry][friend_id]');
 
         $sql='SELECT `user_name`FROM `users` WHERE `id`=?';
         $data= array($friend_id2);
@@ -93,7 +93,7 @@
         $stmt->execute($data);
         $select_friend=$stmt->fetch(PDO::FETCH_ASSOC);
         $_SESSION['cherry']['select_friend']=$select_friend;
-        v($select_friend,'$select_friend');
+        // v($select_friend,'$select_friend');
 
         $_SESSION['cherry']['select_friend']=$select_friend;
     }else{
@@ -104,7 +104,7 @@
     }
 
 
-    v($folder_id,'$folder_idfolder_id');
+    // v($folder_id,'$folder_idfolder_id');
 
     // v($friend_id2,'$friend_id2');
 
@@ -131,7 +131,7 @@
             $stmt->execute($data);
             $chatroom_data2=$stmt->fetch(PDO::FETCH_ASSOC);
             $chatroom_id=$chatroom_data2['id'];
-            v($chatroom_id,'$chatroom_data2');
+            // v($chatroom_id,'$chatroom_data2');
             $_SESSION['cherry']['chatroom_id']=$chatroom_id;
 
             //存在していない時はチャットルームにデータを挿入
@@ -151,7 +151,7 @@
         }else{//存在している時はチャットルームIDを取得
             $chatroom_id=$chatroom_data['id'];
             $_SESSION['cherry']['chatroom_id']=$chatroom_id;
-            v($_SESSION['cherry']['chatroom_id'],'$chatroom_id');
+            // v($_SESSION['cherry']['chatroom_id'],'$chatroom_id');
         }
     }
     // v($_SESSION['cherry']['chatroom_id'],'$_SESSION[cherry][chatroom_id]');
@@ -177,7 +177,7 @@
             break;
         }
         $talks[]=$talk;
-        v($talks,'$talks');
+        // v($talks,'$talks');
     }
 
     // v($_SESSION,('$_SESSION'));
@@ -402,7 +402,7 @@
         <label for="trigger4" class="modal_trigger"></label>
             <div class="modal_content">
             <label for="trigger4" class="close_button">✖️</label>
-            <h2>リクエストを申請中の友だち一覧</h2><br>
+            <h2>リクエストを申請中の友だち一覧</h2><br><br><br>
             <?php if (!empty($waits)): ?>
             <p>友だちがリクエストを承認すると、全友だちフォルダに追加されます。</p>
             <p>友だちが承認しない場合は、直接連絡を取ってみてくださいね。</p>
@@ -462,7 +462,7 @@
         <?php if (isset($folders)): ?>
         <?php foreach($folders as $folder_each) :?>
         <form method="POST" action="">
-        <input type="submit" name="folder" class="square_btn6" value="<?php echo $folder_each['folder_name'] ?>">
+        <input type="submit" name="folder" class="square_btn6" value="<?php echo $folder_each['folder_name'] ?>"><br>
         <input type="hidden" name="folder_id" value="<?php echo $folder_each['id']?>">
         </form>
         <?php endforeach; ?>
@@ -482,14 +482,14 @@
         <?php if($friend_each['folder_id'] == $folder_id): ?>
         <div>
         <form method="GET" action="">
-        <button class="square_btn7" value="">🍒<?php echo $friend_each['user_name'] ?></button>
+        <button class="square_btn7" value="">🍒<?php echo $friend_each['user_name'] ?></button><br>
 
 
-        <?php foreach($waits as $waits_each) ?>
+        <!-- <?php foreach($waits as $waits_each) ?>
         <?php if($friend_each['friend_id'] == $waits_each['id']) :?>
             <b style="font-size: 15px;"><br>リクエスト中</b>
         <?php endif; ?>
-
+ -->
 
         <input type="hidden" name="friend_id"  value="<?php echo $friend_each['friend_id']?>">
         <input type="hidden" name="folder_id" value="<?php echo $friend_each['folder_id']?>">
