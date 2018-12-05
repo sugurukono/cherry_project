@@ -29,7 +29,7 @@
     if (!empty($_POST)) {
         //DB登録処理
         //usersテーブルにユーザー情報の登録処理
-        $sql = 'INSERT INTO `pics` SET `pic_name` = ?, `content` = ?, `time` = ?, `created` = NOW()';
+        $sql = 'INSERT INTO `pics` SET `pic_name` = ?, `content` = ?, `time` = ?, `user_id` = 4, `created` = NOW()';
         $stmt = $dbh->prepare($sql);
         $data = array($file_name, $content, $time );
         $stmt->execute($data);

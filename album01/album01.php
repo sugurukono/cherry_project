@@ -5,10 +5,12 @@
     require('../dbconnect.php');
 
 
+    //公開期間の選択
     $time_limit = array('6時間','24時間','3日','１週間','無期限');
 
     //$num = array('1', '2', '3', '4', '5', '6', '7', '8', '9' );
     //$d = count($num);
+
 
     $time_num = -1; //0以外のデータを初期化
     if (!empty($_POST)) {
@@ -16,8 +18,9 @@
     }
 
     $c = count($time_limit);
+    //公開期間の選択終わり
 
-
+    //DBからPROFILE情報データの取得
     $data = array();
     $sql = 'SELECT * FROM `users` WHERE `id` = 4';
 
@@ -27,22 +30,34 @@
 
     $validations = array();
     $feed = '';
+    //DBからPROFILE情報データの取得終了
 
-    if (!empty($_POST)) {
-        $feed = $_POST['feed'];
+    $sql = 'SELECT `p`.*, `u`.`user_name` FROM `pics` AS `p` LEFT JOIN `users` AS `u` ON `p`.`user_id`=`u`.`id` ORDER BY `created` DESC LIMIT 9 OFFSET 0' ;
+    $data = array();
+    $stmt = $dbh->prepare($sql);
+    $stmt->execute($data);
 
-        if ($feed == '') {
-            $validations['feed'] = 'blank';
-        }else{
-            //データベースに投稿データを保存
-            //DB登録処理
-            //usersテーブルにユーザー情報の登録処理
-            $sql = 'INSERT INTO `feeds` SET `user_id` = ?, `feed` = ?, `created` = NOW()';
-            $stmt = $dbh->prepare($sql);
-            $data = array($signin_user['id'], $feed);
-            $stmt->execute($data);
+     // 表示用の配列を初期化
+    $pics = array();
+
+    while (true) {
+        $record = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($record == false) {
+            break;
         }
+        $pics[] = $record;
     }
+
+    //$s = $pics["time"];
+
+    $i = 0;
+
+    $id_sql = 'SELECT COUNT(*) as `id` FROM `pics`';
+    $id_data = array();
+    $id_stmt = $dbh->prepare($id_sql);
+    $id_stmt->execute($id_data);
+
+    $id_count_data = $id_stmt->fetch(PDO::FETCH_ASSOC);
 
 
     $feed = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -61,6 +76,14 @@
 
         //v($feed,'$feed');
         //[]は、配列の末尾にデータを追加するという意味
+
+    //オートマでデリート処理　途中
+    if (!empty($d_time) && $d_time < $send_date) {
+        $sql='DELETE FROM `pics` WHERE `id`=?';
+        $data=array($d_room_id);
+        $stmt = $dbh->prepare($sql);
+        $stmt->execute($data);
+    }
 
 
 ?>
@@ -135,25 +158,29 @@
       <span hidden id="signin-user"><?php echo $signin_user['id']; ?></span>
       <div class="box3"><br><h2>ユーザー名：<?php echo $signin_user['user_name']; ?></h2><h2>ID：<?php echo $signin_user['id']; ?></h2><h2><span class="friends_count">友達：</span><?= $feed['friends_count']; ?>人</h2></div>
       <div class="box2"><h1><img src="img/IMG_7352.jpg" width="150" class="img-circle""></h1></div>
-      <div class="box2"><h1><br>PROFILE</h1></div><br>
+      <div class="box2"><center><h1><br>PROFILE</h1></center></div><br>
 
       <center>
-        <img src="img/img1.jpeg" width="300" height="225" class="btn btn-primary" data-toggle="modal" data-target="#demoNormalModal_1" >
-        <img src="img/img2.jpg" width="300" height="225" class="btn btn-primary" data-toggle="modal" data-target="#demoNormalModal_2" >
+        <?php foreach($pics as $pic){ ?>
+          <img src="../album_register/images/<?php echo $pic['pic_name']; ?>" width="300" height="225" class="btn btn-primary" data-toggle="modal" data-target="#demoNormalModal_<?php echo $pic['pic_name']; ?>" >
+        <?php } ?>
+        <!-- <img src="img/img2.jpg" width="300" height="225" class="btn btn-primary" data-toggle="modal" data-target="#demoNormalModal_2" >
         <img src="img/img3.jpeg" width="300" height="225" class="btn btn-primary" data-toggle="modal" data-target="#demoNormalModal_3" >
         <img src="img/img4.jpeg" width="300" height="225" class="btn btn-primary" data-toggle="modal" data-target="#demoNormalModal_4" >
         <img src="img/img5.jpg" width="300" height="225" class="btn btn-primary" data-toggle="modal" data-target="#demoNormalModal_5" >
         <img src="img/img6.jpg" width="300" height="225" class="btn btn-primary" data-toggle="modal" data-target="#demoNormalModal_6" >
         <img src="img/img7.jpg" width="300" height="225" class="btn btn-primary" data-toggle="modal" data-target="#demoNormalModal_7" >
         <img src="img/img8.gif" width="300" height="225" class="btn btn-primary" data-toggle="modal" data-target="#demoNormalModal_8" >
-        <img src="img/img9.jpg" width="300" height="225" class="btn btn-primary" data-toggle="modal" data-target="#demoNormalModal_9" ><br>
+        <img src="img/img9.jpg" width="300" height="225" class="btn btn-primary" data-toggle="modal" data-target="#demoNormalModal_9" > -->
+        <br>
         <!-- <br><input type="submit" value="全ての写真をみる"> -->
         <br><a href="../album02/album02.php"><h4>全ての写真をみる</h4></a>
       </center>
     </div>
 
         <!-- モーダルダイアログ -->
-        <div class="modal fade" id="demoNormalModal_1" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
+        <?php foreach($pics as $pic){ ?>
+        <div class="modal fade" id="demoNormalModal_<?php echo $pic['pic_name']; ?>" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -164,19 +191,19 @@
                     </div>
                     <div class="modal-body">
                         <center>
-                            <img src="img/img1.jpeg" width="300" height="225">
+                          <img src="../album_register/images/<?php echo $pic['pic_name']; ?>" width="300" height="225">
                         </center>
                     </div>
                     <div class="modal-body">
                         <h3>＜コメント＞</h3>
-                        <textarea name="content" placeholder="自由記入欄" cols="90" rows="5"></textarea>
+                        <h2><?php echo $pic['content']; ?></h2>
                     </div>
                     <div class="modal-body">
                         <h3>＜公開期間＞</h3>
                         <select name="time">
                           <option value="-1">選択してください</option>
                           <?php for($i=0; $i < $c; $i++): ?>
-                            <?php if ($i == $time_num): ?>
+                            <?php if ($i == $pic['time']): ?>
                               <!--前回選択されたvalue（都道府県）なのでoptionタグにselected属性をつける　-->
                               <option value="<?php echo $i; ?>" selected><?php echo $time_limit[$i]; ?></option>
                             <?php else: ?>
@@ -187,365 +214,18 @@
                         </select>
                     </div>
                     <div class="modal-footer">
-                      <button type="button" class="btn btn-danger"><h4>削除</h4></button>
+                      <?php if ($signin_user['id']==$pic['user_id']) :?>
+                      <!-- <button type="button" class="btn btn-danger"><h4>削除</h4></button> -->
+                      <a onclick="return confirm('ほんとに消すの？');" href="album01_delete.php?pic_id=<?= $pic['id'];?>" class="btn btn-danger btn-xs"><h4>削除</h4></a>
                       <button type="button" class="btn btn-secondary" data-dismiss="modal"><h4>閉じる</h4></button>
-                      <button type="button" class="btn btn-primary"><h4>更新</h4></button>
+                      <!-- <button type="button" class="btn btn-primary"><h4>編集</h4></button> -->
+                      <a href="album01_edit.php?pic_id=<?= $pic['id'];?>" class="btn btn-success btn-xs"><h4>編集</h4></a>
+                      <?php endif;?>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- モーダル終わり -->
-
-        <!-- モーダルダイアログ -->
-        <div class="modal fade" id="demoNormalModal_2" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3 class="modal-title" id="demoModalTitle">写真の編集</h3>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <center>
-                            <img src="img/img2.jpg" width="300" height="225">
-                        </center>
-                    </div>
-                    <div class="modal-body">
-                        <h3>＜コメント＞</h3>
-                        <textarea name="content" placeholder="自由記入欄" cols="90" rows="5"></textarea>
-                    </div>
-                    <div class="modal-body">
-                        <h3>＜公開期間＞</h3>
-                        <select name="time">
-                          <option value="-1">選択してください</option>
-                          <?php for($i=0; $i < $c; $i++): ?>
-                            <?php if ($i == $time_num): ?>
-                              <!--前回選択されたvalue（都道府県）なのでoptionタグにselected属性をつける　-->
-                              <option value="<?php echo $i; ?>" selected><?php echo $time_limit[$i]; ?></option>
-                            <?php else: ?>
-                              <!--前回選択されたvalueと一致しないもしくはそもそもPOST送信されていないのでoptionタグをそのまま表示-->
-                              <option value="<?php echo $i; ?>"><?php echo $time_limit[$i]; ?></option>
-                             <?php endif; ?>
-                          <?php endfor; ?>
-                        </select>
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-danger"><h4>削除</h4></button>
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal"><h4>閉じる</h4></button>
-                      <button type="button" class="btn btn-primary"><h4>更新</h4></button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- モーダル終わり -->
-
-        <!-- モーダルダイアログ -->
-        <div class="modal fade" id="demoNormalModal_3" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3 class="modal-title" id="demoModalTitle">写真の編集</h3>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <center>
-                            <img src="img/img3.jpeg" width="300" height="225">
-                        </center>
-                    </div>
-                    <div class="modal-body">
-                        <h3>＜コメント＞</h3>
-                        <textarea name="content" placeholder="自由記入欄" cols="90" rows="5"></textarea>
-                    </div>
-                    <div class="modal-body">
-                        <h3>＜公開期間＞</h3>
-                        <select name="time">
-                          <option value="-1">選択してください</option>
-                          <?php for($i=0; $i < $c; $i++): ?>
-                            <?php if ($i == $time_num): ?>
-                              <!--前回選択されたvalue（都道府県）なのでoptionタグにselected属性をつける　-->
-                              <option value="<?php echo $i; ?>" selected><?php echo $time_limit[$i]; ?></option>
-                            <?php else: ?>
-                              <!--前回選択されたvalueと一致しないもしくはそもそもPOST送信されていないのでoptionタグをそのまま表示-->
-                              <option value="<?php echo $i; ?>"><?php echo $time_limit[$i]; ?></option>
-                             <?php endif; ?>
-                          <?php endfor; ?>
-                        </select>
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-danger"><h4>削除</h4></button>
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal"><h4>閉じる</h4></button>
-                      <button type="button" class="btn btn-primary"><h4>更新</h4></button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- モーダル終わり -->
-
-        <!-- モーダルダイアログ -->
-        <div class="modal fade" id="demoNormalModal_4" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3 class="modal-title" id="demoModalTitle">写真の編集</h3>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <center>
-                            <img src="img/img4.jpeg" width="300" height="225">
-                        </center>
-                    </div>
-                    <div class="modal-body">
-                        <h3>＜コメント＞</h3>
-                        <textarea name="content" placeholder="自由記入欄" cols="90" rows="5"></textarea>
-                    </div>
-                    <div class="modal-body">
-                        <h3>＜公開期間＞</h3>
-                        <select name="time">
-                          <option value="-1">選択してください</option>
-                          <?php for($i=0; $i < $c; $i++): ?>
-                            <?php if ($i == $time_num): ?>
-                              <!--前回選択されたvalue（都道府県）なのでoptionタグにselected属性をつける　-->
-                              <option value="<?php echo $i; ?>" selected><?php echo $time_limit[$i]; ?></option>
-                            <?php else: ?>
-                              <!--前回選択されたvalueと一致しないもしくはそもそもPOST送信されていないのでoptionタグをそのまま表示-->
-                              <option value="<?php echo $i; ?>"><?php echo $time_limit[$i]; ?></option>
-                             <?php endif; ?>
-                          <?php endfor; ?>
-                        </select>
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-danger"><h4>削除</h4></button>
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal"><h4>閉じる</h4></button>
-                      <button type="button" class="btn btn-primary"><h4>更新</h4></button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- モーダル終わり -->
-
-        <!-- モーダルダイアログ -->
-        <div class="modal fade" id="demoNormalModal_5" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3 class="modal-title" id="demoModalTitle">写真の編集</h3>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <center>
-                            <img src="img/img5.jpg" width="300" height="225">
-                        </center>
-                    </div>
-                    <div class="modal-body">
-                        <h3>＜コメント＞</h3>
-                        <textarea name="content" placeholder="自由記入欄" cols="90" rows="5"></textarea>
-                    </div>
-                    <div class="modal-body">
-                        <h3>＜公開期間＞</h3>
-                        <select name="time">
-                          <option value="-1">選択してください</option>
-                          <?php for($i=0; $i < $c; $i++): ?>
-                            <?php if ($i == $time_num): ?>
-                              <!--前回選択されたvalue（都道府県）なのでoptionタグにselected属性をつける　-->
-                              <option value="<?php echo $i; ?>" selected><?php echo $time_limit[$i]; ?></option>
-                            <?php else: ?>
-                              <!--前回選択されたvalueと一致しないもしくはそもそもPOST送信されていないのでoptionタグをそのまま表示-->
-                              <option value="<?php echo $i; ?>"><?php echo $time_limit[$i]; ?></option>
-                             <?php endif; ?>
-                          <?php endfor; ?>
-                        </select>
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-danger"><h4>削除</h4></button>
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal"><h4>閉じる</h4></button>
-                      <button type="button" class="btn btn-primary"><h4>更新</h4></button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- モーダル終わり -->
-
-        <!-- モーダルダイアログ -->
-        <div class="modal fade" id="demoNormalModal_6" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3 class="modal-title" id="demoModalTitle">写真の編集</h3>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <center>
-                            <img src="img/img6.jpg" width="300" height="225">
-                        </center>
-                    </div>
-                    <div class="modal-body">
-                        <h3>＜コメント＞</h3>
-                        <textarea name="content" placeholder="自由記入欄" cols="90" rows="5"></textarea>
-                    </div>
-                    <div class="modal-body">
-                        <h3>＜公開期間＞</h3>
-                        <select name="time">
-                          <option value="-1">選択してください</option>
-                          <?php for($i=0; $i < $c; $i++): ?>
-                            <?php if ($i == $time_num): ?>
-                              <!--前回選択されたvalue（都道府県）なのでoptionタグにselected属性をつける　-->
-                              <option value="<?php echo $i; ?>" selected><?php echo $time_limit[$i]; ?></option>
-                            <?php else: ?>
-                              <!--前回選択されたvalueと一致しないもしくはそもそもPOST送信されていないのでoptionタグをそのまま表示-->
-                              <option value="<?php echo $i; ?>"><?php echo $time_limit[$i]; ?></option>
-                             <?php endif; ?>
-                          <?php endfor; ?>
-                        </select>
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-danger"><h4>削除</h4></button>
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal"><h4>閉じる</h4></button>
-                      <button type="button" class="btn btn-primary"><h4>更新</h4></button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- モーダル終わり -->
-
-        <!-- モーダルダイアログ -->
-        <div class="modal fade" id="demoNormalModal_7" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3 class="modal-title" id="demoModalTitle">写真の編集</h3>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <center>
-                            <img src="img/img7.jpg" width="300" height="225">
-                        </center>
-                    </div>
-                    <div class="modal-body">
-                        <h3>＜コメント＞</h3>
-                        <textarea name="content" placeholder="自由記入欄" cols="90" rows="5"></textarea>
-                    </div>
-                    <div class="modal-body">
-                        <h3>＜公開期間＞</h3>
-                        <select name="time">
-                          <option value="-1">選択してください</option>
-                          <?php for($i=0; $i < $c; $i++): ?>
-                            <?php if ($i == $time_num): ?>
-                              <!--前回選択されたvalue（都道府県）なのでoptionタグにselected属性をつける　-->
-                              <option value="<?php echo $i; ?>" selected><?php echo $time_limit[$i]; ?></option>
-                            <?php else: ?>
-                              <!--前回選択されたvalueと一致しないもしくはそもそもPOST送信されていないのでoptionタグをそのまま表示-->
-                              <option value="<?php echo $i; ?>"><?php echo $time_limit[$i]; ?></option>
-                             <?php endif; ?>
-                          <?php endfor; ?>
-                        </select>
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-danger"><h4>削除</h4></button>
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal"><h4>閉じる</h4></button>
-                      <button type="button" class="btn btn-primary"><h4>更新</h4></button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- モーダル終わり -->
-
-        <!-- モーダルダイアログ -->
-        <div class="modal fade" id="demoNormalModal_8" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3 class="modal-title" id="demoModalTitle">写真の編集</h3>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <center>
-                            <img src="img/img8.gif" width="300" height="225">
-                        </center>
-                    </div>
-                    <div class="modal-body">
-                        <h3>＜コメント＞</h3>
-                        <textarea name="content" placeholder="自由記入欄" cols="90" rows="5"></textarea>
-                    </div>
-                    <div class="modal-body">
-                        <h3>＜公開期間＞</h3>
-                        <select name="time">
-                          <option value="-1">選択してください</option>
-                          <?php for($i=0; $i < $c; $i++): ?>
-                            <?php if ($i == $time_num): ?>
-                              <!--前回選択されたvalue（都道府県）なのでoptionタグにselected属性をつける　-->
-                              <option value="<?php echo $i; ?>" selected><?php echo $time_limit[$i]; ?></option>
-                            <?php else: ?>
-                              <!--前回選択されたvalueと一致しないもしくはそもそもPOST送信されていないのでoptionタグをそのまま表示-->
-                              <option value="<?php echo $i; ?>"><?php echo $time_limit[$i]; ?></option>
-                             <?php endif; ?>
-                          <?php endfor; ?>
-                        </select>
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-danger"><h4>削除</h4></button>
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal"><h4>閉じる</h4></button>
-                      <button type="button" class="btn btn-primary"><h4>更新</h4></button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- モーダル終わり -->
-
-        <!-- モーダルダイアログ -->
-        <div class="modal fade" id="demoNormalModal_9" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h3 class="modal-title" id="demoModalTitle">写真の編集</h3>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <center>
-                            <img src="img/img9.jpg" width="300" height="225">
-                        </center>
-                    </div>
-                    <div class="modal-body">
-                        <h3>＜コメント＞</h3>
-                        <textarea name="content" placeholder="自由記入欄" cols="90" rows="5"></textarea>
-                    </div>
-                    <div class="modal-body">
-                        <h3>＜公開期間＞</h3>
-                        <select name="time">
-                          <option value="-1">選択してください</option>
-                          <?php for($i=0; $i < $c; $i++): ?>
-                            <?php if ($i == $time_num): ?>
-                              <!--前回選択されたvalue（都道府県）なのでoptionタグにselected属性をつける　-->
-                              <option value="<?php echo $i; ?>" selected><?php echo $time_limit[$i]; ?></option>
-                            <?php else: ?>
-                              <!--前回選択されたvalueと一致しないもしくはそもそもPOST送信されていないのでoptionタグをそのまま表示-->
-                              <option value="<?php echo $i; ?>"><?php echo $time_limit[$i]; ?></option>
-                             <?php endif; ?>
-                          <?php endfor; ?>
-                        </select>
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-danger"><h4>削除</h4></button>
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal"><h4>閉じる</h4></button>
-                      <button type="button" class="btn btn-primary"><h4>更新</h4></button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <?php } ?>
         <!-- モーダル終わり -->
 
         <!-- 広告 -->

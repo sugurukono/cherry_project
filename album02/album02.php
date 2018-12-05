@@ -18,6 +18,7 @@
     $c = count($time_limit);
 
 
+
     $data = array();
     $sql = 'SELECT * FROM `users` WHERE `id` = 4';
 
@@ -28,40 +29,22 @@
     $validations = array();
     $feed = '';
 
-    if (!empty($_POST)) {
-        $feed = $_POST['feed'];
 
-        if ($feed == '') {
-            $validations['feed'] = 'blank';
-        }else{
-            //データベースに投稿データを保存
-            //DB登録処理
-            //usersテーブルにユーザー情報の登録処理
-            $sql = 'INSERT INTO `feeds` SET `user_id` = ?, `feed` = ?, `created` = NOW()';
-            $stmt = $dbh->prepare($sql);
-            $data = array($signin_user['id'], $feed);
-            $stmt->execute($data);
+
+    $sql = 'SELECT `p`.*, `u`.`id`, `u`.`user_name` FROM `pics` AS `p` LEFT JOIN `users` AS `u` ON `p`.`user_id`=`u`.`id` ORDER BY `created` DESC LIMIT 15 OFFSET 9' ;
+    $data = array();
+    $stmt = $dbh->prepare($sql);
+    $stmt->execute($data);
+
+    $pics = array();
+
+    while (true) {
+        $record = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($record == false) {
+            break;
         }
+        $pics[] = $record;
     }
-
-
-    $feed = $stmt->fetch(PDO::FETCH_ASSOC);
-        //$feed連想配列にlike数を格納するキーを用意し、数字を代入する
-        //代入するlike数を取得するSQL文の実行
-        $friends_sql = 'SELECT COUNT(*) as `friends_count` FROM `friends` WHERE `id` = ?';
-        $friends_data = array($feed['id']);
-        $friends_stmt = $dbh->prepare($friends_sql);
-        $friends_stmt->execute($friends_data);
-
-        $friends_count_data = $friends_stmt->fetch(PDO::FETCH_ASSOC);
-
-        $feed['friends_count'] = $friends_count_data['friends_count'];
-
-    $feeds = []; //投稿データを全て格納する配列
-
-        //v($feed,'$feed');
-        //[]は、配列の末尾にデータを追加するという意味
-
 
 ?>
 
@@ -138,6 +121,9 @@
       <div class="box2"><h1><br>PROFILE</h1></div><br>
  -->
       <center>
+        <?php foreach($pics as $pic){ ?>
+          <img src="../album_register/images/<?php echo $pic['pic_name']; ?>" width="300" height="225" class="btn btn-primary" data-toggle="modal" data-target="#demoNormalModal_<?php echo $pic['pic_name']; ?>" >
+        <?php } ?>
         <img src="img/img10.jpg" width="300" height="225" class="btn btn-primary" data-toggle="modal" data-target="#demoNormalModal_1" >
         <img src="img/img11.jpg" width="300" height="225" class="btn btn-primary" data-toggle="modal" data-target="#demoNormalModal_2" >
         <img src="img/img12.jpg" width="300" height="225" class="btn btn-primary" data-toggle="modal" data-target="#demoNormalModal_3" >
@@ -159,9 +145,57 @@
         <img src="img/img28.jpg" width="300" height="225" class="btn btn-primary" data-toggle="modal" data-target="#demoNormalModal_19" >
         <img src="img/img29.jpg" width="300" height="225" class="btn btn-primary" data-toggle="modal" data-target="#demoNormalModal_20" >
         <img src="img/img30.png" width="300" height="225" class="btn btn-primary" data-toggle="modal" data-target="#demoNormalModal_" >
+        <br>
         <!-- <br><input type="submit" value="全ての写真をみる"> -->
+        <br><a href="../album01/album01.php"><h4>PLOFILE画面に戻る</h4></a>
       </center>
     </div>
+
+        <!-- モーダルダイアログ -->
+        <?php foreach($pics as $pic){ ?>
+        <div class="modal fade" id="demoNormalModal_<?php echo $pic['pic_name']; ?>" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="demoModalTitle">写真の編集</h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <center>
+                            <img src="../album_register/images/<?php echo $pic['pic_name']; ?>" width="300" height="225">
+                        </center>
+                    </div>
+                    <div class="modal-body">
+                        <h3>＜コメント＞</h3>
+                        <h4><textarea name="content" cols="57" rows="5"><?php echo $pic['content']; ?></textarea></h4>
+                    </div>
+                    <div class="modal-body">
+                        <h3>＜公開期間＞</h3>
+                        <select name="time">
+                          <option value="-1">選択してください</option>
+                          <?php for($i=0; $i < $c; $i++): ?>
+                            <?php if ($i == $time_num): ?>
+                              <!--前回選択されたvalue（都道府県）なのでoptionタグにselected属性をつける　-->
+                              <option value="<?php echo $i; ?>" selected><?php echo $time_limit[$i]; ?></option>
+                            <?php else: ?>
+                              <!--前回選択されたvalueと一致しないもしくはそもそもPOST送信されていないのでoptionタグをそのまま表示-->
+                              <option value="<?php echo $i; ?>"><?php echo $time_limit[$i]; ?></option>
+                             <?php endif; ?>
+                          <?php endfor; ?>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-danger"><h4>削除</h4></button>
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal"><h4>閉じる</h4></button>
+                      <button type="button" class="btn btn-primary"><h4>更新</h4></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php } ?>
+        <!-- モーダル終わり -->
 
         <!-- モーダルダイアログ -->
         <div class="modal fade" id="demoNormalModal_1" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
@@ -180,7 +214,7 @@
                     </div>
                     <div class="modal-body">
                         <h3>＜コメント＞</h3>
-                        <textarea name="content" placeholder="自由記入欄" cols="90" rows="5"></textarea>
+                        <h4><textarea name="content" placeholder="自由記入欄" cols="57" rows="5"></textarea></h4>
                     </div>
                     <div class="modal-body">
                         <h3>＜公開期間＞</h3>
@@ -224,7 +258,7 @@
                     </div>
                     <div class="modal-body">
                         <h3>＜コメント＞</h3>
-                        <textarea name="content" placeholder="自由記入欄" cols="90" rows="5"></textarea>
+                        <h4><textarea name="content" placeholder="自由記入欄" cols="57" rows="5"></textarea></h4>
                     </div>
                     <div class="modal-body">
                         <h3>＜公開期間＞</h3>
@@ -268,7 +302,7 @@
                     </div>
                     <div class="modal-body">
                         <h3>＜コメント＞</h3>
-                        <textarea name="content" placeholder="自由記入欄" cols="90" rows="5"></textarea>
+                        <h4><textarea name="content" placeholder="自由記入欄" cols="57" rows="5"></textarea></h4>
                     </div>
                     <div class="modal-body">
                         <h3>＜公開期間＞</h3>
@@ -312,7 +346,7 @@
                     </div>
                     <div class="modal-body">
                         <h3>＜コメント＞</h3>
-                        <textarea name="content" placeholder="自由記入欄" cols="90" rows="5"></textarea>
+                        <h4><textarea name="content" placeholder="自由記入欄" cols="57" rows="5"></textarea></h4>
                     </div>
                     <div class="modal-body">
                         <h3>＜公開期間＞</h3>
@@ -356,7 +390,7 @@
                     </div>
                     <div class="modal-body">
                         <h3>＜コメント＞</h3>
-                        <textarea name="content" placeholder="自由記入欄" cols="90" rows="5"></textarea>
+                        <h4><textarea name="content" placeholder="自由記入欄" cols="57" rows="5"></textarea></h4>
                     </div>
                     <div class="modal-body">
                         <h3>＜公開期間＞</h3>
@@ -400,7 +434,7 @@
                     </div>
                     <div class="modal-body">
                         <h3>＜コメント＞</h3>
-                        <textarea name="content" placeholder="自由記入欄" cols="90" rows="5"></textarea>
+                        <h4><textarea name="content" placeholder="自由記入欄" cols="57" rows="5"></textarea></h4>
                     </div>
                     <div class="modal-body">
                         <h3>＜公開期間＞</h3>
@@ -444,7 +478,7 @@
                     </div>
                     <div class="modal-body">
                         <h3>＜コメント＞</h3>
-                        <textarea name="content" placeholder="自由記入欄" cols="90" rows="5"></textarea>
+                        <h4><textarea name="content" placeholder="自由記入欄" cols="57" rows="5"></textarea></h4>
                     </div>
                     <div class="modal-body">
                         <h3>＜公開期間＞</h3>
@@ -488,7 +522,7 @@
                     </div>
                     <div class="modal-body">
                         <h3>＜コメント＞</h3>
-                        <textarea name="content" placeholder="自由記入欄" cols="90" rows="5"></textarea>
+                        <h4><textarea name="content" placeholder="自由記入欄" cols="57" rows="5"></textarea></h4>
                     </div>
                     <div class="modal-body">
                         <h3>＜公開期間＞</h3>
@@ -532,7 +566,7 @@
                     </div>
                     <div class="modal-body">
                         <h3>＜コメント＞</h3>
-                        <textarea name="content" placeholder="自由記入欄" cols="90" rows="5"></textarea>
+                        <h4><textarea name="content" placeholder="自由記入欄" cols="57" rows="5"></textarea></h4>
                     </div>
                     <div class="modal-body">
                         <h3>＜公開期間＞</h3>
@@ -576,7 +610,7 @@
                     </div>
                     <div class="modal-body">
                         <h3>＜コメント＞</h3>
-                        <textarea name="content" placeholder="自由記入欄" cols="90" rows="5"></textarea>
+                        <h4><textarea name="content" placeholder="自由記入欄" cols="57" rows="5"></textarea></h4>
                     </div>
                     <div class="modal-body">
                         <h3>＜公開期間＞</h3>
@@ -620,7 +654,7 @@
                     </div>
                     <div class="modal-body">
                         <h3>＜コメント＞</h3>
-                        <textarea name="content" placeholder="自由記入欄" cols="90" rows="5"></textarea>
+                        <h4><textarea name="content" placeholder="自由記入欄" cols="57" rows="5"></textarea></h4>
                     </div>
                     <div class="modal-body">
                         <h3>＜公開期間＞</h3>
@@ -664,7 +698,7 @@
                     </div>
                     <div class="modal-body">
                         <h3>＜コメント＞</h3>
-                        <textarea name="content" placeholder="自由記入欄" cols="90" rows="5"></textarea>
+                        <h4><textarea name="content" placeholder="自由記入欄" cols="57" rows="5"></textarea></h4>
                     </div>
                     <div class="modal-body">
                         <h3>＜公開期間＞</h3>
@@ -708,7 +742,7 @@
                     </div>
                     <div class="modal-body">
                         <h3>＜コメント＞</h3>
-                        <textarea name="content" placeholder="自由記入欄" cols="90" rows="5"></textarea>
+                        <h4><textarea name="content" placeholder="自由記入欄" cols="57" rows="5"></textarea></h4>
                     </div>
                     <div class="modal-body">
                         <h3>＜公開期間＞</h3>
@@ -752,7 +786,7 @@
                     </div>
                     <div class="modal-body">
                         <h3>＜コメント＞</h3>
-                        <textarea name="content" placeholder="自由記入欄" cols="90" rows="5"></textarea>
+                        <h4><textarea name="content" placeholder="自由記入欄" cols="57" rows="5"></textarea></h4>
                     </div>
                     <div class="modal-body">
                         <h3>＜公開期間＞</h3>
@@ -796,7 +830,7 @@
                     </div>
                     <div class="modal-body">
                         <h3>＜コメント＞</h3>
-                        <textarea name="content" placeholder="自由記入欄" cols="90" rows="5"></textarea>
+                        <h4><textarea name="content" placeholder="自由記入欄" cols="57" rows="5"></textarea></h4>
                     </div>
                     <div class="modal-body">
                         <h3>＜公開期間＞</h3>
@@ -840,7 +874,7 @@
                     </div>
                     <div class="modal-body">
                         <h3>＜コメント＞</h3>
-                        <textarea name="content" placeholder="自由記入欄" cols="90" rows="5"></textarea>
+                        <h4><textarea name="content" placeholder="自由記入欄" cols="57" rows="5"></textarea></h4>
                     </div>
                     <div class="modal-body">
                         <h3>＜公開期間＞</h3>
@@ -884,7 +918,7 @@
                     </div>
                     <div class="modal-body">
                         <h3>＜コメント＞</h3>
-                        <textarea name="content" placeholder="自由記入欄" cols="90" rows="5"></textarea>
+                        <h4><textarea name="content" placeholder="自由記入欄" cols="57" rows="5"></textarea></h4>
                     </div>
                     <div class="modal-body">
                         <h3>＜公開期間＞</h3>
@@ -928,7 +962,7 @@
                     </div>
                     <div class="modal-body">
                         <h3>＜コメント＞</h3>
-                        <textarea name="content" placeholder="自由記入欄" cols="90" rows="5"></textarea>
+                        <h4><textarea name="content" placeholder="自由記入欄" cols="57" rows="5"></textarea></h4>
                     </div>
                     <div class="modal-body">
                         <h3>＜公開期間＞</h3>
@@ -972,7 +1006,7 @@
                     </div>
                     <div class="modal-body">
                         <h3>＜コメント＞</h3>
-                        <textarea name="content" placeholder="自由記入欄" cols="90" rows="5"></textarea>
+                        <h4><textarea name="content" placeholder="自由記入欄" cols="57" rows="5"></textarea></h4>
                     </div>
                     <div class="modal-body">
                         <h3>＜公開期間＞</h3>
@@ -1016,7 +1050,7 @@
                     </div>
                     <div class="modal-body">
                         <h3>＜コメント＞</h3>
-                        <textarea name="content" placeholder="自由記入欄" cols="90" rows="5"></textarea>
+                        <h4><textarea name="content" placeholder="自由記入欄" cols="57" rows="5"></textarea></h4>
                     </div>
                     <div class="modal-body">
                         <h3>＜公開期間＞</h3>
@@ -1044,7 +1078,7 @@
         <!-- モーダル終わり -->
 
         <!-- 広告 -->
-        <div class="col-xs-3" style="background-color:#DDDDDD; height:1800px">
+        <div class="col-xs-3" style="background-color:#DDDDDD; height:2400px">
         <div class="box5">
         <p>広告</p>
         </div>
