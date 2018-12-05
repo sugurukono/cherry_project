@@ -138,13 +138,13 @@
 
     <div class="col-xs-12" style="background-color:#DDDDDD; height:235px">
         <div class="box5">
-        <p>広告</p>
+        <img src="img/Nexseed3.jpg">
         </div>
         <div class="box5">
-        <p>広告</p>
+        <img src="img/Nexseed3.jpg">
         </div>
         <div class="box5">
-        <p>広告</p>
+        <img src="img/Nexseed3.jpg">
         </div>
     </div><br>
 
