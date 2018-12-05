@@ -143,6 +143,10 @@
                 $chatroom_id=$dbh->lastInsertId();
                 $_SESSION['cherry']['chatroom_id']=$chatroom_id;
 
+                $_SESSION['cherry']['data3']['chatroom_id']=$chatroom_id;
+                $_SESSION['cherry']['data3']['id']=$chatroom_id;
+                $_SESSION['cherry']['data3']['delete_time']="0000-00-00 00:00:00";
+
             }
         }else{//存在している時はチャットルームIDを取得
             $chatroom_id=$chatroom_data['id'];
@@ -173,7 +177,7 @@
             break;
         }
         $talks[]=$talk;
-        // v($talks,'$talks');
+        v($talks,'$talks');
     }
 
     // v($_SESSION,('$_SESSION'));
@@ -229,13 +233,15 @@
     }
     // v($waits, '$waits');
 
-// // オートマでデリート処理
-//     if (!empty($d_time) && $d_time < $send_date) {
-//         $sql='DELETE FROM `chatroom` WHERE `id`=?';
-//         $data=array($d_room_id);
-//         $stmt = $dbh->prepare($sql);
-//         $stmt->execute($data);
-//     }
+// オートマでデリート処理
+    if (($d_time!="0000-00-00 00:00:00") && $d_time < date("Y-m-d H:i:s")) {
+        $sql='DELETE FROM `chatroom` WHERE `id`=?';
+        $data=array($d_room_id);
+        $stmt = $dbh->prepare($sql);
+        $stmt->execute($data);
+
+        
+    }
 
 
 
@@ -519,19 +525,22 @@
             </div>
             <!-- タイムライン部分③ -->
             <div >
-                <?php if ($chatroom_id==$d_room_id && !empty($d_time) && $d_time !== "0000-00-00 00:00:00" && $d_time > $send_date) :?>
+                <?php if (!empty($d_time) && $chatroom_id==$d_room_id && $d_time !== "0000-00-00 00:00:00" && $d_time > $send_date) :?>
                 <b>削除設定中：<?php echo $d_time ?></b>
                 <?php else: 
-                //削除時間を過ぎてるので$talksの中身を空にする
-                $talks = [];
 
+                    if ($d_time == "0000-00-00 00:00:00"){
+                        //talk表示したい
+                    } else{
+                        //削除時間を過ぎてるので$talksの中身を空にする
+                        $talks = [];
+                        $_SESSION['cherry']['data3']['delete_time'] ="0000-00-00 00:00:00";
+                    }
+                
                 endif; ?>
-                <?php if(empty($d_time)): ?>
-                    <b>enjoy!</b>
-                <?php endif; ?>
             </div>
             <div id="bms_messages">
-                <?php if (isset($_SESSION['cherry']['friend_id'])): ?>
+                <?php if (!empty($chatroom_id)): ?>
                 <?php foreach ($talks as $talk_each):?>
                 <!--メッセージ１（左側）-->
                 <?php if ($talk_each['sender_id']==$_SESSION['cherry']['friend_id'] ): ?>
