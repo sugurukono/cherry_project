@@ -21,12 +21,13 @@
     //公開期間の選択終わり
 
     //DBからPROFILE情報データの取得
-    $data = array();
-    $sql = 'SELECT * FROM `users` WHERE `id` = 4';
-
+    
+    $sql = 'SELECT * FROM `users` WHERE `id` = ?';
+    $data = array($_SESSION['id']);
     $stmt = $dbh->prepare($sql);//アロー演算子の左側をオブジェクトという
     $stmt->execute($data);
     $signin_user = $stmt->fetch(PDO::FETCH_ASSOC);
+    v($signin_user,'$signin_user');
 
     $validations = array();
     $feed = '';
@@ -157,7 +158,7 @@
     </div>
       <span hidden id="signin-user"><?php echo $signin_user['id']; ?></span>
       <div class="box3"><br><h2>ユーザー名：<?php echo $signin_user['user_name']; ?></h2><h2>ID：<?php echo $signin_user['id']; ?></h2><h2><span class="friends_count">友達：</span><?= $feed['friends_count']; ?>人</h2></div>
-      <div class="box2"><h1><img src="img/IMG_7352.jpg" width="150" class="img-circle""></h1></div>
+      <div class="box2"><h1><img src="../user_img/<?php echo $signin_user['user_img']?>" width="150" height="150" class="img-circle""></h1></div>
       <div class="box2"><center><h1><br>PROFILE</h1></center></div><br>
 
       <center>

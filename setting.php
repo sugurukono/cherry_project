@@ -125,7 +125,7 @@
       <h1 class="title" style="color:white;">🍒Cherry</h1>
 
     <li class="words">
-        <a href="album/album.php">My Page</a>
+        <a href="album01/album01.php">My Page</a>
     </li>
     <li class="words"><a href="talk_main1.php">Talk</a>
     </li>

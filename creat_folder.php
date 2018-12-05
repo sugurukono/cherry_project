@@ -19,7 +19,7 @@
 
 
 
-    header('Location: talk_main1.php');
+    header('Location: setting.php');
     exit();
 
 
