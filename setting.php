@@ -180,7 +180,7 @@
 
         <div class="row">
           <form method="POST" action="update_profile.php" enctype="multipart/form-data">
-          <div class="col-xs-6" style="height: 600px; background-color: #37b8e061; margin:30px 0px;">
+          <div class="col-xs-6" style="height: 500px; background-color: #37b8e061; margin:30px 0px;">
             <div class="profile1">
                 <b>プロフィール画像</b> 
                   <?php if($user_img == '') :?>
@@ -191,7 +191,7 @@
                 <span class="square_btn"><input type="file" name="img_name" accept="image/*"></span>
             </div>
           </div>
-          <div class="col-xs-6" style="height: 600px; background-color: #37b8e061; margin: 30px 0px;">
+          <div class="col-xs-6" style="height: 500px; background-color: #37b8e061; margin: 30px 0px;">
             <div class="profile2"><br>
                 <b>お名前</b>
                 <input type="text" name="name" placeholder="さくらんぼ" value="<?php echo htmlspecialchars($user_name); ?>" class="text"><br>
@@ -376,10 +376,10 @@
 
     <div class="col-xs-12" style="background-color: white; ">
        <h1 id="help"><span class="title_1">♦Help 使い方ガイド♦</span></h1>
-       <img src="img/howtoalbum.jpeg"><br><br>
-       <img src="img/howtotalk.jpeg"><br><br>
-       <img src="img/howtofakepage.jpeg"><br><br>
-       <img src="img/howtosetting.jpeg"><br><br>
+       <img class="help" src="img/howtoalbum.jpeg"><br><br>
+       <img class="help" src="img/howtotalk.jpeg"><br><br>
+       <img class="help" src="img/howtofakepage.jpeg"><br><br>
+       <img class="help" src="img/howtosetting.jpeg"><br><br>
     </div>
 
 <div class="row">
@@ -389,7 +389,7 @@
 
 <div class="col-xs-12" style="background-color: white;">
       <h1 id="qanda"><span class="title_1">♦Ｑ＆Ａ♦</span></h1>
-      <img src="img/qanda.jpeg">
+      <img class="help" src="img/qanda.jpeg">
     </div>
 
 

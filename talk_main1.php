@@ -4,6 +4,7 @@
     require('dbconnect.php');
 
     $chatroom_id='';
+    $folder_id='';
 
     $sql = 'SELECT * FROM `users` WHERE `id`=?';
     $data = array($_SESSION["id"]);//WHEREで入れたやつだけでOK
@@ -96,14 +97,14 @@
     }
 
 
-    v($folder_id,'$folder_idfolder_id');
+    // v($folder_id,'$folder_idfolder_id');
 
     // v($friend_id2,'$friend_id2');
 
 
     // v($friends,'$friends');
     // v($_GET['sending'],'$_GET[sending]');
-    v($friend_id,'$friend_id');
+    // v($friend_id,'$friend_id');
     // v($signin_user['id'],'$signin_user');
     // v($friends['friend_id'],'$friends[friend_id]');
 
@@ -238,12 +239,12 @@
     $d_room_id=$_SESSION['cherry']['data3']['id'];
     // v($_SESSION['cherry']['data3']['delete_time'],'$_SESSION[cherry][data3][delete_time]');
     // v($d_time,'$d_time');
-    v($d_room_id,'$d_room_id');
+    // v($d_room_id,'$d_room_id');
     
     // v($send_date,'$send_date');
 
 // オートマでデリート処理
-    v($d_time,'$d_time');
+    // v($d_time,'$d_time');
 
     if (($d_time!="0000-00-00 00:00:00") && $d_time < date("Y-m-d H:i:s")) {
         $sql='DELETE FROM `chatroom` WHERE `id`=?';
@@ -274,7 +275,6 @@
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 
 </head>
-
 <body>
     <!-- ヘッダー 開始-->
   <div class="row">
@@ -368,22 +368,19 @@
     <div class="modal_wrap">
     <input id="trigger3" type="checkbox">
     <label for="trigger3" style="color:pink; font-size:12px;">トークルーム削除</label>
-
     <div class="modal_overlay">
         <label for="trigger3" class="modal_trigger"></label>
         <div class="modal_content">
             <label for="trigger3" class="close_button">✖️</label>
             <h2>トークルーム削除</h2>
-
            <form submit="GET" action="delete_magic.php">
             <!-- フレンドセレクト -->
             <select class="select" name="friend_id">
             <?php foreach($friends as $friend_each): ?>
-            <option value=<?php echo $friend_each['friend_id'] ?>><?php echo $friend_each['user_name']?><option>
+            <option value="<?php echo $friend_each['friend_id']?>"><?php echo $friend_each['user_name']?></option>
             <?php endforeach; ?>
             </select>
             さんとのトークを
-
             <select name="delete_time" class="select">
                 <option value="-1">今すぐ</option>
                 <option value="1">一時間後</option>
@@ -431,6 +428,7 @@
         </div>
     </div>
 
+
 <!-- リクエスト送られて来た場合 -->
     <?php if (!empty($reqs)): ?>
     <div class="modal_wrap">
@@ -459,7 +457,6 @@
         </div>
     </div>
         <?php endif ;?>
-
     </div>
 
     
@@ -511,7 +508,6 @@
     </div>
 
 
-
 <!-- トーク -->
     <div id="your_container">
         <!-- チャットの外側部分① -->
@@ -523,9 +519,7 @@
                     <!--ステータスアイコン-->
                     <!-- <div id="bms_status_icon">🍒</div> -->
                     <!--ユーザー名-->
-                    <!-- <div id="bms_chat_user_name" "><?php echo $signin_user['user_name'] ?></div>
- -->
-
+                    <!-- <div id="bms_chat_user_name" "><?php echo $signin_user['user_name'] ?></div>-->
                     <?php if (isset($friend_id)): ?>
                     <div id="bms_status_icon" ">🍒</div>
                     <div id="bms_chat_user_name" ><?php echo $_SESSION['cherry']['select_friend']['user_name'] ?>さん</div>
@@ -536,8 +530,7 @@
             <div >
                 <?php if (!empty($d_time) && $chatroom_id==$d_room_id && $d_time !== "0000-00-00 00:00:00" && $d_time > $send_date) :?>
                 <b>削除設定中：<?php echo $d_time ?></b>
-                <?php else: 
-
+                <?php else:
                     if ($d_time == "0000-00-00 00:00:00"){
                         //talk表示したい
                     } else{
@@ -545,7 +538,6 @@
                         $talks = [];
                         $_SESSION['cherry']['data3']['delete_time'] ="0000-00-00 00:00:00";
                     }
-                
                 endif; ?>
             </div>
             <div id="bms_messages">

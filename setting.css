@@ -53,7 +53,7 @@ html, body{
   float: left;
   font-family: 'Lobster', cursive;
   font-size: 25px;
-  padding: 12px 70px;
+  padding: 16px 80px;
   color:#003366;
   text-decoration: none;
   /*-webkit-transition: all 0.5s ease;
@@ -72,7 +72,7 @@ li{float:left;}
   font-size: 32px;
   color:black;
   font-family: 'Lobster', cursive;
-  padding: 7px 64px;
+  padding: 9px 50px;
 }
 
 .title_1{
@@ -325,3 +325,7 @@ display: inline-block;
     border-bottom: none;/*線を消す*/
 }
 
+.help{
+  margin-left: 100px;
+    width: 1200px;
+}
