@@ -228,20 +228,16 @@
         </div>
         <?php } ?>
         <!-- モーダル終わり -->
-
         <!-- 広告 -->
         <div class="col-xs-3" style="background-color:#DDDDDD; height:950px">
         <div class="box5">
-        <p>広告</p>
+        <img src="img/Nexseed.jpg">
         </div>
         <div class="box5">
-        <p>広告</p>
+        <img src="img/Nexseed.jpg">
         </div>
         <div class="box5">
-        <p>広告</p>
-        </div>
-        <div class="box5">
-        <p>広告</p>
+        <img src="img/Nexseed.jpg">
         </div>
     </div>
 </div>
