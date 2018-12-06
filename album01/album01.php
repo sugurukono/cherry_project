@@ -201,18 +201,7 @@
                     </div>
                     <div class="modal-body">
                         <h3>＜公開期間＞</h3>
-                        <select name="time">
-                          <option value="-1">選択してください</option>
-                          <?php for($i=0; $i < $c; $i++): ?>
-                            <?php if ($i == $pic['time']): ?>
-                              <!--前回選択されたvalue（都道府県）なのでoptionタグにselected属性をつける　-->
-                              <option value="<?php echo $i; ?>" selected><?php echo $time_limit[$i]; ?></option>
-                            <?php else: ?>
-                              <!--前回選択されたvalueと一致しないもしくはそもそもPOST送信されていないのでoptionタグをそのまま表示-->
-                              <option value="<?php echo $i; ?>"><?php echo $time_limit[$i]; ?></option>
-                             <?php endif; ?>
-                          <?php endfor; ?>
-                        </select>
+                        <h4><?php echo $time_limit[$pic['time']]; ?></h4>
                     </div>
                     <div class="modal-footer">
                       <?php if ($signin_user['id']==$pic['user_id']) :?>

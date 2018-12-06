@@ -142,7 +142,7 @@ if (!empty($_POST)) {
         <div id="c_box" class="col-xs-9">
           <center>
             <div><br>
-              <input type="submit" value="更新" class="btn btn-warning btn-xs">
+              <input type="submit" value="更新" class="btn btn-warning btn-xs" style="width:100px; height:38px;">
             </div>
           </center>
         </div>
