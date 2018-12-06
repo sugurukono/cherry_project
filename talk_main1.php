@@ -20,7 +20,7 @@
     $d_room_id=$_SESSION['cherry']['data3']['id'];
     // v($_SESSION['cherry']['data3']['delete_time'],'$_SESSION[cherry][data3][delete_time]');
     // v($d_time,'$d_time');
-    // v($d_room_id,'$d_room_id');
+    v($d_room_id,'$d_room_id');
     date_default_timezone_set('Asia/Manila');
     $send_date=date("Y-m-d H:i:s");
     // v($send_date,'$send_date');
@@ -111,7 +111,7 @@
 
     // v($friends,'$friends');
     // v($_GET['sending'],'$_GET[sending]');
-    // v($friend_id,'$friend_id');
+    v($friend_id,'$friend_id');
     // v($signin_user['id'],'$signin_user');
     // v($friends['friend_id'],'$friends[friend_id]');
 
