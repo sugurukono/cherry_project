@@ -23,6 +23,15 @@
         $chatroom_data3=$stmt->fetch(PDO::FETCH_ASSOC);
         v($chatroom_data3,'$chatroom_data3');//合ってる
 
+        if ($chatroom_data3=='') {
+        $sql='SELECT * FROM `chatroom` WHERE `owner_id`=? AND`member_id`=?';
+        $data = array($friend_id,$user_id);
+        $stmt = $dbh->prepare($sql);
+        $stmt->execute($data);
+        $chatroom_data3=$stmt->fetch(PDO::FETCH_ASSOC);
+        v($chatroom_data3,'$chatroom_data3');//合ってる
+          }  
+
         $send_date=date("Y-m-d H:i:s");
         v($send_date,'$send_date');
         // $send_date20=date("Y/m/d H:i:s", strtotime($send_date." +1 HOUR"));

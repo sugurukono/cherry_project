@@ -3,6 +3,7 @@
     require('functions.php');
     require('dbconnect.php');
 
+    $chatroom_id='';
 
     $sql = 'SELECT * FROM `users` WHERE `id`=?';
     $data = array($_SESSION["id"]);//WHEREで入れたやつだけでOK
@@ -14,17 +15,8 @@
     $user_id=$signin_user['id'];
     $folder='';
 
-
-//時間を取ってくる作業
-    $d_time=$_SESSION['cherry']['data3']['delete_time'];
-    $d_room_id=$_SESSION['cherry']['data3']['id'];
-    // v($_SESSION['cherry']['data3']['delete_time'],'$_SESSION[cherry][data3][delete_time]');
-    // v($d_time,'$d_time');
-    v($d_room_id,'$d_room_id');
     date_default_timezone_set('Asia/Manila');
     $send_date=date("Y-m-d H:i:s");
-    // v($send_date,'$send_date');
-
 
 //foldersテーブルからデータ取得①
     $sql = 'SELECT * FROM `folders` WHERE `user_id`=?';
@@ -147,10 +139,18 @@
                 $_SESSION['cherry']['data3']['id']=$chatroom_id;
                 $_SESSION['cherry']['data3']['delete_time']="0000-00-00 00:00:00";
 
+            }else{
+                //存在している時はチャットルームIDを取得
+                $chatroom_id=$chatroom_data2['id'];
+                $_SESSION['cherry']['chatroom_id']=$chatroom_id;
+                $_SESSION['cherry']['data3']['id']=$chatroom_id;
+                $_SESSION['cherry']['data3']['delete_time']=$chatroom_data2['delete_time'];
             }
         }else{//存在している時はチャットルームIDを取得
             $chatroom_id=$chatroom_data['id'];
             $_SESSION['cherry']['chatroom_id']=$chatroom_id;
+            $_SESSION['cherry']['data3']['id']=$chatroom_id;
+            $_SESSION['cherry']['data3']['delete_time']=$chatroom_data['delete_time'];
             // v($_SESSION['cherry']['chatroom_id'],'$chatroom_id');
         }
     }
@@ -233,7 +233,18 @@
     }
     // v($waits, '$waits');
 
+//時間を取ってくる作業
+    $d_time=$_SESSION['cherry']['data3']['delete_time'];
+    $d_room_id=$_SESSION['cherry']['data3']['id'];
+    // v($_SESSION['cherry']['data3']['delete_time'],'$_SESSION[cherry][data3][delete_time]');
+    // v($d_time,'$d_time');
+    v($d_room_id,'$d_room_id');
+    
+    // v($send_date,'$send_date');
+
 // オートマでデリート処理
+    v($d_time,'$d_time');
+
     if (($d_time!="0000-00-00 00:00:00") && $d_time < date("Y-m-d H:i:s")) {
         $sql='DELETE FROM `chatroom` WHERE `id`=?';
         $data=array($d_room_id);

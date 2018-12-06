@@ -42,18 +42,19 @@
 
         //$change_massage=$talk_each['massage'];という代入が関数の呼び出しの時起こってる
 
-        // $display_message = $change_massage;
+        $display_message = $change_massage;
 
         // $display_message = $rule['magic_comment'];
 
-        $display_message=str_replace($rule['comment'],$rule['magic_comment'],$change_massage);
+        
 
         // 変更したい発言が何時間後に消える設定か
         if ($rule['change_time']==0){
+            $display_message=str_replace($rule['comment'],$rule['magic_comment'],$change_massage);
             return $display_message;
         }
         elseif($rule['change_time']==1) {
-            $change_time=date($send_date,strtotime("+1 hour"));
+            $change_time=date($send_date,strtotime("+20 SECONDS"));
         }
         elseif ($rule['change_time']==2) {
             $change_time=date($send_date,strtotime("+12 hour"));
@@ -65,8 +66,11 @@
 
         // 過去か未来かを確認するifを作る
         if(!empty($change_time) && $change_time > $send_date){
+            $display_message=str_replace($rule['comment'],$rule['magic_comment'],$change_massage);
             return $display_message;
         }
+
+        return $display_message;
         
 
     }
