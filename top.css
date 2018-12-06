@@ -78,6 +78,7 @@ li{float:left;}
 /*トップ画*/
 .top_img{
     background: url(img/top.jpg)no-repeat center;
+    margin-top: 89px;
   }
 
 .bottom_img{
@@ -262,7 +263,9 @@ li{float:left;}
   color:white;
 }
 
-
+.help{
+  margin-left: 200px;
+}
 
 /*↓は画面わけに必要なコードなので消さないで！
 /*!

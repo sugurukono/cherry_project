@@ -54,6 +54,7 @@
    <style>
     .error_msg{
       color:red;
+      margin: 422px;
     }
   </style>
   <link rel="stylesheet" type="text/css"  href="top.css">
@@ -135,9 +136,9 @@
 
 
     <div class="col-xs-12" style="background-color:#003366; h">
-      <img src="img/howtoalbum.jpeg"><br><br>
-      <img src="img/howtotalk.jpeg"><br><br>
-      <img src="img/howtosetting.jpeg"><br><br>
+      <img class="help" src="img/howtoalbum.jpeg"><br><br>
+      <img class="help" src="img/howtotalk.jpeg"><br><br>
+      <img class="help" src="img/howtosetting.jpeg"><br><br>
     </div>
   </div>
  
