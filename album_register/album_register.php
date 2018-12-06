@@ -23,7 +23,12 @@
         
         $content=$_POST['content'];
         $time=$_POST['time'];
+
+        //デリート機能
+        $send_date=date("Y-m-d H:i:s");
+        v($send_date,'$send_date');
         
+
         if ($content == '') {
             $validations['content'] = 'blank';
         }

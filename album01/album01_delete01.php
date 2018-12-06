@@ -35,6 +35,7 @@
         $stmt = $dbh->prepare($sql);
         $stmt->execute($data);
 
+        $chatroom_data3["status"]=0;
         $pics_data["delete_time"]=$delete_date_time;
 
         }elseif($delete_time == 1){
@@ -45,6 +46,7 @@
             $stmt = $dbh->prepare($sql);
             $stmt->execute($data);
 
+            $chatroom_data3["status"]=1;
             $pics_data["delete_time"]=$delete_date_time;
 
 
@@ -56,6 +58,7 @@
             $stmt = $dbh->prepare($sql);
             $stmt->execute($data);
 
+            $chatroom_data3["status"]=2;
             $pics_data["delete_time"]=$delete_date_time;
 
         }elseif($delete_time == 3){
@@ -66,6 +69,7 @@
             $stmt = $dbh->prepare($sql);
             $stmt->execute($data);
 
+            $chatroom_data3["status"]=3;
             $pics_data["delete_time"]=$delete_date_time;
 
         }
