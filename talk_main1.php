@@ -104,7 +104,7 @@
     }
 
 
-    // v($folder_id,'$folder_idfolder_id');
+    v($folder_id,'$folder_idfolder_id');
 
     // v($friend_id2,'$friend_id2');
 
@@ -239,8 +239,6 @@
         $data=array($d_room_id);
         $stmt = $dbh->prepare($sql);
         $stmt->execute($data);
-
-        
     }
 
 
