@@ -374,8 +374,12 @@
     </div>
   </div>
 
-    <div class="col-xs-12" style="background-color: white; height:200px">
-       <h1 id="help"><span class="title_1">♦Help 使い方ガイド♦</span></h1>（TOPでも使用したもの？）
+    <div class="col-xs-12" style="background-color: white; ">
+       <h1 id="help"><span class="title_1">♦Help 使い方ガイド♦</span></h1>
+       <img src="img/howtoalbum.jpeg"><br><br>
+       <img src="img/howtotalk.jpeg"><br><br>
+       <img src="img/howtofakepage.jpeg"><br><br>
+       <img src="img/howtosetting.jpeg"><br><br>
     </div>
 
 <div class="row">
@@ -383,8 +387,9 @@
     </div>
   </div>
 
-<div class="col-xs-12" style="background-color: white; height:200px">
+<div class="col-xs-12" style="background-color: white;">
       <h1 id="qanda"><span class="title_1">♦Ｑ＆Ａ♦</span></h1>
+      <img src="img/qanda.jpeg">
     </div>
 
 
