@@ -147,7 +147,7 @@
         <img src="img/img30.png" width="300" height="225" class="btn btn-primary" data-toggle="modal" data-target="#demoNormalModal_" >
         <br>
         <!-- <br><input type="submit" value="全ての写真をみる"> -->
-        <br><a href="../album01/album01.php"><h4>PLOFILE画面に戻る</h4></a>
+        <br><a href="../album01/album01.php"><h4>PROFILE画面に戻る</h4></a>
       </center>
     </div>
 
